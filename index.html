@@ -3,13 +3,25 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TrustMe AI — Calculator</title>
+  <title>TrustMe AI — Cinematic Build (Day 7)</title>
   <meta name="theme-color" content="#0b1220">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css" /></head>
+  <link rel="stylesheet" href="style.css" />
+</head>
 <body>
+  <!-- Cinematic background -->
+  <div class="hero-visual">
+    <video id="heroVideo" class="hero-bg" playsinline muted loop preload="metadata" poster="assets/hero_poster.jpg">
+      <source src="assets/hero.webm" type="video/webm">
+      <source src="assets/hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-no-video" style="background-image:url('assets/hero_poster.jpg');"></div>
+  </div>
+
+  <!-- Floating gradient ambience -->
   <div class="bg-anim"></div>
 
   <header class="container nav">
@@ -27,12 +39,16 @@
   </header>
 
   <main id="top">
+    <!-- HERO CONTENT -->
     <section class="hero container">
       <div class="hero-copy">
-        <h2>Full projection with <span class="grad-text">responsive values</span> & <span class="grad-text">effective %</span>.</h2>
-        <p class="subhead">Per-Day / Per-Trade rates, Trades/Day, chart (log/linear), CSV export — all live.</p>
+        <h2 class="cinema-title">
+          <span class="grad-text">The Architect</span> is awake.<br/>
+          <small class="muted">Precision compounding for real traders.</small>
+        </h2>
+        <p class="subhead">I, Robot-inspired visuals with a dark-tech edge. Try your parameters below — chart & table update live.</p>
         <div class="cta-row">
-          <a class="btn primary" href="#calculator">Open Calculator</a>
+          <a class="btn primary" href="#calculator">Start Your Journey</a>
           <a class="btn ghost" href="#plans">See Table</a>
         </div>
       </div>
@@ -183,6 +199,7 @@
       </div>
     </footer>
   </main>
-<script src="script.js" defer></script>
+
+  <script src="script.js" defer></script>
 </body>
 </html>

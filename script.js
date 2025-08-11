@@ -1,15 +1,41 @@
+// Day 7 visuals + full calculator logic
 (function(){
   function fmt(n){ return n.toLocaleString(undefined,{style:'currency', currency:'USD', maximumFractionDigits:2}); }
   function ready(fn){ if(document.readyState!=='loading'){ fn(); } else { document.addEventListener('DOMContentLoaded', fn); } }
 
   ready(function(){
+    // HERO VIDEO handling (mute + autoplay + fallback)
+    const heroVideo = document.getElementById('heroVideo');
+    const fallback = document.querySelector('.hero-no-video');
+    if(heroVideo){
+      // Prefer not to play video on very small screens to save data
+      const prefersReducedData = window.matchMedia('(max-width: 680px)').matches;
+      if(prefersReducedData){
+        heroVideo.style.display = 'none';
+        if(fallback) fallback.style.display = 'block';
+      }else{
+        heroVideo.muted = true;
+        const playAttempt = heroVideo.play();
+        if(playAttempt && typeof playAttempt.then === 'function'){
+          playAttempt.then(()=>{
+            // playing
+            if(fallback) fallback.style.display = 'none';
+          }).catch(()=>{
+            // autoplay blocked
+            heroVideo.style.display = 'none';
+            if(fallback) fallback.style.display = 'block';
+          });
+        }
+      }
+    }
+
     const els = {
       amount: document.getElementById('amount'),
       rate: document.getElementById('rate'),
       days: document.getElementById('days'),
       tpd: document.getElementById('tradesPerDay'),
       tpdLabel: document.getElementById('tradesLabel'),
-      rateTypeRadios: document.querySelectorAll('input[name="rateType"]'),
+      rateTypeRadios: document.querySelectorAll('input[name=\"rateType\"]'),
       modeToggle: document.getElementById('modeToggle'),
       tableBody: document.querySelector('#planTable tbody'),
       totalEnd: document.getElementById('total-end'),
@@ -27,7 +53,7 @@
       rateLabel: document.getElementById('rateLabel'),
       chart: document.getElementById('balanceChart'),
       exportBtn: document.getElementById('exportCsvBtn'),
-      scaleRadios: document.querySelectorAll('input[name="scale"]'),
+      scaleRadios: document.querySelectorAll('input[name=\"scale\"]'),
     };
 
     function getRateType(){ for(const r of els.rateTypeRadios){ if(r && r.checked) return r.value; } return 'per_day'; }
@@ -127,8 +153,8 @@
       ['amount','rate','days','tradesPerDay','modeToggle'].forEach(id=>{
         const el=document.getElementById(id); if(el) el.addEventListener(evt, render, {passive:true});
       });
-      document.querySelectorAll('input[name="rateType"]').forEach(el=> el.addEventListener(evt, render, {passive:true}));
-      document.querySelectorAll('input[name="scale"]').forEach(el=> el.addEventListener(evt, render, {passive:true}));
+      document.querySelectorAll('input[name=\"rateType\"]').forEach(el=> el.addEventListener(evt, render, {passive:true}));
+      document.querySelectorAll('input[name=\"scale\"]').forEach(el=> el.addEventListener(evt, render, {passive:true}));
     });
 
     const y=document.getElementById('year'); if(y) y.textContent = new Date().getFullYear();
