@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TrustMe AI — Single-file (Day 6a)</title>
+<meta name="theme-color" content="#0b1220">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgo=" />
+<style>
+:root{--bg:#07090f;--panel:#0d111a;--panel-2:#0f1522;--glass:rgba(255,255,255,.06);
+--border:rgba(255,255,255,.08);--text:#e6eefc;--muted:#9bb0d0;--brand:#7aa2ff;--brand-2:#40e0d0;
+--radius:18px;--shadow:0 10px 30px rgba(0,0,0,.4);--warn:#f59e0b}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial,sans-serif;color:var(--text);background:var(--bg)}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;font-weight:800;color:#0a0a0a;box-shadow:var(--shadow)}
+.brand-text h1,.brand-text h4{margin:0;font-weight:800}
+.ai-pill{padding:2px 8px;border-radius:999px;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#0a0a0a;font-size:.8rem;margin-left:6px;font-weight:800}
+.tagline{margin:4px 0 0;color:var(--muted);font-size:.9rem}
+.nav-links a{color:var(--text);text-decoration:none;padding:8px 12px;border-radius:10px}
+.nav-links a:hover{background:var(--panel-2)}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;padding-top:20px;align-items:center}
+.grad-text{background:linear-gradient(135deg,var(--brand),var(--brand-2));-webkit-background-clip:text;color:transparent}
+.subhead{color:var(--muted)}
+.cta-row{display:flex;gap:12px;margin:12px 0 8px}
+.btn{display:inline-block;padding:12px 16px;border-radius:12px;text-decoration:none;font-weight:700;border:1px solid var(--border)}
+.btn.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#0a0a0a}
+.btn.ghost{background:transparent;color:var(--text)}
+.hero-card{padding:18px;border-radius:var(--radius);background:linear-gradient(0deg,var(--panel),var(--panel-2));border:1px solid var(--border);box-shadow:var(--shadow)}
+.glass{backdrop-filter:blur(10px);background:linear-gradient(0deg,rgba(255,255,255,.06),rgba(255,255,255,.02))}
+.snapshot-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.label{color:var(--muted);font-size:12px;margin:0 0 4px}
+.big{font-size:20px;font-weight:800;margin:0;line-height:1.1}
+.big.fit{font-size:clamp(14px,3.6vw,22px)}
+.mode-badge{background:var(--glass);border:1px solid var(--border);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
+.card{background:linear-gradient(0deg,var(--panel),var(--panel-2));border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card-head{padding:20px 20px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.chart-controls{margin-left:auto;display:flex;gap:12px;align-items:center}
+.calculator{margin-top:22px;padding:16px}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field input[type=number]{background:#0b1220;border:1px solid var(--border);color:var(--text);border-radius:12px;padding:12px;outline:none}
+.range-row{display:flex;align-items:center;justify-content:space-between}
+input[type=range]{accent-color:#7aa2ff}
+.rate-type{border:1px dashed var(--border);border-radius:12px;padding:12px}
+.rate-type label{display:inline-flex;align-items:center;gap:8px;margin-right:12px}
+.switch-field{align-self:end}
+.switch{position:relative;width:260px;height:44px;background:#0b1220;border:1px solid var(--border);border-radius:999px;display:flex;align-items:center;padding:0 8px}
+.switch input{display:none}
+.switch .slider{position:absolute;left:4px;top:4px;bottom:4px;width:125px;border-radius:999px;background:linear-gradient(135deg,var(--brand),var(--brand-2));transition:transform .25s ease}
+.switch .switch-labels{position:relative;width:100%;display:flex;justify-content:space-between;font-size:12px;color:#0a0a0a;font-weight:800}
+.switch .switch-labels::before{content:attr(data-left);color:var(--muted);position:absolute;left:18px;top:50%;transform:translateY(-50%)}
+.switch .switch-labels::after{content:attr(data-right);color:#0a0a0a;position:absolute;right:18px;top:50%;transform:translateY(-50%)}
+.switch input:checked ~ .slider{transform:translateX(126px)}
+.switch input:not(:checked) ~ .switch-labels::after{color:var(--muted)}
+.switch input:not(:checked) ~ .switch-labels::before{color:#0a0a0a}
+.risk{margin:0 16px 12px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);color:#f8d38e;padding:10px 12px;border-radius:12px}
+.hidden{display:none}
+.totals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:0 16px 16px}
+.total-box{background:var(--panel-2);border:1px solid var(--border);border-radius:14px;padding:14px}
+.chart-wrap{padding:0 16px 16px}
+#balanceChart{width:100%;max-width:1100px;border-radius:14px;background:#0b1220;border:1px solid var(--border)}
+.table-wrap{overflow:auto;margin:16px}
+table{width:100%;border-collapse:collapse;min-width:800px}
+thead th{position:sticky;top:0;background:#0b1220;border-bottom:1px solid var(--border);padding:12px;text-align:left;font-size:12px;color:var(--muted)}
+tbody td{border-bottom:1px dashed var(--border);padding:10px;font-variant-numeric:tabular-nums}
+.footer{margin-top:28px;border-top:1px solid var(--border);background:#0b1220}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr;gap:20px;padding:24px}
+.bg-anim{position:fixed;inset:0;z-index:-1;filter:blur(60px) saturate(130%);
+background:radial-gradient(600px 400px at 20% 10%,rgba(64,224,208,.18),transparent 60%),
+radial-gradient(500px 300px at 80% 20%,rgba(122,162,255,.18),transparent 60%),
+radial-gradient(600px 500px at 40% 90%,rgba(64,224,208,.12),transparent 60%);animation:float 16s ease-in-out infinite alternate}
+@keyframes float{0%{transform:translateY(0)}100%{transform:translateY(-12px)}}
+@media (max-width:980px){.hero{grid-template-columns:1fr;gap:18px}.grid-2{grid-template-columns:1fr}.switch{width:100%}.snapshot-grid{grid-template-columns:1fr 1fr}.footer-grid{grid-template-columns:1fr}}
+.small{font-size:12px}.muted{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="bg-anim"></div>
+<header class="container nav">
+  <a class="brand" href="#top">
+    <div class="logo">TM</div>
+    <div class="brand-text">
+      <h1>TrustMe <span class="ai-pill">AI</span></h1>
+      <p class="tagline">Smarter trading. Transparent growth.</p>
+    </div>
+  </a>
+  <nav class="nav-links">
+    <a href="#calculator">Calculator</a>
+    <a href="#plans">Plans 1–120</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero container">
+    <div class="hero-copy">
+      <h2>Full projection with <span class="grad-text">responsive values</span> & <span class="grad-text">effective %</span>.</h2>
+      <p class="subhead">Per-Day / Per-Trade rates, Trades/Day, chart (log/linear), CSV export — all live.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="#calculator">Open Calculator</a>
+        <a class="btn ghost" href="#plans">See Table</a>
+      </div>
+    </div>
+    <div class="hero-card glass">
+      <div class="card-head">
+        <h3>Live Snapshot</h3>
+        <span id="snapshot-mode" class="mode-badge">Auto Reinvest</span>
+      </div>
+      <div class="snapshot-grid">
+        <div><p class="label">Start</p><p class="big" id="snap-start">$1,000.00</p></div>
+        <div><p class="label"><span id="snap-rate-label">Daily %</span></p><p class="big" id="snap-rate">2.00%</p><p class="muted small" id="snap-effective" style="display:none;">Effective Daily: —</p></div>
+        <div><p class="label">Trades/Day</p><p class="big" id="snap-trades">10</p></div>
+        <div><p class="label">Day 120</p><p class="big fit" id="snap-day120">$—</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="calculator" class="calculator container card">
+    <div class="card-head"><h3>Live Profit Calculator</h3><p class="muted">Pick <b>Rate Type</b>, set trades/day, and choose reinvest or withdraw.</p></div>
+    <form class="grid-2">
+      <label class="field"><span>Investment Amount (USD)</span><input type="number" id="amount" min="0" step="0.01" value="1000"/></label>
+      <label class="field"><span id="rateLabel">Rate (%) — Per Day</span><input type="number" id="rate" min="0" step="0.01" value="2"/></label>
+      <label class="field"><span>Trades Per Day</span><input type="range" id="tradesPerDay" min="1" max="100" step="1" value="10"/><div class="range-row"><span class="muted small">1</span><strong id="tradesLabel">10</strong><span class="muted small">100</span></div></label>
+      <fieldset class="field rate-type"><legend>Rate Type</legend><label><input type="radio" name="rateType" value="per_day" checked/> Per Day</label><label><input type="radio" name="rateType" value="per_trade"/> Per Trade</label></fieldset>
+      <label class="field switch-field"><span>Mode</span><div class="switch"><input type="checkbox" id="modeToggle" checked/><span class="slider"></span><span class="switch-labels" data-left="Withdraw" data-right="Auto Reinvest"></span></div></label>
+      <label class="field"><span>Days to Simulate</span><input type="number" id="days" min="1" max="120" step="1" value="120"/></label>
+    </form>
+    <div id="risk" class="risk hidden">⚠️ High trade frequency. Consider reducing trades/day for realism.</div>
+    <div class="totals">
+      <div class="total-box"><p class="label">Projected Balance (End)</p><p class="big" id="total-end">$—</p></div>
+      <div class="total-box"><p class="label">Total Profit</p><p class="big" id="total-profit">$—</p></div>
+      <div class="total-box" id="withdraw-box"><p class="label">Total Withdrawn</p><p class="big" id="total-withdrawn">$—</p></div>
+    </div>
+  </section>
+
+  <section class="container card" id="chartSection">
+    <div class="card-head chart-head">
+      <h3>Balance Curve</h3>
+      <div class="chart-controls"><label class="small"><input type="radio" name="scale" value="linear" checked/> Linear</label><label class="small"><input type="radio" name="scale" value="log"/> Log</label></div>
+      <p class="muted small">Projection based on your settings.</p>
+    </div>
+    <div class="chart-wrap"><canvas id="balanceChart" width="1100" height="360"></canvas></div>
+  </section>
+
+  <section id="plans" class="container card">
+    <div class="card-head"><h3>1–120 Day Investment Table</h3><button class="btn ghost" id="exportCsvBtn" type="button">⬇ Export CSV</button></div>
+    <div class="table-wrap">
+      <table id="planTable">
+        <thead><tr><th>Day</th><th>Start</th><th>Profit</th><th>Withdrawn</th><th>End</th><th>Cumulative Withdrawn</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container footer-grid"><div><div class="brand"><div class="logo">TM</div><div class="brand-text"><h4>TrustMe <span class="ai-pill">AI</span></h4><p class="tagline">Smarter trading. Transparent growth.</p></div></div><p class="muted small">© <span id="year"></span> TrustMe AI. All rights reserved.</p></div></div></footer>
+</main>
+
+<script>
+(function(){
+  function fmt(n){return n.toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:2})}
+  function ready(fn){if(document.readyState!=='loading'){fn()}else{document.addEventListener('DOMContentLoaded',fn)}}
+  ready(function(){
+    const $=id=>document.getElementById(id);
+    const els={amount:$('amount'),rate:$('rate'),days:$('days'),tpd:$('tradesPerDay'),tpdLabel:$('tradesLabel'),
+      rateTypeRadios:document.querySelectorAll('input[name="rateType"]'),modeToggle:$('modeToggle'),
+      tableBody:document.querySelector('#planTable tbody'),totalEnd:$('total-end'),totalProfit:$('total-profit'),totalWithdrawn:$('total-withdrawn'),withdrawBox:$('withdraw-box'),
+      snapStart:$('snap-start'),snapRate:$('snap-rate'),snapRateLabel:$('snap-rate-label'),snapEff:$('snap-effective'),snapTrades:$('snap-trades'),snapDay120:$('snap-day120'),snapMode:$('snapshot-mode'),
+      risk:$('risk'),rateLabel:$('rateLabel'),chart:$('balanceChart'),exportBtn:$('exportCsvBtn'),scaleRadios:document.querySelectorAll('input[name="scale"]')};
+    function getRateType(){for(const r of els.rateTypeRadios){if(r.checked)return r.value}return'per_day'}
+    function getScale(){for(const r of els.scaleRadios){if(r.checked)return r.value}return'linear'}
+    const vf=(el,fb)=>{const v=parseFloat(el&&el.value||'');return isNaN(v)?fb:v}, vi=(el,fb)=>{const v=parseInt(el&&el.value||'');return isNaN(v)?fb:v}
+    function simulate(amount,rateValue,days,tpd,rateType,reinvest=true){
+      const rows=[];let balance=amount,cumWithdraw=0;tpd=Math.max(1,tpd|0);
+      const perTradeRate=rateType==='per_trade'?(rateValue/100):(rateValue/100)/tpd;const series=[balance];
+      for(let d=1;d<=days;d++){const start=balance;let end=start,dayProfit=0;
+        if(reinvest){for(let t=0;t<tpd;t++){const p=end*perTradeRate;end+=p;dayProfit+=p}}
+        else{dayProfit=rateType==='per_trade'?start*(perTradeRate*tpd):start*(rateValue/100);cumWithdraw+=dayProfit;end=start}
+        rows.push({day:d,start,profit:dayProfit,withdrawn:reinvest?0:dayProfit,end,cumWithdraw});balance=end;series.push(balance)}
+      const endBal=reinvest?balance:amount, totalProfit=reinvest?(endBal-amount):cumWithdraw;return{rows,end:endBal,totalProfit,cumWithdraw,balanceSeries:series}
+    }
+    function drawChart(series,scale){const ctx=els.chart.getContext('2d'),w=els.chart.width,h=els.chart.height;ctx.clearRect(0,0,w,h);
+      const pad={l:50,r:20,t:20,b:30};ctx.strokeStyle='rgba(255,255,255,.08)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,h-pad.b);ctx.lineTo(w-pad.r,h-pad.b);ctx.stroke();
+      if(!series||series.length<2)return;let min=Math.min(...series),max=Math.max(...series);let yMin=min*.98,yMax=max*1.02;let mapY=v=>v;
+      if(scale==='log'){const log=x=>Math.log10(Math.max(1e-9,x));yMin=log(yMin);yMax=log(yMax);mapY=v=>log(v)}
+      const X=i=>pad.l+(i/(series.length-1))*(w-pad.l-pad.r), Y=v=>{const vv=mapY(v);return h-pad.b-((vv-yMin)/(yMax-yMin))*(h-pad.t-pad.b)}
+      ctx.strokeStyle='rgba(255,255,255,.06)';ctx.setLineDash([4,6]);for(let g=0;g<=4;g++){const yy=pad.t+g*(h-pad.t-pad.b)/4;ctx.beginPath();ctx.moveTo(pad.l,yy);ctx.lineTo(w-pad.r,yy);ctx.stroke()}ctx.setLineDash([]);
+      ctx.strokeStyle='#7aa2ff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(X(0),Y(series[0]));for(let i=1;i<series.length;i++){ctx.lineTo(X(i),Y(series[i]))}ctx.stroke()}
+    function toCSV(rows){const head=['Day','Start','Profit','Withdrawn','End','Cumulative Withdrawn'];const lines=[head.join(',')];rows.forEach(r=>lines.push([r.day,r.start.toFixed(2),r.profit.toFixed(2),r.withdrawn.toFixed(2),r.end.toFixed(2),r.cumWithdraw.toFixed(2)].join(',')));return lines.join('\\n')}
+    function download(name,text){const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(text);a.download=name;document.body.appendChild(a);a.click();a.remove()}
+    function fitText(el){if(!el)return;const len=(el.textContent||'').length;const size=Math.max(12,Math.min(22,22-Math.max(0,len-12)*0.6));el.style.fontSize=size+'px'}
+    function effectiveDaily(rateType,rateValue,tpd){if(rateType!=='per_trade')return null;const per=rateValue/100;return( Math.pow(1+per, Math.max(1,tpd)) - 1 )*100}
+    function render(){
+      const amount=Math.max(0,vf(els.amount,1000));const rateValue=Math.max(0,vf(els.rate,2));const days=Math.min(120,Math.max(1,vi(els.days,120)));const tpd=Math.max(1,vi(els.tpd,10));
+      const reinvest=!!(els.modeToggle&&els.modeToggle.checked);const rateType=getRateType();const scale=getScale();
+      els.tpdLabel.textContent=String(tpd);els.rateLabel.textContent=`Rate (%) — ${rateType==='per_day'?'Per Day':'Per Trade'}`;els.snapRateLabel.textContent=rateType==='per_day'?'Daily %':'Per-Trade %';
+      const eff=effectiveDaily(rateType,rateValue,tpd);if(eff!=null){els.snapEffective.style.display='block';els.snapEffective.textContent=`Effective Daily: ${eff.toFixed(2)}%`}else{els.snapEffective.style.display='none'}
+      tpd>=50?els.risk.classList.remove('hidden'):els.risk.classList.add('hidden');
+      const sim=simulate(amount,rateValue,days,tpd,rateType,reinvest);const {rows,end,totalProfit,cumWithdraw,balanceSeries}=sim;
+      els.tableBody.innerHTML=rows.map(r=>`<tr><td>${r.day}</td><td>${fmt(r.start)}</td><td>${fmt(r.profit)}</td><td>${fmt(r.withdrawn)}</td><td>${fmt(r.end)}</td><td>${fmt(r.cumWithdraw)}</td></tr>`).join('');
+      els.totalEnd.textContent=fmt(end);els.totalProfit.textContent=fmt(totalProfit);els.totalWithdrawn.textContent=reinvest?fmt(0):fmt(cumWithdraw);els.withdrawBox.style.display=reinvest?'none':'block';
+      els.snapStart.textContent=fmt(amount);els.snapRate.textContent=`${rateValue.toFixed(2)}%`;els.snapTrades.textContent=String(tpd);els.snapMode.textContent=reinvest?'Auto Reinvest':'Withdraw';
+      const d120=simulate(amount,rateValue,120,tpd,rateType,true).end;els.snapDay120.textContent=fmt(d120);fitText(els.snapDay120);
+      drawChart(balanceSeries,scale);els.exportBtn.onclick=()=>download('trustmeai_projection.csv',toCSV(rows));
+    }
+    ['input','change'].forEach(evt=>{
+      ['amount','rate','days','tradesPerDay','modeToggle'].forEach(id=>{const el=$(id);el&&el.addEventListener(evt,render,{passive:true})});
+      document.querySelectorAll('input[name="rateType"]').forEach(el=>el.addEventListener(evt,render,{passive:true}));
+      document.querySelectorAll('input[name="scale"]').forEach(el=>el.addEventListener(evt,render,{passive:true}));
+    });
+    $('year') && ($('year').textContent=new Date().getFullYear());
+    // Fix small typo target
+    Object.defineProperty(els,'snapEffective',{get(){return $('snap-effective')}});
+    render();
+  });
+})();
+</script>
+</body>
+</html>
