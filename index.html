@@ -1,205 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TrustMe AI — Cinematic Build (Day 7)</title>
-  <meta name="theme-color" content="#0b1220">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrustMe AI - Cinematic</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Cinematic background -->
-  <div class="hero-visual">
-    <video id="heroVideo" class="hero-bg" playsinline muted loop preload="metadata" poster="assets/hero_poster.jpg">
-      <source src="assets/hero.webm" type="video/webm">
-      <source src="assets/hero.mp4" type="video/mp4">
-    </video>
-    <div class="hero-overlay"></div>
-    <div class="hero-no-video" style="background-image:url('assets/hero_poster.jpg');"></div>
+
+<!-- Cinematic Hero Section -->
+<div class="hero-container">
+  <video autoplay muted loop playsinline id="hero-video" poster="assets/hero_poster.jpg">
+    <source src="assets/hero.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video>
+  <div class="hero-overlay" id="hero-overlay">
+    <h1 class="intro-text">I Am TrustMe AI</h1>
+    <button id="play-intro">Play Intro</button>
   </div>
+</div>
 
-  <!-- Floating gradient ambience -->
-  <div class="bg-anim"></div>
+<!-- Calculator Section -->
+<div id="calculator" style="display:none; padding: 20px;">
+  <h2>Investment Calculator</h2>
+  <p>Calculator and chart from Day 1–6 build will be here.</p>
+</div>
 
-  <header class="container nav">
-    <a class="brand" href="#top" aria-label="TrustMe AI">
-      <div class="logo">TM</div>
-      <div class="brand-text">
-        <h1>TrustMe <span class="ai-pill">AI</span></h1>
-        <p class="tagline">Smarter trading. Transparent growth.</p>
-      </div>
-    </a>
-    <nav class="nav-links">
-      <a href="#calculator">Calculator</a>
-      <a href="#plans">Plans 1–120</a>
-    </nav>
-  </header>
-
-  <main id="top">
-    <!-- HERO CONTENT -->
-    <section class="hero container">
-      <div class="hero-copy">
-        <h2 class="cinema-title">
-          <span class="grad-text">The Architect</span> is awake.<br/>
-          <small class="muted">Precision compounding for real traders.</small>
-        </h2>
-        <p class="subhead">I, Robot-inspired visuals with a dark-tech edge. Try your parameters below — chart & table update live.</p>
-        <div class="cta-row">
-          <a class="btn primary" href="#calculator">Start Your Journey</a>
-          <a class="btn ghost" href="#plans">See Table</a>
-        </div>
-      </div>
-      <div class="hero-card glass">
-        <div class="card-head">
-          <h3>Live Snapshot</h3>
-          <span id="snapshot-mode" class="mode-badge">Auto Reinvest</span>
-        </div>
-        <div class="snapshot-grid">
-          <div>
-            <p class="label">Start</p>
-            <p class="big" id="snap-start">$1,000.00</p>
-          </div>
-          <div>
-            <p class="label"><span id="snap-rate-label">Daily %</span></p>
-            <p class="big" id="snap-rate">2.00%</p>
-            <p class="muted small" id="snap-effective" style="display:none;">Effective Daily: —</p>
-          </div>
-          <div>
-            <p class="label">Trades/Day</p>
-            <p class="big" id="snap-trades">10</p>
-          </div>
-          <div>
-            <p class="label">Day 120</p>
-            <p class="big fit" id="snap-day120">$—</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CALCULATOR -->
-    <section id="calculator" class="calculator container card">
-      <div class="card-head">
-        <h3>Live Profit Calculator</h3>
-        <p class="muted">Pick <b>Rate Type</b>, set trades/day, and choose reinvest or withdraw.</p>
-      </div>
-
-      <form class="grid-2">
-        <label class="field">
-          <span>Investment Amount (USD)</span>
-          <input type="number" id="amount" min="0" step="0.01" value="1000" />
-        </label>
-
-        <label class="field">
-          <span id="rateLabel">Rate (%) — Per Day</span>
-          <input type="number" id="rate" min="0" step="0.01" value="2" />
-        </label>
-
-        <label class="field">
-          <span>Trades Per Day</span>
-          <input type="range" id="tradesPerDay" min="1" max="100" step="1" value="10" />
-          <div class="range-row">
-            <span class="muted small">1</span>
-            <strong id="tradesLabel">10</strong>
-            <span class="muted small">100</span>
-          </div>
-        </label>
-
-        <fieldset class="field rate-type">
-          <legend>Rate Type</legend>
-          <label><input type="radio" name="rateType" value="per_day" checked /> Per Day</label>
-          <label><input type="radio" name="rateType" value="per_trade" /> Per Trade</label>
-        </fieldset>
-
-        <label class="field switch-field">
-          <span>Mode</span>
-          <div class="switch">
-            <input type="checkbox" id="modeToggle" checked />
-            <span class="slider"></span>
-            <span class="switch-labels" data-left="Withdraw" data-right="Auto Reinvest"></span>
-          </div>
-        </label>
-
-        <label class="field">
-          <span>Days to Simulate</span>
-          <input type="number" id="days" min="1" max="120" step="1" value="120" />
-        </label>
-      </form>
-
-      <div id="risk" class="risk hidden">⚠️ High trade frequency. Consider reducing trades/day for realism.</div>
-
-      <div class="totals">
-        <div class="total-box">
-          <p class="label">Projected Balance (End)</p>
-          <p class="big" id="total-end">$—</p>
-        </div>
-        <div class="total-box">
-          <p class="label">Total Profit</p>
-          <p class="big" id="total-profit">$—</p>
-        </div>
-        <div class="total-box" id="withdraw-box">
-          <p class="label">Total Withdrawn</p>
-          <p class="big" id="total-withdrawn">$—</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- CHART -->
-    <section class="container card" id="chartSection">
-      <div class="card-head chart-head">
-        <h3>Balance Curve</h3>
-        <div class="chart-controls">
-          <label class="small"><input type="radio" name="scale" value="linear" checked /> Linear</label>
-          <label class="small"><input type="radio" name="scale" value="log" /> Log</label>
-        </div>
-        <p class="muted small">Projection based on your settings.</p>
-      </div>
-      <div class="chart-wrap">
-        <canvas id="balanceChart" width="1100" height="360" aria-label="Balance chart"></canvas>
-      </div>
-    </section>
-
-    <!-- PLANS TABLE -->
-    <section id="plans" class="container card">
-      <div class="card-head">
-        <h3>1–120 Day Investment Table</h3>
-        <button class="btn ghost" id="exportCsvBtn" type="button">⬇ Export CSV</button>
-      </div>
-      <div class="table-wrap">
-        <table id="planTable" aria-label="Projection table">
-          <thead>
-            <tr>
-              <th>Day</th>
-              <th>Start</th>
-              <th>Profit</th>
-              <th>Withdrawn</th>
-              <th>End</th>
-              <th>Cumulative Withdrawn</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
-
-    <footer id="contact" class="footer">
-      <div class="container footer-grid">
-        <div>
-          <div class="brand">
-            <div class="logo">TM</div>
-            <div class="brand-text">
-              <h4>TrustMe <span class="ai-pill">AI</span></h4>
-              <p class="tagline">Smarter trading. Transparent growth.</p>
-            </div>
-          </div>
-          <p class="muted small">© <span id="year"></span> TrustMe AI. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
-  </main>
-
-  <script src="script.js" defer></script>
+<script src="script.js"></script>
 </body>
 </html>
