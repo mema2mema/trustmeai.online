@@ -1,1 +1,1 @@
-Put hero.mp4 and hero_poster.jpg here.
+Put your compressed hero.mp4 and hero_poster.jpg here. Paths expected: ./assets/hero.mp4 and ./assets/hero_poster.jpg
