@@ -1,1 +1,1 @@
-Put hero.mp4 and hero_poster.jpg here.
+Place your hero.mp4 (compressed) and hero_poster.jpg here before deploying to Netlify.
