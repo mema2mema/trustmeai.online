@@ -1,1 +1,0 @@
-Deploy this folder to Netlify. Place compressed hero.mp4 and hero_poster.jpg into ./assets/ before deploy.
