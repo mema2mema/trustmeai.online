@@ -1,3 +1,332 @@
 <!DOCTYPE html>
-<!-- Full HTML from the canvas code above would go here -->
-<!-- Placeholder to avoid repeating the huge file in this Python cell -->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TrustMe AI — Cinematic Intro + Calculator (Day 1)</title>
+  <meta name="description" content="TrustMe AI fast-track Day 1: cinematic hero intro, autoplay video, growth calculator with 1–120 day table and log/linear chart toggle." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background:#0a0a0a; color:#f5f5f5; opacity:0; transition:opacity .4s ease; }
+    body.ready { opacity:1; }
+    .cinematic-line { opacity:0; transform: translateY(10px); transition: opacity 700ms ease, transform 700ms ease; }
+    .cinematic-line.show { opacity:1; transform: translateY(0); }
+    .autoscale { display:inline-block; max-width: 100%; white-space: nowrap; }
+    .autoscale[data-chars] { font-variation-settings: "wght" 650; }
+    .hero-gradient { background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.6) 100%); }
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { -moz-appearance: textfield; }
+  </style>
+</head>
+<body class="bg-neutral-950 text-neutral-100 selection:bg-blue-500 selection:text-white">
+  <section class="relative h-[90vh] min-h-[520px] w-full overflow-hidden">
+    <video id="heroVideo" class="absolute inset-0 h-full w-full object-cover" autoplay muted playsinline loop preload="auto" poster="./assets/hero_poster.jpg">
+      <source src="./assets/hero.mp4" type="video/mp4" />
+    </video>
+    <div class="absolute inset-0 hero-gradient"></div>
+    <div class="relative z-10 h-full w-full flex items-center justify-center">
+      <div class="px-6 md:px-12 max-w-5xl text-center">
+        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight">
+          <span class="block cinematic-line" data-delay="200">The Architect:</span>
+          <span class="block mt-2 cinematic-line" data-delay="1200">I Am <span class="text-blue-400">TrustMe AI</span></span>
+        </h1>
+        <p class="mt-6 text-base md:text-lg text-neutral-200 cinematic-line" data-delay="2200">
+          Observe. Learn. Execute. Precision at machine speed. Profits, tracked to the last digit.
+        </p>
+        <p class="mt-2 text-sm md:text-base text-neutral-300 cinematic-line" data-delay="3000">
+          Autonomous signals. Transparent logs. Your decisions — amplified.
+        </p>
+        <div class="mt-8 flex items-center justify-center gap-3 cinematic-line" data-delay="3800">
+          <button id="skipIntro" class="rounded-2xl bg-white/10 hover:bg-white/20 px-5 py-3 text-sm md:text-base backdrop-blur border border-white/10 transition">Skip intro</button>
+          <button id="scrollToCalc" class="rounded-2xl bg-blue-500 hover:bg-blue-600 px-5 py-3 text-sm md:text-base font-medium transition">See the Calculator</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="calc" class="relative -mt-6 rounded-t-3xl bg-neutral-900/70 backdrop-blur-lg border-t border-neutral-800">
+    <div class="max-w-7xl mx-auto px-6 md:px-10 py-10">
+      <div class="flex items-end justify-between gap-6 flex-wrap">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold">Profit Projection</h2>
+          <p class="text-neutral-300 mt-1 text-sm md:text-base">Simulate growth for 1–120 days. Toggle between Per Day and Per Trade modes.</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs md:text-sm">
+          <label for="scaleToggle" class="opacity-80">Chart scale</label>
+          <select id="scaleToggle" class="bg-neutral-800 border border-neutral-700 rounded-xl px-3 py-2 focus:outline-none focus:ring-0">
+            <option value="linear">Linear</option>
+            <option value="logarithmic">Log</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-1">
+          <div class="rounded-3xl border border-neutral-800 bg-neutral-900 p-5">
+            <div class="flex items-center gap-2 text-sm">
+              <span class="opacity-80">Mode</span>
+              <div class="ml-auto"></div>
+            </div>
+            <div class="mt-2 grid grid-cols-2 gap-2">
+              <button data-mode="perDay" class="modeBtn rounded-2xl border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm">Per Day</button>
+              <button data-mode="perTrade" class="modeBtn rounded-2xl border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm opacity-80">Per Trade</button>
+            </div>
+
+            <div class="mt-5 space-y-4">
+              <div>
+                <label class="text-sm opacity-80">Investment Amount (USDT)</label>
+                <input id="amount" type="number" min="0" step="1" value="1000" class="mt-2 w-full rounded-2xl bg-neutral-800 border border-neutral-700 px-3 py-2 focus:outline-none" />
+              </div>
+
+              <div id="perDayControls" class="space-y-2">
+                <label class="text-sm opacity-80">Daily Profit %</label>
+                <input id="dailyPct" type="range" min="0" max="50" value="2" step="0.1" class="w-full" />
+                <div class="flex justify-between text-xs">
+                  <span>0%</span> <span id="dailyPctVal">2%</span> <span>50%</span>
+                </div>
+              </div>
+
+              <div id="perTradeControls" class="space-y-4 hidden">
+                <div>
+                  <label class="text-sm opacity-80">Per Trade %</label>
+                  <input id="perTradePct" type="range" min="0" max="20" value="1" step="0.1" class="w-full" />
+                  <div class="flex justify-between text-xs"><span>0%</span> <span id="perTradePctVal">1%</span> <span>20%</span></div>
+                </div>
+                <div>
+                  <label class="text-sm opacity-80">Trades / Day</label>
+                  <input id="tradesPerDay" type="range" min="1" max="100" value="5" step="1" class="w-full" />
+                  <div class="flex justify-between text-xs"><span>1</span> <span id="tradesPerDayVal">5</span> <span>100</span></div>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-sm opacity-80">Projection Days</label>
+                <input id="days" type="range" min="1" max="120" value="30" step="1" class="w-full" />
+                <div class="flex justify-between text-xs"><span>1</span> <span id="daysVal">30</span> <span>120</span></div>
+              </div>
+
+              <button id="downloadCsv" class="w-full mt-2 rounded-2xl bg-white/10 hover:bg-white/20 px-4 py-2 text-sm border border-white/10">Download CSV</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-2">
+          <div class="rounded-3xl border border-neutral-800 bg-neutral-900 p-5" style="height:360px">
+            <canvas id="equityChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 rounded-3xl border border-neutral-800 bg-neutral-900">
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-left text-sm">
+            <thead class="bg-neutral-900/60 border-b border-neutral-800">
+              <tr>
+                <th class="px-4 py-3 font-medium">Day</th>
+                <th class="px-4 py-3 font-medium">Start</th>
+                <th class="px-4 py-3 font-medium">Profit</th>
+                <th class="px-4 py-3 font-medium">End</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody" class="divide-y divide-neutral-800"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="py-10 text-center text-xs text-neutral-400">© <span id="year"></span> TrustMe AI</footer>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => document.body.classList.add('ready'));
+    const lines = document.querySelectorAll('.cinematic-line');
+    lines.forEach(el => setTimeout(() => el.classList.add('show'), parseInt(el.dataset.delay || '0', 10)));
+    document.getElementById('scrollToCalc').addEventListener('click', () => {
+      document.getElementById('calc').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    document.getElementById('skipIntro').addEventListener('click', () => {
+      document.getElementById('calc').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    setTimeout(() => {
+      if (!window._introSkipped) {
+        document.getElementById('calc').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 6500);
+    const heroVideo = document.getElementById('heroVideo');
+    heroVideo && heroVideo.play().catch(() => {
+      const tryPlay = () => heroVideo.play().finally(() => {
+        document.removeEventListener('touchstart', tryPlay);
+        document.removeEventListener('click', tryPlay);
+      });
+      document.addEventListener('touchstart', tryPlay, { once: true });
+      document.addEventListener('click', tryPlay, { once: true });
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const amountEl = document.getElementById('amount');
+    const dailyPctEl = document.getElementById('dailyPct');
+    const dailyPctValEl = document.getElementById('dailyPctVal');
+    const perTradePctEl = document.getElementById('perTradePct');
+    const perTradePctValEl = document.getElementById('perTradePctVal');
+    const tradesPerDayEl = document.getElementById('tradesPerDay');
+    const tradesPerDayValEl = document.getElementById('tradesPerDayVal');
+    const daysEl = document.getElementById('days');
+    const daysValEl = document.getElementById('daysVal');
+    const tableBody = document.getElementById('tableBody');
+    const scaleToggle = document.getElementById('scaleToggle');
+    const downloadCsvBtn = document.getElementById('downloadCsv');
+    const perDayControls = document.getElementById('perDayControls');
+    const perTradeControls = document.getElementById('perTradeControls');
+    const modeBtns = document.querySelectorAll('.modeBtn');
+    let mode = 'perDay';
+
+    modeBtns.forEach(btn => btn.addEventListener('click', () => {
+      mode = btn.dataset.mode;
+      modeBtns.forEach(b => b.classList.toggle('opacity-80', b !== btn));
+      if (mode === 'perDay') {
+        perDayControls.classList.remove('hidden');
+        perTradeControls.classList.add('hidden');
+      } else {
+        perDayControls.classList.add('hidden');
+        perTradeControls.classList.remove('hidden');
+      }
+      renderAll();
+    }));
+
+    const syncLabels = () => {
+      dailyPctValEl.textContent = dailyPctEl.value + '%';
+      perTradePctValEl.textContent = perTradePctEl.value + '%';
+      tradesPerDayValEl.textContent = tradesPerDayEl.value;
+      daysValEl.textContent = daysEl.value;
+    };
+
+    [amountEl, dailyPctEl, perTradePctEl, tradesPerDayEl, daysEl].forEach(el => {
+      el.addEventListener('input', () => { syncLabels(); renderAll(); });
+      el.addEventListener('change', () => { syncLabels(); renderAll(); });
+    });
+    syncLabels();
+
+    const fmt = (n) => {
+      if (!isFinite(n)) return '-';
+      const abs = Math.abs(n);
+      if (abs >= 1e12) return (n/1e12).toFixed(2) + 'T';
+      if (abs >= 1e9) return (n/1e9).toFixed(2) + 'B';
+      if (abs >= 1e6) return (n/1e6).toFixed(2) + 'M';
+      if (abs >= 1e3) return (n/1e3).toFixed(2) + 'K';
+      return n.toFixed(2);
+    };
+
+    const makeAutoscaleSpan = (text) => {
+      const span = document.createElement('span');
+      span.className = 'autoscale';
+      span.textContent = text;
+      span.dataset.chars = String(text).length;
+      const len = span.dataset.chars | 0;
+      const clamp = (min, v, max) => Math.max(min, Math.min(v, max));
+      const scale = clamp(0.7, 14/len, 1);
+      span.style.fontSize = (scale * 1.0) + 'rem';
+      return span;
+    };
+
+    const project = (amount, days, mode, dailyPct, perTradePct, tradesPerDay) => {
+      const rows = [];
+      let balance = amount;
+      for (let d = 1; d <= days; d++) {
+        const start = balance;
+        let growthFactor;
+        if (mode === 'perDay') {
+          growthFactor = 1 + (dailyPct / 100);
+        } else {
+          const perTrade = 1 + (perTradePct / 100);
+          growthFactor = Math.pow(perTrade, tradesPerDay);
+        }
+        const end = start * growthFactor;
+        const profit = end - start;
+        rows.push({ day: d, start, profit, end });
+        balance = end;
+      }
+      return rows;
+    };
+
+    const ctx = document.getElementById('equityChart');
+    let chart;
+    const renderChart = (data) => {
+      const labels = data.map(r => r.day);
+      const equity = data.map(r => r.end);
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: { labels, datasets: [{ label: 'Equity', data: equity, tension: 0.2 }] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { labels: { color: '#e5e7eb' } },
+            tooltip: { callbacks: { label: (c) => ' ' + new Intl.NumberFormat().format(c.parsed.y.toFixed ? c.parsed.y.toFixed(2) : c.parsed.y) } }
+          },
+          scales: {
+            x: { ticks: { color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+            y: { type: scaleToggle.value, ticks: { color: '#9ca3af' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+          }
+        }
+      });
+    };
+    scaleToggle.addEventListener('change', () => renderAll());
+
+    const renderTable = (data) => {
+      tableBody.innerHTML = '';
+      const frag = document.createDocumentFragment();
+      data.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-neutral-800/40 transition';
+        const tdDay = document.createElement('td'); tdDay.className = 'px-4 py-3 text-neutral-300'; tdDay.textContent = r.day;
+        const tdStart = document.createElement('td'); tdStart.className = 'px-4 py-3'; tdStart.appendChild(makeAutoscaleSpan('$' + fmt(r.start)));
+        const tdProfit = document.createElement('td'); tdProfit.className = 'px-4 py-3 text-green-400'; tdProfit.appendChild(makeAutoscaleSpan('+$' + fmt(r.profit)));
+        const tdEnd = document.createElement('td'); tdEnd.className = 'px-4 py-3 font-semibold'; tdEnd.appendChild(makeAutoscaleSpan('$' + fmt(r.end)));
+        tr.append(tdDay, tdStart, tdProfit, tdEnd);
+        frag.appendChild(tr);
+      });
+      tableBody.appendChild(frag);
+    };
+
+    const toCsv = (data) => {
+      const header = ['Day','Start','Profit','End'];
+      const rows = data.map(r => [r.day, r.start.toFixed(8), r.profit.toFixed(8), r.end.toFixed(8)]);
+      return [header, ...rows].map(r => r.join(',')).join('\\n');
+    };
+
+    downloadCsvBtn.addEventListener('click', () => {
+      const amount = parseFloat(amountEl.value || '0');
+      const days = parseInt(daysEl.value || '0', 10);
+      const dailyPct = parseFloat(dailyPctEl.value || '0');
+      const perTradePct = parseFloat(perTradePctEl.value || '0');
+      const tpd = parseInt(tradesPerDayEl.value || '1', 10);
+      const data = project(amount, days, mode, dailyPct, perTradePct, tpd);
+      const blob = new Blob([toCsv(data)], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'trustmeai_projection.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    const renderAll = () => {
+      const amount = parseFloat(amountEl.value || '0');
+      const days = parseInt(daysEl.value || '0', 10);
+      const dailyPct = parseFloat(dailyPctEl.value || '0');
+      const perTradePct = parseFloat(perTradePctEl.value || '0');
+      const tpd = parseInt(tradesPerDayEl.value || '1', 10);
+      const data = project(amount, days, mode, dailyPct, perTradePct, tpd);
+      renderChart(data);
+      renderTable(data);
+    };
+    renderAll();
+  </script>
+</body>
+</html>
