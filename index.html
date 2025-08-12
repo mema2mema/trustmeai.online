@@ -1,1 +1,37 @@
-[PASTE THE HTML CODE I JUST GAVE ABOVE HERE]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrustMe AI — Day 1</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-neutral-950 text-neutral-100">
+    <section class="hero">
+        <video autoplay muted loop playsinline id="bg-video">
+            <source src="assets/hero.mp4" type="video/mp4">
+        </video>
+        <div class="hero-text">
+            <h1>The Architect: <span class="highlight">I Am TrustMe AI</span></h1>
+            <p>Observe. Learn. Execute. Precision at machine speed.</p>
+            <div class="buttons">
+                <button onclick="skipIntro()">Skip intro</button>
+                <button onclick="showCalculator()">See the Calculator</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="calculator" style="display:none;">
+        <h2>Profit Projection</h2>
+        <div>
+            <label>Start Amount: <input type="number" id="startAmount" value="150"></label>
+            <label>Daily %: <input type="number" id="dailyPercent" value="25"></label>
+            <label>Days: <input type="number" id="days" value="30"></label>
+            <button onclick="calculateProfit()">Calculate</button>
+        </div>
+        <table id="results"></table>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
