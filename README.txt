@@ -1,4 +1,1 @@
-TrustMe AI Day 1 build
-
-Place this folder on Netlify as the deploy folder (root must contain index.html).
-Ensure your video exists at ./assets/hero.mp4 and poster at ./assets/hero_poster.jpg.
+Deploy this folder to Netlify. Place compressed hero.mp4 and hero_poster.jpg into ./assets/ before deploy.
