@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html>
 <head>
@@ -8,7 +7,6 @@
   <script src="./app.js?v=3" defer></script>
 </head>
 <body data-page="withdraw">
-  
 <nav>
   <div class="nav-inner">
     <div class="nav-brand"><span class="logo-dot"></span> TrustMe AI</div>
@@ -16,35 +14,20 @@
     <a href="/strategy.html">Strategy</a>
     <a href="/assets.html">Assets</a>
     <a href="/deposit.html">Deposit</a>
-    <a href="/withdraw.html">Withdraw</a>
-    <span class="right badge">Aurora Glass UI</span>
+    <a class="active" href="/withdraw.html">Withdraw</a>
   </div>
 </nav>
-
-  <div class="container">
-    <h1>Withdraw</h1>
-    <div class="card section">
-      <label class="notice">To Address (T... or 0x...)</label>
-      <input id="to" class="input" placeholder="T... or 0x...">
-      <div class="flex" style="margin-top:12px">
-        <input id="wamt" class="input" style="max-width:200px" value="1000">
-        <button class="btn" id="wsubmit">Submit</button>
-      </div>
-      <div class="notice" style="margin-top:8px">Network fee preview: ~1 USDT (TRC20). Large withdrawals may require manual approval (demo).</div>
-    </div>
-
-    <div class="card section">
-      <h2>History</h2>
-      <table class="table">
-        <thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead>
-        <tbody id="historyBody"></tbody>
-      </table>
-    </div>
+<div class="container">
+  <h1>Withdraw</h1>
+  <div class="card section">
+    <label>To Address: <input id="to" type="text" placeholder="T... or 0x..."/></label>
+    <label>Amount (USDT): <input id="wamt" type="number" min="1"/></label>
+    <button id="wsubmit">Submit Withdrawal</button>
   </div>
-  
-<div class="footer">
-  © 2025 TrustMe AI • Contact: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a> · <a href="https://t.me/" target="_blank">Telegram</a>
+  <div class="card section">
+    <h2>History</h2>
+    <table class="table"><thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead><tbody id="historyBody"></tbody></table>
+  </div>
 </div>
-
 </body>
 </html>

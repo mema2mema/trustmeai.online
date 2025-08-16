@@ -220,3 +220,70 @@ document.addEventListener('DOMContentLoaded', ()=>{
     } catch(e) { console.warn('assets render failed', e); }
   }
 });
+
+
+
+// --- Strategy page ---
+if(page==='strategy'){
+  const tbody = document.querySelector('#historyBody');
+  const planBtns = document.querySelectorAll('.activatePlan');
+  planBtns.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const plan = btn.dataset.plan || 'Custom';
+      const row = {time:now(), type:'plan', amount:0, fee:0, status:'activated '+plan};
+      addHistoryRow(tbody,row);
+      alert('Plan '+plan+' activated successfully!');
+    });
+  });
+}
+
+// --- Deposit page ---
+if(page==='deposit'){
+  const addr = document.querySelector('#addr');
+  const qr = document.querySelector('#qr');
+  const tbody = document.querySelector('#historyBody');
+  function genAddress(){
+    const useTRON = Math.random()<0.5;
+    const a = useTRON? randomTRON(): randomEVM();
+    addr.textContent = a;
+    qr.src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='+encodeURIComponent(a);
+  }
+  genAddress();
+  const amountSel = document.querySelector('#amountSel');
+  const delaySel = document.querySelector('#delaySel');
+  const scheduleBtn = document.querySelector('#scheduleBtn');
+  scheduleBtn.addEventListener('click', ()=>{
+    const v = parseFloat(amountSel.value||'0');
+    const d = parseInt(delaySel.value||'5',10);
+    if(!(v>0)) return alert('Enter amount');
+    const row = {time:now(), type:'deposit', amount:v, fee:0, status:'pending'};
+    addHistoryRow(tbody,row);
+    setTimeout(()=>{
+      row.status='confirmed'; 
+      addHistoryRow(tbody,{...row});
+      alert('Deposit of '+v+' USDT confirmed!');
+    }, d*1000);
+  });
+}
+
+// --- Withdraw page ---
+if(page==='withdraw'){
+  const to = document.querySelector('#to');
+  const amt = document.querySelector('#wamt');
+  const btn = document.querySelector('#wsubmit');
+  const tbody = document.querySelector('#historyBody');
+  btn.addEventListener('click', ()=>{
+    const a = parseFloat(amt.value||'0');
+    const t = to.value.trim();
+    if(!/^T|0x/.test(t)){ alert('Enter a valid TRC20 (T...) or EVM (0x...) address'); return; }
+    if(!(a>0)){ alert('Enter amount'); return; }
+    const row = {time:now(), type:'withdraw', amount:a, fee:1, status:'pending'};
+    addHistoryRow(tbody,row);
+    setTimeout(()=>{
+      row.status='submitted';
+      addHistoryRow(tbody,{...row});
+      alert('Withdrawal of '+a+' USDT submitted!');
+    }, 3000);
+    to.value=''; amt.value='';
+  });
+}
