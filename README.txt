@@ -1,25 +1,36 @@
-TRUSTME AI — Auth + Guard (final, non-conflicting)
+TrustMe AI — Safe Patch (no conflicts)
+=======================================
 
-FILES
- - tm-auth.js   -> minimal auth (register/login/logout/localStorage)
- - guard.js     -> optional page guard for protected pages
- - login.html   -> login page
- - register.html-> register page (email, password, retype, email code, referral)
+This patch keeps your working Home/Strategy/Assets/Deposit/Withdraw intact
+and fixes Login/Register + Strategy plan activation wiring.
 
-HOW TO USE
-1) Upload all four files to your site root (next to index.html).
+Files included (drop-in replacements):
+ - login.html
+ - register.html
+ - tm-auth.js              (minimal, no header/nav injection)
+ - guard.js                (optional: page lock helper)
+ - strategy.html           (only the bottom <script> section updated to safely bind)
+ - script.js               (exposes window.bindActivatePlan + robust handlers)
 
-2) DO NOT include tm-auth.js or guard.js on Home/Strategy/Assets/Deposit/Withdraw unless you want to protect a page.
+How to install
+--------------
+1) BACKUP your current folder.
+2) Copy the files from this patch into your site root (same place as index.html).
+   Allow overwrite for the matching files above ONLY.
+3) Deploy, then hard refresh your browser (Ctrl+F5).
 
-3) To protect a page (e.g., strategy.html):
-   - Add data-auth to the body tag:
-       <body data-auth="required">
-   - Add these two scripts (order matters) anywhere on the page (head or before </body>):
-       <script src="tm-auth.js"></script>
-       <script src="guard.js"></script>
+Optional page lock
+------------------
+If you want to require login for a page, add to that page:
+  <body data-auth="required">
+and include (before </body>):
+  <script src="tm-auth.js"></script>
+  <script src="guard.js"></script>
+Users not logged in are redirected to login.html?next=<thatpage>.
 
-   If not logged in, users are redirected to login.html?next=thatpage.html
-
-4) Login/Register pages already include tm-auth.js and are isolated from your app code.
-
-5) If you change style.css path, update the <link rel="stylesheet"> in login/register pages.
+Notes
+-----
+- The Strategy page update makes sure bindActivatePlan() is called AFTER the DOM
+  is ready and only if the function exists (prevents silent failures).
+- The script.js update exposes bindActivatePlan on window and uses data-* attributes
+  to pass min/max limits per tier to the popup.

@@ -1,4 +1,4 @@
-/* guard.js — simple page guard for protected pages */
+/* guard.js — redirect unauthenticated users from protected pages */
 document.addEventListener('DOMContentLoaded', () => {
   const mustAuth = document.body && document.body.getAttribute('data-auth') === 'required';
   if (!mustAuth) return;

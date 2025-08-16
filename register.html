@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Register — TrustMe AI</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <style>.auth-box{max-width:520px;margin:48px auto}</style>
 </head>
 <body>
@@ -14,22 +14,22 @@
       <h2>Create Account</h2>
       <form id="regForm">
         <label class="small">Email</label>
-        <input id="regEmail" class="input" type="email" placeholder="you@example.com" required>
+        <input id="regEmail" class="input" type="email" placeholder="you@example.com" required />
         <label class="small" style="margin-top:.6rem">Password</label>
-        <input id="regPass" class="input" type="password" placeholder="At least 6 characters" required>
+        <input id="regPass" class="input" type="password" placeholder="At least 6 characters" required />
         <label class="small" style="margin-top:.6rem">Re-type Password</label>
-        <input id="regPass2" class="input" type="password" placeholder="Repeat password" required>
+        <input id="regPass2" class="input" type="password" placeholder="Repeat password" required />
         <div class="grid grid-2" style="gap:.6rem;margin-top:.6rem">
           <div>
             <label class="small">Email Code</label>
-            <input id="regCode" class="input" type="text" placeholder="6-digit code" disabled required>
+            <input id="regCode" class="input" type="text" placeholder="6-digit code" disabled required />
           </div>
           <div style="display:flex;align-items:flex-end">
             <button id="sendCode" type="button" class="btn" style="width:100%">Send Code</button>
           </div>
         </div>
         <label class="small" style="margin-top:.6rem">Referral Code (optional)</label>
-        <input id="regRef" class="input" type="text" placeholder="ABC123 (optional)">
+        <input id="regRef" class="input" type="text" placeholder="ABC123 (optional)" />
         <button class="btn" style="width:100%;margin-top:.9rem">Create Account</button>
       </form>
       <p class="small" style="margin-top:.6rem">Already registered? <a href="login.html">Login</a></p>
@@ -37,11 +37,11 @@
     </div>
   </main>
 
-  <script src="tm-auth.js" onerror="document.getElementById('dbg').textContent='ERROR: tm-auth.js failed to load (check filename & path)'"></script>
+  <script src="tm-auth.js" onerror="document.getElementById('dbg').textContent='ERROR: tm-auth.js failed to load at /tm-auth.js'"></script>
   <script>
     (function(){
       const dbg = (t)=>document.getElementById('dbg').textContent = t || '';
-      if(!window.TMAuth){ dbg('TMAuth not found. Make sure tm-auth.js exists at site root.'); return; }
+      if(!window.TMAuth){ dbg('TMAuth not found. Ensure tm-auth.js is in the site root.'); return; }
       let CODE=null, EXP=0;
       document.getElementById('sendCode').addEventListener('click', ()=>{
         const email=document.getElementById('regEmail').value.trim().toLowerCase();
@@ -51,7 +51,7 @@
         if(p.length<6) return alert('Password must be at least 6 characters');
         if(p!==p2) return alert('Passwords do not match');
         CODE=String(Math.floor(100000+Math.random()*900000)); EXP=Date.now()+10*60*1000;
-        alert('Demo confirmation code: '+CODE+' (valid 10 min)');
+        alert('Demo code: '+CODE+' (valid 10 min)');
         const codeInput=document.getElementById('regCode'); codeInput.disabled=false; codeInput.focus();
       });
       document.getElementById('regForm').addEventListener('submit', async (e)=>{

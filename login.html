@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login — TrustMe AI</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    .auth-box{max-width:520px;margin:48px auto}
-  </style>
+  <link rel="stylesheet" href="style.css" />
+  <style>.auth-box{max-width:520px;margin:48px auto}</style>
 </head>
 <body>
   <main class="auth-box">
@@ -16,9 +14,9 @@
       <h2>Login</h2>
       <form id="loginForm">
         <label class="small">Email</label>
-        <input id="loginEmail" class="input" type="email" placeholder="you@example.com" required>
+        <input id="loginEmail" class="input" type="email" placeholder="you@example.com" required />
         <label class="small" style="margin-top:.6rem">Password</label>
-        <input id="loginPass" class="input" type="password" placeholder="••••••••" required>
+        <input id="loginPass" class="input" type="password" placeholder="••••••••" required />
         <button class="btn" style="width:100%;margin-top:.9rem">Login</button>
       </form>
       <p class="small" style="margin-top:.6rem">No account? <a href="register.html">Register</a></p>
@@ -26,11 +24,11 @@
     </div>
   </main>
 
-  <script src="tm-auth.js" onerror="document.getElementById('dbg').textContent='ERROR: tm-auth.js failed to load (check filename & path)'"></script>
+  <script src="tm-auth.js" onerror="document.getElementById('dbg').textContent='ERROR: tm-auth.js failed to load at /tm-auth.js'"></script>
   <script>
     (function(){
       const dbg = (t)=>document.getElementById('dbg').textContent = t || '';
-      if(!window.TMAuth){ dbg('TMAuth not found. Make sure tm-auth.js exists at site root.'); return; }
+      if(!window.TMAuth){ dbg('TMAuth not found. Ensure tm-auth.js is in the site root.'); return; }
       document.getElementById('loginForm').addEventListener('submit', async (e)=>{
         e.preventDefault();
         const email = document.getElementById('loginEmail').value.trim().toLowerCase();
