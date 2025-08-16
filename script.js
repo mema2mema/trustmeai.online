@@ -237,6 +237,12 @@ function hijackActivateButtons(){
 document.addEventListener('DOMContentLoaded', hijackActivateButtons);
 
 // v1.6.5: minimal modal UI (style like picture 1) + guaranteed submit
+    addHistoryRow(new Date(), 'lock', amt, 0, 'active');
+    closeModal();
+    toast(`${tier} activated with ${amt.toFixed(2)} USDT (demo)`);
+  }, {once:true});
+}
+
 function showTierModal(tier){
   const lim=TIER_LIMITS[tier];
   const rangeTxt = lim ? `${lim.min.toLocaleString()}–${lim.max.toLocaleString()} USDT` : '';
@@ -248,21 +254,41 @@ function showTierModal(tier){
         <button class="btn-ghost" data-close>Close</button>
       </div>
       <p class="small" style="opacity:.85;margin:.25rem 0 .75rem 0">Min–Max: ${rangeTxt}</p>
-      <input id="tierAmountInput" type="number" min="${lim?.min||0}" max="${lim?.max||0}" step="1" placeholder="Enter amount" class="input" style="width:100%"/>
+      <input id="tierAmountInput" type="text" inputmode="decimal" placeholder="Enter amount" class="input" style="width:100%"/>
       <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.9rem">
         <button class="btn-ghost" data-close>Cancel</button>
         <button class="btn" id="tierConfirmBtn">Confirm</button>
       </div>
     </div>`;
   openModal(modalHTML);
-  const confirmBtn = document.getElementById('tierConfirmBtn');
-  confirmBtn?.addEventListener('click', ()=>{
-    const input = document.getElementById('tierAmountInput');
-    const amt = parseFloat((input?.value||'0').trim());
-    const v = validateTierAmount(tier, amt);
+  bindTierConfirm(tier);
+}
+
+// v1.6.6: robust confirm flow
+window.TIER_LIMITS = window.TIER_LIMITS || {
+  T1:{min:50,max:999},
+  T2:{min:1000,max:9999},
+  T3:{min:10000,max:19999},
+  T4:{min:20000,max:100000}
+};
+function sanitizeNumber(val){
+  // remove commas/spaces and convert
+  return parseFloat(String(val).replace(/[,\s]/g,''));
+}
+function bindTierConfirm(tier){
+  const btn=document.getElementById('tierConfirmBtn');
+  const input=document.getElementById('tierAmountInput');
+  if(!btn || !input) return;
+  const submit=()=>{
+    const amt=sanitizeNumber(input.value||'0');
+    const v=validateTierAmount(tier, amt);
     if(!v.ok){ alert(v.msg); return; }
     addHistoryRow(new Date(), 'lock', amt, 0, 'active');
     closeModal();
     toast(`${tier} activated with ${amt.toFixed(2)} USDT (demo)`);
-  }, {once:true});
+  };
+  btn.addEventListener('click', submit, {once:true});
+  input.addEventListener('keydown', (e)=>{
+    if(e.key==='Enter'){ e.preventDefault(); submit(); }
+  });
 }
