@@ -208,11 +208,13 @@ $("#year").textContent = new Date().getFullYear();
   if(sel){ sel.addEventListener('change', update); update(); }
 })();
 
+
 // ===== Auto deposit simulation after address generation =====
 (function(){
   let pendingTimer = null;
   const genBtn = document.getElementById('btnGenerateDeposit');
-  function cancelTimer(){ if(pendingTimer){ clearTimeout(pendingTimer); pendingTimer=null; } }
+  const statusEl = document.getElementById('demoStatus');
+  function cancelTimer(){ if(pendingTimer){ clearTimeout(pendingTimer); pendingTimer=null; if(statusEl) statusEl.textContent='No demo deposit scheduled.'; } }
   function addHistoryRow(type, amount, fee, status){
     const tbody = document.querySelector("#historyTable tbody");
     if (!tbody) return;
@@ -222,11 +224,10 @@ $("#year").textContent = new Date().getFullYear();
       <td class="p-2">${type}</td>
       <td class="p-2">${Number(amount).toFixed(2)}</td>
       <td class="p-2">${fee?Number(fee).toFixed(2):'0.00'}</td>
-      <td class="p-2">confirmed</td>`;
+      <td class="p-2">${status}</td>`;
     tbody.prepend(tr);
   }
   function credit(amount){
-    // Increase available balance
     const el = document.getElementById("walletAvailable");
     if (!el) return;
     const cur = Number(el.textContent.replace(/,/g,'')) || 0;
@@ -236,12 +237,18 @@ $("#year").textContent = new Date().getFullYear();
   if(genBtn){
     genBtn.addEventListener('click', ()=>{
       cancelTimer();
-      // Demo: credit 100 USDT after ~2 minutes
+      const amtSel = document.getElementById('demoAmount');
+      const delSel = document.getElementById('demoDelay');
+      const amount = amtSel ? Number(amtSel.value) : 100;
+      const delaySec = delSel ? Number(delSel.value) : 10;
+      if(statusEl) statusEl.textContent = `Demo deposit scheduled: +${amount} USDT in ~${delaySec}s...`;
+      // show pending row immediately
+      addHistoryRow('deposit', amount, 0, 'pending');
       pendingTimer = setTimeout(()=>{
-        addHistoryRow('deposit', 100, 0, 'confirmed');
-        credit(100);
-        alert('Demo deposit confirmed: +100 USDT');
-      }, 120000); // 2 minutes
+        credit(amount);
+        addHistoryRow('deposit', amount, 0, 'confirmed');
+        if(statusEl) statusEl.textContent = `Demo deposit confirmed: +${amount} USDT`;
+      }, delaySec * 1000);
     });
   }
 })();

@@ -86,6 +86,30 @@
           <button id="btnCheckDeposit" class="rounded-xl px-3 py-2 bg-gray-100">Check</button>
         </div>
         
+
+<div class="mt-3 text-xs bg-amber-50 border border-amber-200 rounded-xl p-3">
+  <div class="font-medium text-amber-700 mb-2">Demo Controls (testing only)</div>
+  <div class="grid grid-cols-2 gap-2">
+    <label class="flex items-center gap-2 text-amber-700">
+      Amount:
+      <select id="demoAmount" class="border rounded p-1">
+        <option value="25">25 USDT</option>
+        <option value="50">50 USDT</option>
+        <option value="100" selected>100 USDT</option>
+      </select>
+    </label>
+    <label class="flex items-center gap-2 text-amber-700">
+      Delay:
+      <select id="demoDelay" class="border rounded p-1">
+        <option value="10">10s</option>
+        <option value="60">60s</option>
+        <option value="120">120s</option>
+      </select>
+    </label>
+  </div>
+  <div id="demoStatus" class="mt-2 text-amber-700">No demo deposit scheduled.</div>
+</div>
+
 <div id="walletAddressWrap" class="mt-3 text-sm hidden">
   <div class="opacity-70">Your address</div>
   <div class="flex items-center gap-2">
