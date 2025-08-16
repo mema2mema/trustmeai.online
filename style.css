@@ -143,6 +143,6 @@ hr.sep{border:0;border-top:1px solid var(--soft);margin:1rem 0;opacity:.8}
 .oct-card .oct-inner{ transform: translateZ(20px); }
 .oct-card:hover{ box-shadow: 0 14px 40px rgba(0,0,0,.3), 0 0 0 1px rgba(103,232,249,.28) inset; }
 
-.auth-area{ position:absolute; right:0; top:0; display:flex; gap:.5rem; align-items:center; height:100%; }
+.auth-area{ position:absolute; right:12px; top:0; display:flex; gap:.5rem; align-items:center; height:100%; }
 .auth-area .btn{ padding:.4rem .7rem; font-size:.9rem }
 .auth-email{ color:#B6C2D9; font-size:.9rem; }
