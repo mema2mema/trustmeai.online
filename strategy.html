@@ -1,114 +1,82 @@
-
-<!doctype html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TrustMe AI — Strategy</title>
+<!doctype html><html><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Strategy — TrustMe AI</title>
 <link rel="stylesheet" href="style.css">
 </head><body>
 <div class="nav">
-  <div class="brand"><div class="dot"></div>TrustMe AI</div>
-  <div class="links">
-    <a href="index.html">Home</a>
-    <a href="strategy.html">Strategy</a>
-    <a href="assets.html">Assets</a>
-    <a href="deposit.html">Deposit</a>
-    <a href="withdraw.html">Withdraw</a>
+  <div class="nav-inner">
+    <div class="brand"><span class="brand-dot"></span>TrustMe AI</div>
+    <div>
+      <a href="index.html">Home</a>
+      <a href="strategy.html">Strategy</a>
+      <a href="assets.html">Assets</a>
+      <a href="deposit.html">Deposit</a>
+      <a href="withdraw.html">Withdraw</a>
+    </div>
   </div>
 </div>
-
 <div class="container">
   <h1>Strategy Plans (T1–T4)</h1>
   <div class="tiers">
-    <div class="tier" data-tier="T1" data-min="50" data-max="999" data-ymin="0.5" data-ymax="1.0">
-      <div class="tbar"></div>
-      <h3>T1</h3><div class="caption">$50–$999 USDT • 0.5%–1.0%/day</div>
-      <button class="btn open-modal">Activate Plan</button>
+    <div class="card tier" data-tier="T1" data-min="50" data-max="999" data-rate="0.5–1.0% / day">
+      <div class="stripe"></div>
+      <h3>T1</h3>
+      <div class="muted">$50–$999 USDT</div>
+      <div class="progress" style="margin:12px 0"><span style="width:85%"></span></div>
+      <div class="badge">0.5%–1.0% / day</div>
+      <div class="actions" style="margin-top:14px"><button class="btn primary open-activate">Activate Plan</button></div>
     </div>
-    <div class="tier" data-tier="T2" data-min="1000" data-max="9999" data-ymin="1.0" data-ymax="1.5">
-      <div class="tbar"></div>
-      <h3>T2</h3><div class="caption">$1,000–$9,999 USDT • 1.0%–1.5%/day</div>
-      <button class="btn open-modal">Activate Plan</button>
+    <div class="card tier" data-tier="T2" data-min="1000" data-max="9999" data-rate="1.0–1.5% / day">
+      <div class="stripe"></div>
+      <h3>T2</h3>
+      <div class="muted">$1,000–$9,999 USDT</div>
+      <div class="progress" style="margin:12px 0"><span style="width:88%"></span></div>
+      <div class="badge">1.0%–1.5% / day</div>
+      <div class="actions" style="margin-top:14px"><button class="btn primary open-activate">Activate Plan</button></div>
     </div>
-    <div class="tier" data-tier="T3" data-min="10000" data-max="19999" data-ymin="1.5" data-ymax="2.0">
-      <div class="tbar"></div>
-      <h3>T3</h3><div class="caption">$10,000–$19,999 USDT • 1.5%–2.0%/day</div>
-      <button class="btn open-modal">Activate Plan</button>
+    <div class="card tier" data-tier="T3" data-min="10000" data-max="19999" data-rate="1.5–2.0% / day">
+      <div class="stripe"></div>
+      <h3>T3</h3>
+      <div class="muted">$10,000–$19,999 USDT</div>
+      <div class="progress" style="margin:12px 0"><span style="width:92%"></span></div>
+      <div class="badge">1.5%–2.0% / day</div>
+      <div class="actions" style="margin-top:14px"><button class="btn primary open-activate">Activate Plan</button></div>
     </div>
-    <div class="tier" data-tier="T4" data-min="20000" data-max="100000" data-ymin="2.0" data-ymax="3.0" style="grid-column:1/-1">
-      <div class="tbar"></div>
-      <h3>T4</h3><div class="caption">$20,000–$100,000 USDT • 2.0%–3.0%/day</div>
-      <button class="btn open-modal">Activate Plan</button>
+    <div class="card tier" data-tier="T4" data-min="20000" data-max="100000" data-rate="2.0–3.0% / day">
+      <div class="stripe"></div>
+      <h3>T4</h3>
+      <div class="muted">$20,000–$100,000 USDT</div>
+      <div class="progress" style="margin:12px 0"><span style="width:96%"></span></div>
+      <div class="badge">2.0%–3.0% / day</div>
+      <div class="actions" style="margin-top:14px"><button class="btn primary open-activate">Activate Plan</button></div>
     </div>
   </div>
-
-  <div class="card" style="margin-top:22px">
-    <h3>History</h3>
+  <div class="card">
+    <h2>History</h2>
     <table class="table" id="hist">
-      <thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead>
+      <thead><tr><th>Time</th><th>Type</th><th>Tier</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead>
       <tbody></tbody>
     </table>
   </div>
 </div>
-
-<div class="modal" id="modal">
-  <div class="box">
-    <div class="tbar"></div>
+<div class="modal-backdrop" id="activateModal">
+  <div class="modal">
     <h3 id="mTitle">Activate</h3>
-    <div class="help" id="mRange"></div>
-    <div class="row" style="margin:10px 0 6px">
-      <input id="mAmount" class="input" placeholder="Enter amount (USDT)" inputmode="decimal">
-      <button id="mCancel" class="btn secondary">Cancel</button>
-      <button id="mConfirm" class="btn">Confirm</button>
+    <div class="muted" id="mRange"></div>
+    <div class="row"><input class="input" id="mAmount" placeholder="Enter amount (USDT)" inputmode="decimal"></div>
+    <div class="row">
+      <button class="btn" id="mCancel">Cancel</button>
+      <button class="btn primary" id="mConfirm">Confirm</button>
     </div>
-    <div class="help" id="mEst">Estimated daily: —</div>
   </div>
 </div>
-
-<script>
-const modal = document.getElementById('modal');
-let cur = null;
-document.querySelectorAll('.open-modal').forEach(btn=>{
-  btn.addEventListener('click', (e)=>{
-    const card = e.target.closest('.tier');
-    cur = {
-      tier: card.dataset.tier,
-      min: +card.dataset.min,
-      max: +card.dataset.max,
-      ymin:+card.dataset.ymin,
-      ymax:+card.dataset.ymax,
-    };
-    document.getElementById('mTitle').textContent = `Activate ${cur.tier}`;
-    document.getElementById('mRange').textContent = `Min–Max: $${cur.min.toLocaleString()}–$${cur.max.toLocaleString()} USDT`;
-    document.getElementById('mAmount').value='';
-    document.getElementById('mEst').textContent='Estimated daily: —';
-    modal.classList.add('active');
-    document.getElementById('mAmount').focus();
-  });
-});
-document.getElementById('mCancel').onclick=()=>modal.classList.remove('active');
-document.getElementById('mAmount').addEventListener('input', e=>{
-  const v = parseFloat(e.target.value||'0');
-  if(!cur) return;
-  if(v>0){
-    const r = (cur.ymin + Math.random()*(cur.ymax-cur.ymin));
-    const est = v*r/100;
-    document.getElementById('mEst').textContent = `Estimated daily: ${est.toFixed(2)} USDT (${r.toFixed(2)}%)`;
-  }else{
-    document.getElementById('mEst').textContent='Estimated daily: —';
-  }
-});
-document.getElementById('mConfirm').onclick = ()=>{
-  const v = parseFloat(document.getElementById('mAmount').value||'0');
-  if(!cur) return;
-  if(!(v >= cur.min && v <= cur.max)){
-    alert(`Amount must be between ${cur.min} and ${cur.max} USDT for ${cur.tier}.`);
-    return;
-  }
-  const tr = document.createElement('tr');
-  const now = new Date();
-  const t = now.toLocaleString();
-  tr.innerHTML = `<td>${t}</td><td>lock (${cur.tier})</td><td>${v.toFixed(2)}</td><td>0.00</td><td>active</td>`;
-  document.querySelector('#hist tbody').prepend(tr);
-  modal.classList.remove('active');
-};
-</script>
+<div class="footer">
+  <div class="container small">
+    <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+      <div>© 2025 TrustMe AI</div>
+      <div>Contact: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a> · <a href="https://t.me/" target="_blank">Telegram</a></div>
+    </div>
+  </div>
+</div>
+<script src="site.js"></script>
 </body></html>
