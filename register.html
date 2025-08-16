@@ -3,50 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <title>Register - TrustMe AI</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles/style.css">
+  <script src="tm-auth.js"></script>
 </head>
 <body>
   <div class="auth-container">
-    <h2>Create Account</h2>
-    <form id="registerForm">
-      <label>Email</label>
-      <input type="email" id="email" required>
+    <h2>Register</h2>
+    <form id="regForm">
+      <input type="email" id="regEmail" placeholder="Email" required><br>
+      <input type="password" id="regPass" placeholder="Password" required><br>
+      <input type="password" id="regPass2" placeholder="Re-type Password" required><br>
 
-      <label>Password</label>
-      <input type="password" id="password" required>
+      <div style="margin:10px 0">
+        <input type="text" id="regCode" placeholder="Enter Code" disabled required>
+        <button type="button" id="sendCode" class="btn-ghost">Send Code</button>
+      </div>
 
-      <label>Re-type Password</label>
-      <input type="password" id="password2" required>
-
-      <label>Referral Code (optional)</label>
-      <input type="text" id="ref">
-
-      <button type="submit">Register</button>
+      <input type="text" id="regRef" placeholder="Referral Code (optional)"><br>
+      <button type="submit" class="btn">Create Account</button>
     </form>
-    <p>Already have an account? <a href="login.html">Login</a></p>
+    <p>Already registered? <a href="login.html">Login here</a></p>
   </div>
 
-  <script src="tm-auth.js"></script>
   <script>
-    const form = document.getElementById('registerForm');
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value.trim();
-      const pass  = document.getElementById('password').value.trim();
-      const pass2 = document.getElementById('password2').value.trim();
-      const ref   = document.getElementById('ref').value.trim();
+    let code = null, expire = 0;
 
-      if(pass !== pass2){
-        alert("Passwords do not match");
-        return;
-      }
+    document.getElementById('sendCode').onclick = () => {
+      code = Math.floor(100000 + Math.random()*900000).toString();
+      expire = Date.now() + 10*60*1000;
+      alert("📧 Demo Code (valid 10 min): " + code);
+      document.getElementById('regCode').disabled = false;
+    };
+
+    document.getElementById('regForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const email = document.getElementById('regEmail').value.trim();
+      const pass  = document.getElementById('regPass').value.trim();
+      const pass2 = document.getElementById('regPass2').value.trim();
+      const inputCode = document.getElementById('regCode').value.trim();
+      const ref   = document.getElementById('regRef').value.trim();
+
+      if(pass !== pass2) return alert("❌ Passwords do not match");
+      if(!code || Date.now()>expire || inputCode!==code) return alert("❌ Invalid or expired code");
 
       const ok = await TMAuth.register({email, pass, ref});
       if(ok){
-        alert("Registration successful! You are now logged in.");
-        location.href = "index.html"; // redirect after register
+        alert("✅ Account created successfully!");
+        const next = new URLSearchParams(location.search).get('next') || 'index.html';
+        location.href = next;
       } else {
-        alert("Email already registered.");
+        alert("⚠️ Email already exists");
       }
     });
   </script>
