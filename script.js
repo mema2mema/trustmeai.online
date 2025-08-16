@@ -239,3 +239,18 @@ function bindStrategyActivate(){
   });
 }
 document.addEventListener('DOMContentLoaded', bindStrategyActivate);
+
+// v1.6.4: ensure single Activate modal by hijacking buttons (strip old listeners)
+function hijackActivateButtons(){
+  document.querySelectorAll('[data-tier]').forEach(btn=>{
+    // replace node to remove any existing listeners bound earlier
+    const clone=btn.cloneNode(true);
+    btn.parentNode.replaceChild(clone, btn);
+    clone.addEventListener('click', (ev)=>{
+      ev.preventDefault(); ev.stopPropagation();
+      const tier=clone.getAttribute('data-tier');
+      showTierModal(tier);
+    });
+  });
+}
+document.addEventListener('DOMContentLoaded', hijackActivateButtons);
