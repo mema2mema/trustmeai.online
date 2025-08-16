@@ -292,3 +292,12 @@ function bindTierConfirm(tier){
     if(e.key==='Enter'){ e.preventDefault(); submit(); }
   });
 }
+
+// v1.6.7: delegated click (capture) for Activate Plan buttons
+document.addEventListener('click', function(e){
+  const el = e.target.closest('[data-tier]');
+  if(!el) return;
+  e.preventDefault(); e.stopPropagation();
+  const tier = el.getAttribute('data-tier');
+  if(tier) showTierModal(tier);
+}, true); // capture phase to override any legacy handlers
