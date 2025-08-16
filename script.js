@@ -177,3 +177,65 @@ function drawMoversChart(){
   }
 }
 document.addEventListener('DOMContentLoaded', drawMoversChart);
+
+// v1.6.3 strict tier limits
+const TIER_LIMITS = {
+  T1:{min:50, max:999},
+  T2:{min:1000, max:9999},
+  T3:{min:10000, max:19999},
+  T4:{min:20000, max:100000}
+};
+function validateTierAmount(tier, amt){
+  const lim=TIER_LIMITS[tier];
+  if(!lim) return {ok:false,msg:'Unknown tier'};
+  if(isNaN(amt) || amt<=0) return {ok:false,msg:'Enter a valid amount'};
+  if(amt<lim.min) return {ok:false,msg:`Minimum for ${tier} is ${lim.min} USDT`};
+  if(amt>lim.max) return {ok:false,msg:`Maximum for ${tier} is ${lim.max} USDT`};
+  return {ok:true};
+}
+
+// Hook into any modal confirm buttons dynamically created by openModal()
+document.addEventListener('click', (e)=>{
+  const btn=e.target.closest('[data-confirm-tier]');
+  if(!btn) return;
+  const tier=btn.getAttribute('data-confirm-tier');
+  const input=document.querySelector('#tierAmountInput');
+  const amt=parseFloat((input?.value||'0').trim());
+  const v=validateTierAmount(tier, amt);
+  if(!v.ok){ alert(v.msg); return; }
+  // proceed with existing lock demo
+  addHistoryRow(new Date(), 'lock', amt, 0, 'active');
+  closeModal();
+  toast(`${tier} activated with ${amt.toFixed(2)} USDT (demo)`);
+});
+
+function showTierModal(tier){
+  const lim=TIER_LIMITS[tier];
+  const rangeTxt = lim ? `${lim.min.toLocaleString()}–${lim.max.toLocaleString()}` : '';
+  openModal(`
+    <div class="card panel">
+      <div class="stripe"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <h3 style="margin:0">Activate ${tier}</h3>
+        <button class="btn-ghost" data-close>Close</button>
+      </div>
+      <p class="small" style="margin:.5rem 0 1rem 0">Min–Max: ${rangeTxt} USDT</p>
+      <input id="tierAmountInput" type="number" min="${lim?.min||0}" max="${lim?.max||0}" step="1" placeholder="Enter amount" class="input" style="width:100%"/>
+      <div style="margin-top:1rem;display:flex;gap:.5rem;justify-content:flex-end">
+        <button class="btn-ghost" data-close>Cancel</button>
+        <button class="btn" data-confirm-tier="${tier}">Confirm</button>
+      </div>
+    </div>
+  `);
+}
+
+// Bind activate buttons on strategy page
+function bindStrategyActivate(){
+  document.querySelectorAll('[data-tier]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const tier=btn.getAttribute('data-tier');
+      showTierModal(tier);
+    });
+  });
+}
+document.addEventListener('DOMContentLoaded', bindStrategyActivate);

@@ -113,3 +113,6 @@ footer{border-top:1px solid var(--soft);background:linear-gradient(0deg, rgba(2,
 .footer-nav{display:flex;gap:1rem;justify-content:center;margin:.5rem 0}
 .footer-nav a{color:#C9E7E0;text-decoration:none;font-weight:600}
 .footer-nav a:hover{text-decoration:underline}
+
+/* v1.6.3: show only one footer nav row */
+footer .footer-nav:nth-of-type(n+2){display:none}
