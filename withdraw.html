@@ -1,33 +1,50 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Withdraw — TrustMe AI</title>
-  <link rel="stylesheet" href="./styles.css?v=3"/>
-  <script src="./app.js?v=3" defer></script>
+  <link rel="stylesheet" href="styles.css"/>
+  <script defer src="app.js"></script>
 </head>
-<body data-page="withdraw">
-<nav>
-  <div class="nav-inner">
-    <div class="nav-brand"><span class="logo-dot"></span> TrustMe AI</div>
-    <a href="/index.html">Home</a>
-    <a href="/strategy.html">Strategy</a>
-    <a href="/assets.html">Assets</a>
-    <a href="/deposit.html">Deposit</a>
-    <a class="active" href="/withdraw.html">Withdraw</a>
-  </div>
-</nav>
-<div class="container">
-  <h1>Withdraw</h1>
-  <div class="card section">
-    <label>To Address: <input id="to" type="text" placeholder="T... or 0x..."/></label>
-    <label>Amount (USDT): <input id="wamt" type="number" min="1"/></label>
-    <button id="wsubmit">Submit Withdrawal</button>
-  </div>
-  <div class="card section">
-    <h2>History</h2>
-    <table class="table"><thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead><tbody id="historyBody"></tbody></table>
-  </div>
-</div>
+<body>
+  <header class="nav">
+    <div class="brand">TrustMe <span>AI</span></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="strategy.html">Strategy</a>
+      <a href="assets.html">Assets</a>
+      <a href="deposit.html">Deposit</a>
+      <a href="withdraw.html" class="active">Withdraw</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <h2>Withdraw</h2>
+
+    <div class="wallet-card">
+      <label class="input">
+        <span>To Address (T… or 0x…)</span>
+        <input id="wd-to" placeholder="T… or 0x…"/>
+      </label>
+      <label class="input">
+        <span>Amount (USDT)</span>
+        <input id="wd-amt" type="number" value="1000"/>
+      </label>
+      <div class="muted">Network fee preview: ~1 USDT (TRC20). Large withdrawals may require manual approval (demo).</div>
+      <button class="btn" id="wd-submit">Submit</button>
+    </div>
+
+    <h3>History</h3>
+    <table class="table" id="wd-history">
+      <thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <footer class="footer">
+    <div>© 2025 TrustMe AI</div>
+    <div>Contact: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a> · <a href="https://t.me/trustmeai" target="_blank">Telegram</a></div>
+  </footer>
 </body>
 </html>

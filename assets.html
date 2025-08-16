@@ -1,68 +1,32 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Assets — TrustMe AI</title>
-  <link rel="stylesheet" href="./styles.css?v=3"/>
-  <script src="./app.js?v=3" defer></script>
+  <link rel="stylesheet" href="styles.css"/>
+  <script defer src="app.js"></script>
 </head>
-<body data-page="assets">
-  
-<nav>
-  <div class="nav-inner">
-    <div class="nav-brand"><span class="logo-dot"></span> TrustMe AI</div>
-    <a href="/index.html">Home</a>
-    <a href="/strategy.html">Strategy</a>
-    <a class="active" href="/assets.html">Assets</a>
-    <a href="/deposit.html">Deposit</a>
-    <a href="/withdraw.html">Withdraw</a>
-    <div class="nav-badge">Aurora Glass UI</div>
-  </div>
-</nav>
+<body>
+  <header class="nav">
+    <div class="brand">TrustMe <span>AI</span></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="strategy.html">Strategy</a>
+      <a href="assets.html" class="active">Assets</a>
+      <a href="deposit.html">Deposit</a>
+      <a href="withdraw.html">Withdraw</a>
+    </nav>
+  </header>
 
-  <div class="container">
-    <h1>Assets</h1>
+  <main class="page">
+    <h2>Assets</h2>
+    <div class="notice">Portfolio and market widgets coming soon.</div>
+  </main>
 
-    <div class="grid-2">
-      <div class="card section">
-        <h2>Total Balance</h2>
-        <div class="big-number">$<span id="balanceValue">0.00</span></div>
-        <div class="muted">Calculated from confirmed deposits minus withdrawals &amp; fees.</div>
-      </div>
-
-      <div class="card section">
-        <h2>Live Market</h2>
-        <div class="embed-wrap">
-          <iframe src="https://s.tradingview.com/widgetembed/?symbol=BINANCE:BTCUSDT&interval=60&hidesidetoolbar=1&hideideas=1"
-                  width="100%" height="280" frameborder="0" allowtransparency></iframe>
-        </div>
-      </div>
-    </div>
-
-    <div class="card section">
-      <h2>Portfolio</h2>
-      <table class="table">
-        <thead>
-          <tr><th>Asset</th><th>Balance</th><th>Value (USD)</th></tr>
-        </thead>
-        <tbody id="portfolioBody"></tbody>
-      </table>
-    </div>
-
-    <div class="card section">
-      <h2>Recent Activity</h2>
-      <table class="table">
-        <thead>
-          <tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr>
-        </thead>
-        <tbody id="historyBody"></tbody>
-      </table>
-    </div>
-  </div>
-  
-<div class="footer">
-  © 2025 TrustMe AI • Contact: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a> · <a href="https://t.me/" target="_blank">Telegram</a>
-</div>
-
+  <footer class="footer">
+    <div>© 2025 TrustMe AI</div>
+    <div>Contact: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a> · <a href="https://t.me/trustmeai" target="_blank">Telegram</a></div>
+  </footer>
 </body>
 </html>
