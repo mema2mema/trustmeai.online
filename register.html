@@ -14,67 +14,40 @@
       <form id="regForm">
         <label>Email</label>
         <input type="email" id="regEmail" class="input" placeholder="you@example.com" required>
-
         <label style="margin-top:.6rem">Password</label>
-        <input type="password" id="regPass" class="input" placeholder="At least 6 characters" required>
-
+        <input type="password" id="regPass" class="input" placeholder="••••••••" required>
         <label style="margin-top:.6rem">Re-type Password</label>
-        <input type="password" id="regPass2" class="input" placeholder="Repeat password" required>
-
-        <div style="display:flex;gap:.6rem;align-items:flex-end;margin-top:.6rem">
-          <div style="flex:1">
-            <label>Email Code</label>
-            <input type="text" id="regCode" class="input" placeholder="6-digit code" required disabled>
-          </div>
-          <button type="button" id="sendCode" class="btn" style="white-space:nowrap">Send Code</button>
-        </div>
-
+        <input type="password" id="regPass2" class="input" placeholder="••••••••" required>
         <label style="margin-top:.6rem">Referral Code (optional)</label>
-        <input type="text" id="regRef" class="input" placeholder="ABC123 (optional)">
-
-        <button type="submit" class="btn" style="width:100%;margin-top:.9rem">Create Account</button>
+        <input type="text" id="regRef" class="input" placeholder="Referral code">
+        <button type="submit" class="btn" style="width:100%;margin-top:.9rem">Register</button>
       </form>
-      <p class="small" style="margin-top:.6rem">Already registered? <a href="login.html">Login</a></p>
+      <p class="small" style="margin-top:.6rem">
+        Already have an account? <a href="login.html">Login</a>
+      </p>
     </div>
   </div>
 
   <script src="tm-auth.js"></script>
   <script>
-    let code=null, exp=0;
-
-    document.getElementById('sendCode').addEventListener('click', () => {
-      const email = document.getElementById('regEmail').value.trim().toLowerCase();
-      const pass  = document.getElementById('regPass').value.trim();
-      const pass2 = document.getElementById('regPass2').value.trim();
-      if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return alert('Enter a valid email first');
-      if(pass.length < 6) return alert('Password must be at least 6 characters');
-      if(pass !== pass2)  return alert('Passwords do not match');
-      code = String(Math.floor(100000 + Math.random()*900000));
-      exp  = Date.now() + 10*60*1000;
-      alert('Demo code (valid 10 min): ' + code);
-      const codeInput = document.getElementById('regCode');
-      codeInput.disabled = false;
-      codeInput.focus();
-    });
-
     document.getElementById('regForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('regEmail').value.trim().toLowerCase();
       const pass  = document.getElementById('regPass').value.trim();
       const pass2 = document.getElementById('regPass2').value.trim();
-      const input = document.getElementById('regCode').value.trim();
       const ref   = document.getElementById('regRef').value.trim();
-
-      if(pass !== pass2) return alert('Passwords do not match');
-      if(!code || Date.now() > exp || input !== code) return alert('Invalid or expired code');
-
-      const ok = await TMAuth.register({ email, pass, ref });
+      if(pass !== pass2){
+        alert('❌ Passwords do not match');
+        return;
+      }
+      const ok = await TMAuth.register({email, pass, ref});
       if(ok){
-        alert('Account created! You are now logged in.');
+        alert('✅ Account created successfully');
         const next = new URLSearchParams(location.search).get('next') || 'index.html';
         location.href = next;
-      }else{
-        alert('Email already exists');
+      } else {
+        alert('⚠️ Email already exists, please login');
+        location.href = 'login.html';
       }
     });
   </script>
