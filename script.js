@@ -209,25 +209,6 @@ document.addEventListener('click', (e)=>{
   toast(`${tier} activated with ${amt.toFixed(2)} USDT (demo)`);
 });
 
-function showTierModal(tier){
-  const lim=TIER_LIMITS[tier];
-  const rangeTxt = lim ? `${lim.min.toLocaleString()}–${lim.max.toLocaleString()}` : '';
-  openModal(`
-    <div class="card panel">
-      <div class="stripe"></div>
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <h3 style="margin:0">Activate ${tier}</h3>
-        <button class="btn-ghost" data-close>Close</button>
-      </div>
-      <p class="small" style="margin:.5rem 0 1rem 0">Min–Max: ${rangeTxt} USDT</p>
-      <input id="tierAmountInput" type="number" min="${lim?.min||0}" max="${lim?.max||0}" step="1" placeholder="Enter amount" class="input" style="width:100%"/>
-      <div style="margin-top:1rem;display:flex;gap:.5rem;justify-content:flex-end">
-        <button class="btn-ghost" data-close>Cancel</button>
-        <button class="btn" data-confirm-tier="${tier}">Confirm</button>
-      </div>
-    </div>
-  `);
-}
 
 // Bind activate buttons on strategy page
 function bindStrategyActivate(){
@@ -254,3 +235,34 @@ function hijackActivateButtons(){
   });
 }
 document.addEventListener('DOMContentLoaded', hijackActivateButtons);
+
+// v1.6.5: minimal modal UI (style like picture 1) + guaranteed submit
+function showTierModal(tier){
+  const lim=TIER_LIMITS[tier];
+  const rangeTxt = lim ? `${lim.min.toLocaleString()}–${lim.max.toLocaleString()} USDT` : '';
+  const modalHTML = `
+    <div class="card panel" style="padding:1rem 1rem 1.25rem">
+      <div class="stripe"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
+        <h3 style="margin:0">Activate ${tier}</h3>
+        <button class="btn-ghost" data-close>Close</button>
+      </div>
+      <p class="small" style="opacity:.85;margin:.25rem 0 .75rem 0">Min–Max: ${rangeTxt}</p>
+      <input id="tierAmountInput" type="number" min="${lim?.min||0}" max="${lim?.max||0}" step="1" placeholder="Enter amount" class="input" style="width:100%"/>
+      <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.9rem">
+        <button class="btn-ghost" data-close>Cancel</button>
+        <button class="btn" id="tierConfirmBtn">Confirm</button>
+      </div>
+    </div>`;
+  openModal(modalHTML);
+  const confirmBtn = document.getElementById('tierConfirmBtn');
+  confirmBtn?.addEventListener('click', ()=>{
+    const input = document.getElementById('tierAmountInput');
+    const amt = parseFloat((input?.value||'0').trim());
+    const v = validateTierAmount(tier, amt);
+    if(!v.ok){ alert(v.msg); return; }
+    addHistoryRow(new Date(), 'lock', amt, 0, 'active');
+    closeModal();
+    toast(`${tier} activated with ${amt.toFixed(2)} USDT (demo)`);
+  }, {once:true});
+}
