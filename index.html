@@ -1,307 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TrustMe AI — Dashboard</title>
-  <meta name="description" content="TrustMe AI dashboard with wallet, strategy tiers, live calculator, crypto hot list, referral pie chart." />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <link rel="stylesheet" href="./style.dashboard.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TrustMe AI — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-50 text-gray-900">
-  <!-- HERO -->
-  <header class="bg-gradient-to-r from-emerald-500 to-teal-500 text-white p-6 md:p-10 shadow">
-    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-6 items-center">
-      <div>
-        <h1 class="text-3xl md:text-4xl font-bold">TrustMe AI</h1>
-        <p class="mt-2 opacity-90">Transparent automated trading. Real metrics. Your keys to growth.</p>
-        <div class="mt-4 flex gap-3">
-          <a href="#wallet" class="px-4 py-2 rounded-2xl bg-white text-emerald-600 shadow">Deposit</a>
-          <a href="#wallet" class="px-4 py-2 rounded-2xl bg-black/20">Withdraw</a>
-          <a href="#faq" class="px-4 py-2 rounded-2xl bg-black/20">Tutorials</a>
-        </div>
+<body>
+<main class="container">
+  <section class="card grid2">
+    <div>
+      <h2>Wallet</h2>
+      <div class="row">
+        <div class="metric"><div class="label">Available (USDT)</div><div id="walletAvailable" class="value">0.00</div></div>
+        <div class="metric"><div class="label">Locked</div><div id="walletLocked" class="value">0.00</div></div>
       </div>
 
-      <!-- Live Calculator -->
-      <div class="bg-white/10 rounded-2xl p-4 backdrop-blur">
-        <h3 class="font-semibold mb-3">Live Profit Calculator</h3>
-        <div class="grid grid-cols-2 gap-3 text-sm">
-          <label class="space-y-1">
-            <span>Amount (USDT)</span>
-            <input id="calcAmount" type="number" class="w-full rounded-xl p-2 text-gray-900" value="1000" />
-          </label>
-          <label class="space-y-1">
-            <span>Daily %</span>
-            <input id="calcDaily" type="number" step="0.1" class="w-full rounded-xl p-2 text-gray-900" value="1.2" />
-          </label>
-          <label class="space-y-1">
-            <span>Days</span>
-            <input id="calcDays" type="number" class="w-full rounded-xl p-2 text-gray-900" value="30" />
-          </label>
-          <label class="flex items-center gap-2 mt-6">
-            <input id="calcReinvest" type="checkbox" checked />
-            <span>Auto Reinvest</span>
-          </label>
-        </div>
-        <div class="mt-3 text-sm">Projected Value: <span id="calcOut" class="font-bold">—</span></div>
-      </div>
-    </div>
-  </header>
-
-  <main class="max-w-6xl mx-auto p-4 md:p-6 space-y-8">
-    <!-- PARTNER LOGOS -->
-    <section class="bg-white rounded-2xl p-4 shadow">
-      <h2 class="text-lg font-semibold">API-supported exchanges</h2>
-      <div class="mt-3 grid grid-cols-2 md:grid-cols-6 gap-3 items-center opacity-80 text-center text-sm">
-        <div class="p-3 border rounded-xl">Binance</div>
-        <div class="p-3 border rounded-xl">Kraken</div>
-        <div class="p-3 border rounded-xl">Bybit</div>
-        <div class="p-3 border rounded-xl">Bitget</div>
-        <div class="p-3 border rounded-xl">OKX</div>
-        <div class="p-3 border rounded-xl">KuCoin</div>
-      </div>
-    </section>
-
-    <!-- WALLET -->
-    <section id="wallet" class="grid md:grid-cols-3 gap-4">
-      <div class="md:col-span-1 bg-white rounded-2xl p-4 shadow">
-        <h2 class="text-lg font-semibold">Wallet</h2>
-        <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
-          <div class="p-3 rounded-xl bg-gray-50">
-            <div class="opacity-70">Available (USDT)</div>
-            <div id="walletAvailable" class="text-2xl font-bold">0.00</div>
-          </div>
-          <div class="p-3 rounded-xl bg-gray-50">
-            <div class="opacity-70">Locked</div>
-            <div id="walletLocked" class="text-2xl font-bold">0.00</div>
-          </div>
-        </div>
-        <div class="mt-3">
-          <label class="text-sm">Network</label>
-          <select id="walletNetwork" class="w-full mt-1 p-2 rounded-xl border"><option value="TRC20">TRC20</option><option value="BEP20">BEP20</option><option value="ERC20">ERC20</option></select>
-        </div>
-        <div class="mt-3 flex gap-2">
-          <button id="btnGenerateDeposit" class="flex-1 rounded-xl px-3 py-2 bg-emerald-600 text-white">Generate Deposit</button>
-          <button id="btnCheckDeposit" class="rounded-xl px-3 py-2 bg-gray-100">Check</button>
-        </div>
-        
-
-<div class="mt-3 text-xs bg-amber-50 border border-amber-200 rounded-xl p-3">
-  <div class="font-medium text-amber-700 mb-2">Demo Controls (testing only)</div>
-  <div class="grid grid-cols-2 gap-2">
-    <label class="flex items-center gap-2 text-amber-700">
-      Amount:
-      <select id="demoAmount" class="border rounded p-1">
-        <option value="25">25 USDT</option>
-        <option value="50">50 USDT</option>
-        <option value="100" selected>100 USDT</option>
+      <label class="label mt">Network</label>
+      <select id="walletNetwork" class="input">
+        <option value="TRC20">TRC20</option>
+        <option value="BEP20">BEP20</option>
+        <option value="ERC20">ERC20</option>
       </select>
-    </label>
-    <label class="flex items-center gap-2 text-amber-700">
-      Delay:
-      <select id="demoDelay" class="border rounded p-1">
-        <option value="5" selected>5s</option><option value="10">10s</option>
-        <option value="60">60s</option>
-        <option value="120">120s</option>
-      </select>
-    </label>
-  </div>
-  <div id="demoStatus" class="mt-2 text-amber-700">No demo deposit scheduled.</div>
-</div>
 
-<div id="walletAddressWrap" class="mt-3 text-sm hidden">
-  <div class="opacity-70">Your address</div>
-  <div class="flex items-center gap-2">
-    <div id="walletAddress" class="font-mono break-all bg-gray-50 p-2 rounded-xl flex-1">—</div>
-    <button id="walletCopyBtn" class="px-3 py-2 rounded-xl bg-gray-100">Copy</button>
-  </div>
-  <div class="mt-3">
-    <div class="text-xs opacity-70 mb-1">QR Code</div>
-    <div id="walletQr" class="bg-white p-2 inline-block rounded-xl border"></div>
-  </div>
-  <div class="mt-1 text-xs opacity-70">Send only USDT on the selected network.</div>
-</div>
-
-          <div class="opacity-70">Your address</div>
-          <div id="walletAddress" class="font-mono break-all bg-gray-50 p-2 rounded-xl">—</div>
-          <div class="mt-1 text-xs opacity-70">Send only USDT on the selected network.</div>
-        </div>
+      <div class="row mt">
+        <button id="btnGenerateDeposit" class="btn">Generate Deposit</button>
+        <button id="btnCheckDeposit" class="btn btn-ghost">Check</button>
       </div>
 
-      <div class="md:col-span-2 bg-white rounded-2xl p-4 shadow">
-        <h3 class="font-semibold">Withdraw</h3>
-        <form id="withdrawForm" class="grid md:grid-cols-4 gap-3 mt-3 text-sm">
-          <label class="md:col-span-2">
-            <span>To Address</span>
-            <input name="to" placeholder="T..." class="w-full p-2 mt-1 rounded-xl border" />
+      <div class="demo mt">
+        <div class="demo-title">Demo Controls (testing only)</div>
+        <div class="row">
+          <label>Amount
+            <select id="demoAmount" class="input input-sm">
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100" selected>100</option>
+            </select> USDT
           </label>
-          <label>
-            <span>Amount (USDT)</span>
-            <input name="amount" type="number" step="0.01" class="w-full p-2 mt-1 rounded-xl border" />
+          <label>Delay
+            <select id="demoDelay" class="input input-sm">
+              <option value="5" selected>5s</option>
+              <option value="10">10s</option>
+              <option value="60">60s</option>
+            </select>
           </label>
-          <button class="self-end rounded-xl px-4 py-2 bg-emerald-600 text-white">Submit</button>
-        </form>
-        <p class="mt-2 text-xs opacity-70">Network fee preview: <span id="feePreview">~1 USDT (TRC20)</span>. Large withdrawals may require manual approval.</p>
-
-        <h4 class="mt-6 font-semibold">History</h4>
-        <div class="mt-2 overflow-x-auto">
-          <table class="w-full text-sm" id="historyTable">
-            <thead class="text-left opacity-70">
-              <tr>
-                <th class="p-2">Time</th>
-                <th class="p-2">Type</th>
-                <th class="p-2">Amount</th>
-                <th class="p-2">Fee</th>
-                <th class="p-2">Status</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
         </div>
+        <div id="demoStatus" class="muted">No demo deposit scheduled.</div>
       </div>
-    </section>
 
-    
-<!-- STRATEGY TIERS (T1–T4 static) -->
-<section class="bg-white rounded-2xl p-4 shadow">
-  <div class="flex items-center justify-between">
-    <h2 class="text-lg font-semibold">Strategy Plans (T1–T4)</h2>
-    <div class="text-xs opacity-70">AI Risk Bar helps you choose realistically</div>
-  </div>
-  <div class="grid md:grid-cols-3 gap-3 mt-3">
-    <!-- T1 -->
-    <div class="rounded-2xl p-4 border hover:shadow transition">
-      <div class="flex items-center justify-between">
-        <div class="text-xl font-bold">T1</div>
-        <div class="text-sm bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">0.5%–1.0% / day</div>
-      </div>
-      <div class="mt-2 text-sm opacity-80">$50–$999 USDT</div>
-      <div class="mt-3">
-        <div class="text-xs opacity-70 mb-1">Risk</div>
-        <div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full" style="background:#34d399;width:25%"></div></div>
-      </div>
-      <button class="mt-3 w-full rounded-xl py-2 bg-emerald-600 text-white"" data-tier="T1" data-min="50" data-max="999">Activate Plan</button>
-    </div>
-    <!-- T2 -->
-    <div class="rounded-2xl p-4 border hover:shadow transition">
-      <div class="flex items-center justify-between">
-        <div class="text-xl font-bold">T2</div>
-        <div class="text-sm bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">1.0%–1.5% / day</div>
-      </div>
-      <div class="mt-2 text-sm opacity-80">$1,000–$9,999 USDT</div>
-      <div class="mt-3">
-        <div class="text-xs opacity-70 mb-1">Risk</div>
-        <div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full" style="background:#fb923c;width:35%"></div></div>
-      </div>
-      <button class="mt-3 w-full rounded-xl py-2 bg-emerald-600 text-white"" data-tier="T2" data-min="1000" data-max="9999">Activate Plan</button>
-    </div>
-    <!-- T3 -->
-    <div class="rounded-2xl p-4 border hover:shadow transition">
-      <div class="flex items-center justify-between">
-        <div class="text-xl font-bold">T3</div>
-        <div class="text-sm bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">1.5%–2.0% / day</div>
-      </div>
-      <div class="mt-2 text-sm opacity-80">$10,000–$19,999 USDT</div>
-      <div class="mt-3">
-        <div class="text-xs opacity-70 mb-1">Risk</div>
-        <div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full" style="background:#f97316;width:55%"></div></div>
-      </div>
-      <button class="mt-3 w-full rounded-xl py-2 bg-emerald-600 text-white"" data-tier="T3" data-min="10000" data-max="19999">Activate Plan</button>
-    </div>
-    <!-- T4 -->
-    <div class="rounded-2xl p-4 border hover:shadow transition md:col-span-3">
-      <div class="flex items-center justify-between">
-        <div class="text-xl font-bold">T4</div>
-        <div class="text-sm bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">2.0%–3.0% / day</div>
-      </div>
-      <div class="mt-2 text-sm opacity-80">$20,000–$100,000 USDT</div>
-      <div class="mt-3">
-        <div class="text-xs opacity-70 mb-1">Risk</div>
-        <div class="h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full" style="background:#ef4444;width:75%"></div></div>
-      </div>
-      <button class="mt-3 w-full rounded-xl py-2 bg-emerald-600 text-white"" data-tier="T4" data-min="20000" data-max="100000">Activate Plan</button>
-    </div>
-  </div>
-</section>
-
-    <!-- CRYPTO HOT LIST -->
-    <section class="bg-white rounded-2xl p-4 shadow">
-      <div class="flex items-center justify-between">
-        <h2 class="text-lg font-semibold">Crypto Hot List</h2>
-        <div class="text-xs opacity-70">Top movers (Binance 24h)</div>
-      </div>
-      <div class="mt-3 overflow-x-auto">
-        <table class="w-full text-sm" id="hotlistTable">
-          <thead class="text-left opacity-70">
-            <tr><th class="p-2">Symbol</th><th class="p-2">Price (USDT)</th><th class="p-2">24h %</th></tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- REFERRAL PIE CHART -->
-    <section class="bg-white rounded-2xl p-4 shadow">
-      <h2 class="text-lg font-semibold">Referral Distribution</h2>
-      <div class="grid md:grid-cols-2 gap-3 items-center mt-3">
-        <div>
-          <div class="text-sm">Your link</div>
-          <div id="refLink" class="font-mono bg-gray-50 p-2 rounded-xl break-all">https://trustmeai.online/?ref=TM-ABCD12</div>
-          <div class="text-xs opacity-70 mt-1">3-level commissions. Instant notifications via Telegram.</div>
+      <div id="walletAddressWrap" class="hidden mt">
+        <div class="muted">Your address</div>
+        <div class="row">
+          <div id="walletAddress" class="address">—</div>
+          <button id="walletCopyBtn" class="btn btn-ghost">Copy</button>
         </div>
-        <div><canvas id="refPie" height="180"></canvas></div>
-      </div>
-    </section>
-
-    <!-- SUPPORT & LEGAL -->
-    <section id="faq" class="grid md:grid-cols-3 gap-4">
-      <div class="bg-white rounded-2xl p-4 shadow">
-        <h3 class="font-semibold">Support</h3>
-        <p class="text-sm opacity-80">Questions? We reply fast.</p>
-        <div class="mt-3 flex gap-2">
-          <a class="px-3 py-2 rounded-xl bg-emerald-600 text-white" href="mailto:support@trustmeai.online">Email Support</a>
-          <a class="px-3 py-2 rounded-xl bg-gray-100" href="#">Telegram</a>
+        <div class="mt">
+          <div class="muted">QR Code</div>
+          <div id="walletQr" class="qr"></div>
         </div>
+        <div class="muted">Send only USDT on the selected network.</div>
       </div>
-      <div class="bg-white rounded-2xl p-4 shadow md:col-span-2">
-        <h3 class="font-semibold">Transparency</h3>
-        <ul class="list-disc ml-5 text-sm mt-2 space-y-1">
-          <li>All deposits and withdrawals are tracked with TXIDs.</li>
-          <li>We display real profit logs with timestamps.</li>
-          <li>You control reinvestment and withdrawals anytime.</li>
-        </ul>
-      </div>
-    </section>
-  </main>
+    </div>
 
-<!-- Activate Plan Modal -->
-<div id="planModal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
-  <div class="bg-white rounded-2xl w-[90%] max-w-md p-4">
-    <div class="flex items-center justify-between">
-      <h3 class="text-lg font-semibold">Activate <span id="planModalTier">T1</span></h3>
-      <button id="planModalClose" class="px-2 py-1 rounded-lg bg-gray-100">✕</button>
+    <div>
+      <h2>Withdraw</h2>
+      <label class="label">To Address</label>
+      <input class="input" placeholder="T... or 0x..." />
+      <label class="label mt">Amount (USDT)</label>
+      <input class="input" placeholder="0.00" />
+      <button class="btn mt">Submit</button>
+      <div class="muted mt">Network fee preview: <span id="feePreview">~1 USDT (TRC20)</span>. Large withdrawals may require manual approval.</div>
+
+      <h3 class="mt-lg">History</h3>
+      <table id="historyTable" class="table">
+        <thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead>
+        <tbody></tbody>
+      </table>
     </div>
-    <div class="mt-2 text-sm">
-      <div>Min–Max: <span id="planModalRange">$50–$999</span></div>
-      <div class="mt-2">
-        <label class="text-sm">Amount (USDT)</label>
-        <input id="planAmount" type="number" class="w-full p-2 rounded-xl border mt-1" placeholder="Enter amount" />
+  </section>
+
+  <section class="card">
+    <div class="row space-between">
+      <h2>Strategy Plans (T1–T4)</h2>
+      <div class="muted">AI Risk Bar helps you choose realistically</div>
+    </div>
+    <div id="tiers" class="grid3 mt">
+      <div class="tier">
+        <div class="row space-between">
+          <div class="tier-title">T1</div>
+          <div class="chip">0.5%–1.0% / day</div>
+        </div>
+        <div class="muted">$50–$999 USDT</div>
+        <div class="bar"><div style="width:25%"></div></div>
+        <button class="btn w" data-tier="T1" data-min="50" data-max="999">Activate Plan</button>
+      </div>
+
+      <div class="tier">
+        <div class="row space-between">
+          <div class="tier-title">T2</div>
+          <div class="chip">1.0%–1.5% / day</div>
+        </div>
+        <div class="muted">$1,000–$9,999 USDT</div>
+        <div class="bar"><div style="width:35%"></div></div>
+        <button class="btn w" data-tier="T2" data-min="1000" data-max="9999">Activate Plan</button>
+      </div>
+
+      <div class="tier">
+        <div class="row space-between">
+          <div class="tier-title">T3</div>
+          <div class="chip">1.5%–2.0% / day</div>
+        </div>
+        <div class="muted">$10,000–$19,999 USDT</div>
+        <div class="bar"><div style="width:55%"></div></div>
+        <button class="btn w" data-tier="T3" data-min="10000" data-max="19999">Activate Plan</button>
+      </div>
+
+      <div class="tier wide">
+        <div class="row space-between">
+          <div class="tier-title">T4</div>
+          <div class="chip">2.0%–3.0% / day</div>
+        </div>
+        <div class="muted">$20,000–$100,000 USDT</div>
+        <div class="bar"><div style="width:75%"></div></div>
+        <button class="btn w" data-tier="T4" data-min="20000" data-max="100000">Activate Plan</button>
       </div>
     </div>
-    <div class="mt-3 flex items-center justify-between">
-      <div class="text-xs opacity-70">Funds will be locked to this plan.</div>
-      <button id="planConfirm" class="px-4 py-2 rounded-xl bg-emerald-600 text-white">Confirm</button>
+  </section>
+</main>
+
+<!-- Modal -->
+<div id="planModal" class="modal hidden">
+  <div class="modal-body">
+    <div class="row space-between">
+      <h3>Activate <span id="planModalTier">T1</span></h3>
+      <button id="planModalClose" class="btn btn-ghost">✕</button>
+    </div>
+    <div class="muted">Min–Max: <span id="planModalRange">$50–$999</span></div>
+    <label class="label mt">Amount (USDT)</label>
+    <input id="planAmount" type="number" class="input" placeholder="Enter amount" />
+    <div class="row space-between mt">
+      <div class="muted small">Funds will be locked to this plan (demo).</div>
+      <button id="planConfirm" class="btn">Confirm</button>
     </div>
   </div>
 </div>
 
-
-  <footer class="p-6 text-center text-sm opacity-70">
-    © <span id="year"></span> TrustMe AI • Terms • Privacy • Risk Disclosure
-  </footer>
-
-  <script src="./script.dashboard.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

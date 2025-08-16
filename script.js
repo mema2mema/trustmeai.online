@@ -1,491 +1,90 @@
-// Basic helpers
-const $ = (s) => document.querySelector(s);
-const fmt2 = (n) => Number(n).toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2});
-
-// Hero calculator
-function recalcHero() {
-  const A = Number($("#calcAmount").value || 0);
-  const r = Number($("#calcDaily").value || 0) / 100;
-  const days = Number($("#calcDays").value || 0);
-  const reinv = $("#calcReinvest").checked;
-  let v = A;
-  for (let d=0; d<days; d++) {
-    const gain = v * r;
-    if (reinv) v += gain;
-  }
-  $("#calcOut").textContent = fmt2(v) + " USDT";
-}
-["#calcAmount","#calcDaily","#calcDays","#calcReinvest"].forEach(id=>{
-  document.addEventListener("input", (e)=>{ if (e.target.matches(id)) recalcHero(); });
-});
-recalcHero();
-
-// Wallet mock
-let wallet = { available: 0, locked: 0, address: null };
-$("#walletAvailable").textContent = fmt2(wallet.available);
-$("#walletLocked").textContent = fmt2(wallet.locked);
-
-$("#btnGenerateDeposit").addEventListener("click", ()=>{
-  const sel = document.getElementById('walletNetwork');
-  const net = sel ? sel.value : 'TRC20';
-  function randHex(n){ const c='0123456789abcdef'; let s=''; for(let i=0;i<n;i++) s+=c[Math.floor(Math.random()*16)]; return s; }
-  function gen(net){
-    if(net==='TRC20'){
-      const body='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      let s='T'; for(let i=0;i<33;i++) s+=body[Math.floor(Math.random()*body.length)];
-      return s;
-    }
-    return '0x'+randHex(40);
-  }
-  wallet.address = gen(net);
-  $("#walletAddress").textContent = wallet.address;
-  if (window.__renderDepositQR) { window.__renderDepositQR(); }
-  $("#walletAddressWrap"").classList.remove("hidden");
-});
-$("#btnCheckDeposit").addEventListener("click", ()=>{
-  alert("This would poll backend for confirmations. Hook to your API.");
-});
-
-$("#withdrawForm").addEventListener("submit",(e)=>{
-  e.preventDefault();
-  const fd = new FormData(e.currentTarget);
-  const to = String(fd.get("to")||"");
-  const amt = Number(fd.get("amount")||0);
-  if (!to || !amt) return;
-  // TODO: POST /api/withdraw/create then show pending row:
-  addHistory({type:"withdraw", amount: amt, fee:1, status:"pending"});
-  wallet.available = Math.max(0, wallet.available - amt);
-  $("#walletAvailable").textContent = fmt2(wallet.available);
-  e.target.reset();
-  alert("Withdraw request submitted (mock). Add 2FA + admin approval in backend.");
-});
-
-function addHistory(row){
-  const tbody = $("#historyTable tbody");
+// Helpers
+function $(sel){return document.querySelector(sel)}
+function addHistoryRow(type, amount, fee, status){
+  const tbody = document.querySelector("#historyTable tbody");
   const tr = document.createElement("tr");
-  const now = new Date().toISOString();
-  tr.innerHTML = `<td class="p-2 whitespace-nowrap">${new Date(now).toLocaleString()}</td>
-  <td class="p-2">${row.type}</td>
-  <td class="p-2">${fmt2(row.amount)}</td>
-  <td class="p-2">${row.fee?fmt2(row.fee):"0.00"}</td>
-  <td class="p-2">${row.status}</td>`;
+  const now = new Date();
+  tr.innerHTML = `<td>${now.toLocaleString()}</td><td>${type}</td>
+                  <td>${Number(amount).toFixed(2)}</td><td>${fee?Number(fee).toFixed(2):'0.00'}</td><td>${status}</td>`;
   tbody.prepend(tr);
 }
+function setAvailable(v){ $("#walletAvailable").textContent = Number(v).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}) }
+function getAvailable(){ const n = Number($("#walletAvailable").textContent.replace(/,/g,'')); return isNaN(n)?0:n; }
+function debit(v){ setAvailable(Math.max(0, getAvailable() - v)) }
+function credit(v){ setAvailable(getAvailable() + v) }
 
-// Strategy tiers
-const tiers = [
-  { code: "T1", range: "0.5%–1.0%", min: 50, max: 999, risk: 2 },
-  { code: "T2", range: "1.0%–1.5%", min: 1000, max: 9999, risk: 3 },
-  { code: "T3", range: "1.5%–2.0%", min: 10000, max: 19999, risk: 5 },
-  { code: "T4", range: "2.0%–3.0%", min: 20000, max: 100000, risk: 7 },
-];
-const tiersWrap = $("#tiers");
-tiers.forEach(t=>{
-    const card = document.createElement("div");
-  card.className = "rounded-2xl p-4 border hover:shadow transition";
-  const riskPct = (t.risk/8)*100;
-  const priceRange = `$${t.min.toLocaleString()}–$${t.max.toLocaleString()} USDT`;
-  card.innerHTML = `
-    <div class="flex items-center justify-between">
-      <div class="text-xl font-bold">${t.code}</div>
-      <div class="text-sm bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">${t.range} / day</div>
-    </div>
-    <div class="mt-2 text-sm opacity-80">${priceRange}</div>
-    <div class="mt-3">
-      <div class="text-xs opacity-70 mb-1">Risk</div>
-      <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-        <div class="h-full" style="background:#fb923c;width:${riskPct}%"></div>
-      </div>
-    </div>
-    <button class="mt-3 w-full rounded-xl py-2 bg-emerald-600 text-white">Activate Plan</button>
-  `;
-  tiersWrap.appendChild(card);
-});
-
-// RedHawk simulator
-function proj(amount, dailyPct, days, reinvest){
-  let v = amount, r = dailyPct/100;
-  for (let d=0; d<days; d++){
-    const gain = v * r;
-    if (reinvest) v += gain;
-  }
-  return v;
-}
-function updateSim(){
-  const A = Number($("#simAmount").value||0);
-  const p = Number($("#simDaily").value||0);
-  const R = $("#simReinvest").checked;
-  const days = 30;
-  $("#simDaysOut").textContent = days;
-  $("#simOut").textContent = fmt2(proj(A,p,days,R));
-}
-["#simAmount","#simDaily","#simTrades","#simReinvest"].forEach(id=>{
-  document.addEventListener("input",(e)=>{ if (e.target.matches(id)) updateSim(); });
-});
-updateSim();
-
-// Crypto hot list (Binance 24h ticker)
-async function loadHotlist(){
-  try {
-    const res = await fetch("https://api.binance.com/api/v3/ticker/24hr");
-    const data = await res.json();
-    // Filter for USDT pairs and sort by priceChangePercent desc
-    const usdt = data.filter(r => r.symbol.endsWith("USDT"));
-    usdt.sort((a,b) => Number(b.priceChangePercent) - Number(a.priceChangePercent));
-    const top = usdt.slice(0, 15);
-    const tbody = $("#hotlistTable tbody");
-    tbody.innerHTML = "";
-    top.forEach(row => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td class="p-2">${row.symbol}</td>
-        <td class="p-2">${Number(row.lastPrice).toFixed(6)}</td>
-        <td class="p-2">${Number(row.priceChangePercent).toFixed(2)}%</td>`;
-      tbody.appendChild(tr);
-    });
-  } catch(err){
-    console.error("Hotlist error", err);
-  }
-}
-loadHotlist();
-setInterval(loadHotlist, 30000);
-
-// Referral pie chart
-const ctx = document.getElementById("refPie");
-let refPie = new Chart(ctx, {
-  type: "pie",
-  data: {
-    labels: ["Level 1", "Level 2", "Level 3"],
-    datasets: [{
-      data: [10, 3, 1], // mock counts; wire to DB later
-    }]
-  },
-  options: { plugins: { legend: { position: "bottom" } } }
-});
-
-// Footer year
-$("#year").textContent = new Date().getFullYear();
-
-
-// Dynamic fee preview by network
-(function(){
-  const fees = { TRC20: '~1 USDT (TRC20)', BEP20: '~0.3 USDT (BEP20)', ERC20: '~5–15 USDT (ERC20)' };
-  const sel = document.getElementById('walletNetwork') || document.querySelector('#wallet select, #walletNetwork');
-  const out = document.getElementById('feePreview');
-  function update(){ if (out && sel) out.textContent = fees[sel.value] || fees.TRC20; }
-  if (sel){ sel.addEventListener('change', update); update(); }
-})();
-
-
-// ===== Copy Address & QR Code =====
-(function(){
-  const copyBtn = document.getElementById('walletCopyBtn');
-  const addrEl = document.getElementById('walletAddress');
-  const qrWrap = document.getElementById('walletQr');
-  if(copyBtn && addrEl){
-    copyBtn.addEventListener('click', async ()=>{
-      try {
-        await navigator.clipboard.writeText(addrEl.textContent.trim());
-        alert('Address copied to clipboard');
-      } catch(e){ alert('Copy failed — you can select and copy manually.'); }
-    });
-  }
-  // Re-render QR whenever address changes
-  function renderQR(){
-    if(!qrWrap) return;
-    qrWrap.innerHTML='';
-    try { new QRCode(qrWrap, { text: addrEl.textContent.trim(), width: 160, height: 160 }); } catch(e){}
-  }
-  // Expose for generator to call
-  window.__renderDepositQR = renderQR;
-})();
-
-// ===== Dynamic Fee Preview =====
+// Fee preview
 (function(){
   const fees = { TRC20: '~1 USDT (TRC20)', BEP20: '~0.5 USDT (BEP20)', ERC20: '~5 USDT (ERC20)' };
-  const sel = document.getElementById('walletNetwork');
-  const out = document.getElementById('feePreview');
-  function update(){ if(out && sel) out.textContent = fees[sel.value] || fees.TRC20; }
-  if(sel){ sel.addEventListener('change', update); update(); }
+  const sel = $("#walletNetwork"); const out = $("#feePreview");
+  function update(){ if(out) out.textContent = fees[sel.value] || fees.TRC20; }
+  sel.addEventListener("change", update); update();
 })();
 
-
-// ===== Auto deposit simulation after address generation =====
+// Deposit: generate per-network address, copy, QR, demo credit
 (function(){
-  let pendingTimer = null;
-  const genBtn = document.getElementById('btnGenerateDeposit');
-  const statusEl = document.getElementById('demoStatus');
-  function cancelTimer(){ if(pendingTimer){ clearTimeout(pendingTimer); pendingTimer=null; if(statusEl) statusEl.textContent='No demo deposit scheduled.'; } }
-  function addHistoryRow(type, amount, fee, status){
-    const tbody = document.querySelector("#historyTable tbody");
-    if (!tbody) return;
-    const tr = document.createElement("tr");
-    const now = new Date().toISOString();
-    tr.innerHTML = `<td class="p-2 whitespace-nowrap">${new Date(now).toLocaleString()}</td>
-      <td class="p-2">${type}</td>
-      <td class="p-2">${Number(amount).toFixed(2)}</td>
-      <td class="p-2">${fee?Number(fee).toFixed(2):'0.00'}</td>
-      <td class="p-2">${status}</td>`;
-    tbody.prepend(tr);
-  }
-  function credit(amount){
-    const el = document.getElementById("walletAvailable");
-    if (!el) return;
-    const cur = Number(el.textContent.replace(/,/g,'')) || 0;
-    const next = cur + amount;
-    el.textContent = next.toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2});
-  }
-  if(genBtn){
-    genBtn.addEventListener('click', ()=>{
-      cancelTimer();
-      const amtSel = document.getElementById('demoAmount');
-      const delSel = document.getElementById('demoDelay');
-      const amount = amtSel ? Number(amtSel.value) : 100;
-      const delaySec = delSel ? Number(delSel.value) : 10;
-      if(statusEl) statusEl.textContent = `Demo deposit scheduled: +${amount} USDT in ~${delaySec}s...`;
-      // show pending row immediately
-      addHistoryRow('deposit', amount, 0, 'pending');
-      pendingTimer = setTimeout(()=>{
-        credit(amount);
-        addHistoryRow('deposit', amount, 0, 'confirmed');
-        if(statusEl) statusEl.textContent = `Demo deposit confirmed: +${amount} USDT`;
-      }, delaySec * 1000);
-    });
-  }
-})();
-
-
-// ===== Copy Address + QR rendering =====
-(function(){
-  const addrEl = document.getElementById('walletAddress');
-  const copyBtn = document.getElementById('walletCopyBtn');
-  const qrWrap = document.getElementById('walletQr');
-  function renderQR(){
-    if(!qrWrap || !addrEl) return;
-    qrWrap.innerHTML='';
-    try { new QRCode(qrWrap, { text: addrEl.textContent.trim(), width: 160, height: 160 }); } catch(e){}
-  }
-  if(copyBtn && addrEl){
-    copyBtn.addEventListener('click', async ()=>{
-      try { await navigator.clipboard.writeText(addrEl.textContent.trim()); alert('Address copied'); }
-      catch(e){ alert('Copy failed. Select and copy manually.'); }
-    });
-  }
-  window.__renderDepositQR = renderQR;
-})();
-
-// ===== Ensure address generator triggers QR re-render =====
-(function(){
-  const btn = document.getElementById('btnGenerateDeposit');
-  if(btn){
-    const old = btn.onclick;
-    btn.addEventListener('click', ()=>{
-      setTimeout(()=>{ if(window.__renderDepositQR) window.__renderDepositQR(); }, 50);
-    });
-  }
-})();
-
-// ===== Demo Controls default delay = 5s =====
-(function(){
-  const delSel = document.getElementById('demoDelay');
-  if (delSel) { delSel.value = "5"; }
-})();
-
-// ===== Activate Plan modal =====
-(function(){
-  // Attach click listeners to "Activate Plan" buttons
-  const planModal = document.getElementById('planModal');
-  const tierSpan = document.getElementById('planModalTier');
-  const rangeSpan = document.getElementById('planModalRange');
-  const closeBtn = document.getElementById('planModalClose');
-  const confirmBtn = document.getElementById('planConfirm');
-  const amountInput = document.getElementById('planAmount');
-
-  function openModal(tier, min, max){
-    if(!planModal) return;
-    tierSpan.textContent = tier;
-    rangeSpan.textContent = `$${Number(min).toLocaleString()}–$${Number(max).toLocaleString()}`;
-    amountInput.value='';
-    planModal.classList.remove('hidden');
-    planModal.classList.add('flex');
-  }
-  function closeModal(){
-    planModal.classList.add('hidden');
-    planModal.classList.remove('flex');
-  }
-  if(closeBtn) closeBtn.addEventListener('click', closeModal);
-  if(planModal) planModal.addEventListener('click', (e)=>{ if(e.target===planModal) closeModal(); });
-
-  // Map card buttons
-  const cards = document.querySelectorAll('#tiers .rounded-2xl button, section .rounded-2xl button');
-  cards.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const card = btn.closest('.rounded-2xl');
-      if(!card) return;
-      const tier = card.querySelector('.text-xl.font-bold')?.textContent?.trim() || 'T1';
-      const priceText = card.querySelector('.opacity-80')?.textContent || '$50–$999 USDT';
-      const m = priceText.match(/\$([\d,]+).*\$([\d,]+)/);
-      const min = m ? Number(m[1].replace(/,/g,'')) : 50;
-      const max = m ? Number(m[2].replace(/,/g,'')) : 999;
-      openModal(tier, min, max);
-    });
-  });
-
-  // Confirm -> add lock row to History
-  function addHistoryRow(type, amount, fee, status){
-    const tbody = document.querySelector("#historyTable tbody");
-    if (!tbody) return;
-    const tr = document.createElement("tr");
-    const now = new Date().toISOString();
-    tr.innerHTML = `<td class="p-2 whitespace-nowrap">${new Date(now).toLocaleString()}</td>
-      <td class="p-2">${type}</td>
-      <td class="p-2">${Number(amount).toFixed(2)}</td>
-      <td class="p-2">${fee?Number(fee).toFixed(2):'0.00'}</td>
-      <td class="p-2">${status}</td>`;
-    tbody.prepend(tr);
-  }
-  function debit(amount){
-    const el = document.getElementById("walletAvailable");
-    if (!el) return;
-    const cur = Number(el.textContent.replace(/,/g,'')) || 0;
-    const next = Math.max(0, cur - amount);
-    el.textContent = next.toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2});
-  }
-  if(confirmBtn){
-    confirmBtn.addEventListener('click', ()=>{
-      const amt = Number(amountInput.value || 0);
-      if(!amt || amt <= 0){ alert('Enter a valid amount'); return; }
-      debit(amt);
-      addHistoryRow('lock', amt, 0, 'active');
-      alert('Plan activated (demo). Funds locked.');
-      closeModal();
-    });
-  }
-})();
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  // Helper
-  const $id = (x)=>document.getElementById(x);
-  const tbody = document.querySelector("#historyTable tbody");
-  const availEl = $id("walletAvailable");
-
-  function fmt2(n){ return Number(n).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
-
-  // Generate address per network
   function randHex(n){ const c='0123456789abcdef'; let s=''; for(let i=0;i<n;i++) s+=c[Math.floor(Math.random()*16)]; return s; }
-  function genAddress(net){
-    if(net==='TRC20'){
-      const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      let s='T'; for(let i=0;i<33;i++) s+=chars[Math.floor(Math.random()*chars.length)]; return s;
-    }
+  function genAddr(net){
+    if(net==='TRC20'){const body='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789'; let s='T'; for(let i=0;i<33;i++) s+=body[Math.floor(Math.random()*body.length)]; return s;}
     return '0x'+randHex(40);
   }
-
-  // Fee preview
-  const fees = { TRC20: '~1 USDT (TRC20)', BEP20: '~0.5 USDT (BEP20)', ERC20: '~5 USDT (ERC20)' };
-  const netSel = $id('walletNetwork');
-  const feeOut = $id('feePreview');
-  if(netSel && feeOut){ const upd=()=>feeOut.textContent=fees[netSel.value]||fees.TRC20; netSel.addEventListener('change',upd); upd(); }
-
-  // Deposit generation
-  const genBtn = $id('btnGenerateDeposit');
-  const addrWrap = $id('walletAddressWrap');
-  const addrOut = $id('walletAddress');
-  const copyBtn = $id('walletCopyBtn');
-  const qrWrap = $id('walletQr');
-  const demoAmtSel = $id('demoAmount');
-  const demoDelaySel = $id('demoDelay');
-  const demoStatus = $id('demoStatus');
-  let pendingTimer = null;
-
-  function renderQR(){
-    if(!qrWrap || !addrOut || typeof QRCode==='undefined') return;
-    qrWrap.innerHTML='';
-    new QRCode(qrWrap, { text: addrOut.textContent.trim(), width: 160, height: 160 });
-  }
-  if(copyBtn && addrOut){
-    copyBtn.addEventListener('click', async ()=>{
-      try{ await navigator.clipboard.writeText(addrOut.textContent.trim()); alert('Address copied'); }catch(e){ alert('Copy failed'); }
+  const btn = $("#btnGenerateDeposit");
+  const addrWrap = $("#walletAddressWrap");
+  const addrEl = $("#walletAddress");
+  const copyBtn = $("#walletCopyBtn");
+  const qrWrap = $("#walletQr");
+  const status = $("#demoStatus");
+  btn.addEventListener("click", ()=>{
+    const net = $("#walletNetwork").value;
+    const addr = genAddr(net);
+    addrEl.textContent = addr;
+    addrWrap.classList.remove("hidden");
+    // render QR
+    qrWrap.innerHTML = "";
+    new QRCode(qrWrap, { text: addr, width: 160, height: 160 });
+    // demo pending -> confirm
+    const amount = Number($("#demoAmount").value||100);
+    const delay = Number($("#demoDelay").value||5);
+    status.textContent = `Demo deposit scheduled: +${amount} USDT in ~${delay}s...`;
+    addHistoryRow("deposit", amount, 0, "pending");
+    setTimeout(()=>{
+      credit(amount);
+      addHistoryRow("deposit", amount, 0, "confirmed");
+      status.textContent = `Demo deposit confirmed: +${amount} USDT`;
+    }, delay*1000);
+  });
+  if(copyBtn){
+    copyBtn.addEventListener("click", async ()=>{
+      try{ await navigator.clipboard.writeText(addrEl.textContent.trim()); alert("Address copied"); }
+      catch{ alert("Copy failed. You can select and copy manually."); }
     });
   }
-  function addHistoryRow(type, amount, fee, status){
-    if(!tbody) return;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td class="p-2 whitespace-nowrap">${new Date().toLocaleString()}</td>
-    <td class="p-2">${type}</td>
-    <td class="p-2">${fmt2(amount)}</td>
-    <td class="p-2">${fmt2(fee||0)}</td>
-    <td class="p-2">${status}</td>`;
-    tbody.prepend(tr);
-  }
-  function credit(amount){
-    if(!availEl) return;
-    const cur = Number(availEl.textContent.replace(/,/g,''))||0;
-    availEl.textContent = fmt2(cur + amount);
-  }
-  function debit(amount){
-    if(!availEl) return;
-    const cur = Number(availEl.textContent.replace(/,/g,''))||0;
-    availEl.textContent = fmt2(Math.max(0, cur - amount));
-  }
+})();
 
-  if(genBtn){
-    genBtn.addEventListener('click', ()=>{
-      if(!netSel) return;
-      const addr = genAddress(netSel.value);
-      if(addrOut) addrOut.textContent = addr;
-      if(addrWrap) addrWrap.classList.remove('hidden');
-      renderQR();
-
-      // schedule demo deposit
-      if(pendingTimer) clearTimeout(pendingTimer);
-      const amount = demoAmtSel ? Number(demoAmtSel.value) : 100;
-      const delay = demoDelaySel ? Number(demoDelaySel.value) : 5;
-      if(demoStatus) demoStatus.textContent = `Demo deposit scheduled: +${amount} USDT in ~${delay}s...`;
-      addHistoryRow('deposit', amount, 0, 'pending');
-      pendingTimer = setTimeout(()=>{
-        credit(amount);
-        addHistoryRow('deposit', amount, 0, 'confirmed');
-        if(demoStatus) demoStatus.textContent = `Demo deposit confirmed: +${amount} USDT`;
-      }, delay*1000);
-    });
+// Activate Plan modal
+(function(){
+  const modal = $("#planModal"); const closeBtn = $("#planModalClose"); const confirmBtn = $("#planConfirm");
+  const tierEl = $("#planModalTier"); const rangeEl = $("#planModalRange"); const amountInput = $("#planAmount");
+  function open(tier, min, max){
+    tierEl.textContent = tier;
+    rangeEl.textContent = `$${Number(min).toLocaleString()}–$${Number(max).toLocaleString()}`;
+    amountInput.value = "";
+    modal.classList.remove("hidden");
   }
-
-  // Activate Plan modal
-  const modal = $id('planModal');
-  const tierSpan = $id('planModalTier');
-  const rangeSpan = $id('planModalRange');
-  const amtInput = $id('planAmount');
-  const closeBtn = $id('planModalClose');
-  const confirmBtn = $id('planConfirm');
-  function openModal(tier, min, max){
-    if(tierSpan) tierSpan.textContent = tier;
-    if(rangeSpan) rangeSpan.textContent = `$${min.toLocaleString()}–$${max.toLocaleString()}`;
-    if(amtInput) amtInput.value = '';
-    modal.classList.remove('hidden'); modal.classList.add('flex');
-  }
-  function closeModal(){ modal.classList.add('hidden'); modal.classList.remove('flex'); }
-  if(closeBtn) closeBtn.addEventListener('click', closeModal);
-  if(modal) modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
-
-  document.querySelectorAll('button.activate-plan, button[data-tier]').forEach(btn=>{
-    btn.classList.add('activate-plan');
-    btn.addEventListener('click', ()=>{
-      const tier = btn.dataset.tier || btn.closest('.rounded-2xl')?.querySelector('.text-xl.font-bold')?.textContent?.trim() || 'T1';
-      const min = Number(btn.dataset.min || 50);
-      const max = Number(btn.dataset.max || 999);
-      openModal(tier, min, max);
+  function close(){ modal.classList.add("hidden") }
+  closeBtn.addEventListener("click", close);
+  modal.addEventListener("click", (e)=>{ if(e.target===modal) close(); });
+  document.querySelectorAll("[data-tier]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      open(btn.dataset.tier, btn.dataset.min, btn.dataset.max);
     });
   });
-
-  if(confirmBtn){
-    confirmBtn.addEventListener('click', ()=>{
-      const val = Number(amtInput.value||0);
-      if(!val || val<1){ alert('Enter a valid amount'); return; }
-      debit(val);
-      addHistoryRow('lock', val, 0, 'active');
-      alert('Plan activated (demo).');
-      closeModal();
-    });
-  }
-});
+  confirmBtn.addEventListener("click", ()=>{
+    const amt = Number(amountInput.value||0);
+    if(!amt || amt<1){ alert("Enter a valid amount"); return; }
+    debit(amt);
+    addHistoryRow("lock", amt, 0, "active");
+    alert("Plan activated (demo). Funds locked.");
+    close();
+  });
+})();
