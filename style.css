@@ -98,3 +98,18 @@ footer{border-top:1px solid var(--soft);background:linear-gradient(0deg, rgba(2,
 /* make feature tiles look like tabs and clickable */
 .strategy-card{cursor:pointer; position:relative}
 .strategy-card .more{position:absolute;right:12px;top:12px;font-size:.85rem;color:#B6C2D9}
+
+/* v1.6: medium navbar buttons */
+.navbar .nav-links a{padding:.5rem .85rem;border-radius:10px;font-size:.95rem}
+.navbar .cta{padding:.45rem 1rem;border-radius:12px}
+
+/* v1.6: KPI chart section */
+.kpi-chart{margin-top:1.5rem;background:var(--glass);border:1px solid var(--stroke);border-radius:16px;padding:1rem}
+
+/* v1.6: footer support + footer nav */
+.footer-links{display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center;margin:.5rem 0}
+.footer-pill{padding:.5rem .9rem;border-radius:999px;background:var(--glass);border:1px solid var(--stroke);color:#fff;text-decoration:none}
+.footer-pill:hover{filter:brightness(1.08)}
+.footer-nav{display:flex;gap:1rem;justify-content:center;margin:.5rem 0}
+.footer-nav a{color:#C9E7E0;text-decoration:none;font-weight:600}
+.footer-nav a:hover{text-decoration:underline}

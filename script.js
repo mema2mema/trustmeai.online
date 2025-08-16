@@ -151,3 +151,29 @@ function bindFeatureCards(){
   });
 }
 document.addEventListener('DOMContentLoaded', bindFeatureCards);
+
+// v1.6 simple movers chart
+function drawMoversChart(){
+  const el=document.getElementById('moversChart'); if(!el) return;
+  const ctx=el.getContext('2d');
+  const labels=['XRP/USDT','ADA/USDT','BNB/USDT','SOL/USDT','DOT/USDT'];
+  const values=[0.28,0.35,0.31,0.26,0.24]; // demo %
+  // clear
+  ctx.clearRect(0,0,el.width,el.height);
+  // sizing
+  const w=el.width, h=el.height; const pad=40; const bw=(w-pad*2)/labels.length-20;
+  const max=Math.max(...values)*1.2;
+  // axes
+  ctx.strokeStyle='rgba(255,255,255,.15)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(pad,10); ctx.lineTo(pad,h-pad); ctx.lineTo(w-10,h-pad); ctx.stroke();
+  // bars
+  for(let i=0;i<labels.length;i++){
+    const x=pad+10+i*(bw+20); const y=h-pad; const barH=(values[i]/max)*(h-pad-20);
+    ctx.fillStyle='rgba(103,232,249,.55)';
+    ctx.fillRect(x,y-barH,bw,barH);
+    // label
+    ctx.fillStyle='rgba(255,255,255,.8)'; ctx.font='12px Inter';
+    ctx.fillText(labels[i], x-2, h-pad+14);
+  }
+}
+document.addEventListener('DOMContentLoaded', drawMoversChart);
