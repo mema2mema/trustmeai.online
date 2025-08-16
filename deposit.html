@@ -1,69 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
+
+<!doctype html>
+<html>
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Deposit — TrustMe AI</title>
-  <link rel="stylesheet" href="styles.css"/>
-  <script defer src="qrcode.min.js"></script>
-  <script defer src="app.js"></script>
+  <link rel="stylesheet" href="./styles.css?v=3"/>
+  <script src="./app.js?v=3" defer></script>
 </head>
-<body>
-  <header class="nav">
-    <div class="brand">TrustMe <span>AI</span></div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="strategy.html">Strategy</a>
-      <a href="assets.html">Assets</a>
-      <a href="deposit.html" class="active">Deposit</a>
-      <a href="withdraw.html">Withdraw</a>
-    </nav>
-  </header>
+<body data-page="deposit">
+  
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand"><span class="logo-dot"></span> TrustMe AI</div>
+    <a href="/index.html">Home</a>
+    <a href="/strategy.html">Strategy</a>
+    <a href="/assets.html">Assets</a>
+    <a href="/deposit.html">Deposit</a>
+    <a href="/withdraw.html">Withdraw</a>
+    <span class="right badge">Aurora Glass UI</span>
+  </div>
+</nav>
 
-  <main class="page">
-    <h2>Deposit</h2>
-
-    <div class="wallet-card">
-      <div class="row">
-        <label class="select">
-          <span>Network</span>
-          <select id="net-select">
-            <option value="TRC20">TRC20 (cheap)</option>
-            <option value="BEP20">BEP20 (cheap)</option>
-            <option value="ERC20">ERC20</option>
-          </select>
-        </label>
-        <button class="btn" id="gen-addr">Generate Address</button>
+  <div class="container">
+    <h1>Deposit</h1>
+    <div class="card section">
+      <div class="grid cols-2">
+        <div>
+          <label class="notice">Network</label>
+          <div class="flex">
+            <select id="network" class="input" style="max-width:280px">
+              <option>TRC20</option>
+              <option>BEP20</option>
+              <option>ERC20</option>
+            </select>
+            <button class="btn right" id="genBtn">Generate Address</button>
+          </div>
+          <div class="flex" style="margin-top:12px">
+            <input id="addr" class="input" placeholder="Your deposit address"/>
+            <button class="btn muted" id="copyBtn">Copy</button>
+          </div>
+          <div class="flex" style="margin-top:12px">
+            <select id="amountSel" class="input" style="max-width:120px">
+              <option>50</option><option>100</option><option>200</option><option>500</option><option>1000</option>
+            </select>
+            <select id="delaySel" class="input" style="max-width:120px">
+              <option value="5">5</option><option value="10">10</option><option value="20">20</option>
+            </select>
+            <button class="btn" id="scheduleBtn">Schedule demo deposit</button>
+          </div>
+          <div class="notice" style="margin-top:8px">Address generated per network. Demo deposit will appear in history.</div>
+        </div>
+        <div class="flex" style="justify-content:center;align-items:center">
+          <canvas id="qr" class="qr" width="160" height="160"></canvas>
+        </div>
       </div>
-
-      <div class="row">
-        <label class="input grow">
-          <span>Your deposit address</span>
-          <input id="addr" readonly placeholder="—"/>
-        </label>
-        <button class="btn ghost" id="copy-addr">Copy</button>
-        <div id="qr" class="qr"></div>
-      </div>
-
-      <div class="row">
-        <label class="input narrow"><span>USDT</span><input id="demo-amount" type="number" value="50"/></label>
-        <label class="input narrow"><span>Delay (s)</span><input id="demo-delay" type="number" value="5"/></label>
-        <button class="btn" id="schedule">Schedule demo deposit</button>
-      </div>
-
-      <div class="muted" id="addr-note">Address generated per network. Demo deposit will appear in history.</div>
     </div>
 
-    <h3>History</h3>
-    <table class="table" id="dep-history">
-      <thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead>
-      <tbody></tbody>
-    </table>
-  </main>
+    <div class="card section">
+      <h2>History</h2>
+      <table class="table">
+        <thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead>
+        <tbody id="historyBody"></tbody>
+      </table>
+    </div>
+  </div>
+  
+<div class="footer">
+  © 2025 TrustMe AI • Contact: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a> · <a href="https://t.me/" target="_blank">Telegram</a>
+</div>
 
-  <footer class="footer">
-    <div>© 2025 TrustMe AI</div>
-    <div>Contact: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a> · <a href="https://t.me/trustmeai" target="_blank">Telegram</a></div>
-  </footer>
 </body>
 </html>

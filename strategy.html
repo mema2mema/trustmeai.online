@@ -1,98 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
+
+<!doctype html>
+<html>
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Strategy — TrustMe AI</title>
-  <link rel="stylesheet" href="styles.css"/>
-  <script defer src="app.js"></script>
+  <link rel="stylesheet" href="./styles.css?v=3"/>
+  <script src="./app.js?v=3" defer></script>
 </head>
-<body>
-  <header class="nav">
-    <div class="brand">TrustMe <span>AI</span></div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="strategy.html" class="active">Strategy</a>
-      <a href="assets.html">Assets</a>
-      <a href="deposit.html">Deposit</a>
-      <a href="withdraw.html">Withdraw</a>
-    </nav>
-  </header>
+<body data-page="strategy">
+  
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand"><span class="logo-dot"></span> TrustMe AI</div>
+    <a href="/index.html">Home</a>
+    <a href="/strategy.html">Strategy</a>
+    <a href="/assets.html">Assets</a>
+    <a href="/deposit.html">Deposit</a>
+    <a href="/withdraw.html">Withdraw</a>
+    <span class="right badge">Aurora Glass UI</span>
+  </div>
+</nav>
 
-  <main class="page">
-    <h2>Strategy Plans (T1–T4)</h2>
-
-    <div class="tiers">
-      <div class="tier" data-id="T1" data-min="50" data-max="999" data-rate="0.5–1.0% / day">
-        <div class="tier-head">
-          <span class="tier-name">T1</span>
-          <span class="pill">0.5%–1.0% / day</span>
-        </div>
-        <div class="tier-body">$50–$999 USDT</div>
-        <button class="btn" data-action="activate">Activate Plan</button>
+  <div class="container">
+    <h1>Strategy Plans (T1–T4)</h1>
+    <div class="grid cols-3">
+      <div class="card tier">
+        <div class="bar"></div>
+        <h3>T1</h3>
+        <div class="notice">$50–$999 USDT • <b>0.5%–1.0% / day</b></div>
+        <div class="flex" style="margin-top:12px"><button class="btn" data-activate="T1">Activate Plan</button></div>
       </div>
-
-      <div class="tier" data-id="T2" data-min="1000" data-max="9999" data-rate="1.0–1.5% / day">
-        <div class="tier-head">
-          <span class="tier-name">T2</span>
-          <span class="pill">1.0%–1.5% / day</span>
-        </div>
-        <div class="tier-body">$1,000–$9,999 USDT</div>
-        <button class="btn" data-action="activate">Activate Plan</button>
+      <div class="card tier">
+        <div class="bar"></div>
+        <h3>T2</h3>
+        <div class="notice">$1,000–$9,999 USDT • <b>1.0%–1.5% / day</b></div>
+        <div class="flex" style="margin-top:12px"><button class="btn" data-activate="T2">Activate Plan</button></div>
       </div>
-
-      <div class="tier" data-id="T3" data-min="10000" data-max="19999" data-rate="1.5–2.0% / day">
-        <div class="tier-head">
-          <span class="tier-name">T3</span>
-          <span class="pill">1.5%–2.0% / day</span>
-        </div>
-        <div class="tier-body">$10,000–$19,999 USDT</div>
-        <button class="btn" data-action="activate">Activate Plan</button>
+      <div class="card tier">
+        <div class="bar"></div>
+        <h3>T3</h3>
+        <div class="notice">$10,000–$19,999 USDT • <b>1.5%–2.0% / day</b></div>
+        <div class="flex" style="margin-top:12px"><button class="btn" data-activate="T3">Activate Plan</button></div>
       </div>
-
-      <div class="tier" data-id="T4" data-min="20000" data-max="100000" data-rate="2.0–3.0% / day">
-        <div class="tier-head">
-          <span class="tier-name">T4</span>
-          <span class="pill">2.0%–3.0% / day</span>
-        </div>
-        <div class="tier-body">$20,000–$100,000 USDT</div>
-        <button class="btn" data-action="activate">Activate Plan</button>
+      <div class="card tier" style="grid-column:1/-1">
+        <div class="bar"></div>
+        <h3>T4</h3>
+        <div class="notice">$20,000–$100,000 USDT • <b>2.0%–3.0% / day</b></div>
+        <div class="flex" style="margin-top:12px"><button class="btn" data-activate="T4">Activate Plan</button></div>
       </div>
     </div>
 
-    <h3>History</h3>
-    <table class="table" id="history-table">
-      <thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead>
-      <tbody></tbody>
-    </table>
-  </main>
+    <div class="section card">
+      <h2>History</h2>
+      <table class="table">
+        <thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead>
+        <tbody id="historyBody"></tbody>
+      </table>
+    </div>
+  </div>
 
   <!-- Modal -->
-  <div class="modal" id="plan-modal" hidden>
+  <div class="modal" id="modal">
     <div class="modal-card">
-      <div class="modal-glow"></div>
-      <div class="modal-head">
-        <h4 id="modal-title">Activate T?</h4>
-        <button class="icon" id="modal-close">✕</button>
+      <div class="flex">
+        <h3 id="modalTitle" style="margin:0">Activate</h3>
+        <button class="btn muted right" id="closeBtn">Close</button>
       </div>
-      <div class="modal-body">
-        <div class="muted" id="modal-range">Min–Max: —</div>
-        <label class="input">
-          <span>Amount (USDT)</span>
-          <input type="number" id="modal-amount" placeholder="Enter amount"/>
-        </label>
-        <div class="muted" id="modal-est">Estimated daily: —</div>
-      </div>
-      <div class="modal-actions">
-        <button class="btn ghost" id="modal-cancel">Cancel</button>
-        <button class="btn" id="modal-confirm">Confirm</button>
+      <div class="notice" style="margin:8px 0">Min–Max will be validated.</div>
+      <label class="notice">Amount (USDT)</label>
+      <input id="amountInput" class="input" placeholder="Enter amount"/>
+      <div class="notice" style="margin-top:8px">Estimated daily: <b id="estDaily">—</b></div>
+      <div class="flex" style="margin-top:14px;justify-content:flex-end">
+        <button class="btn muted" id="cancelBtn">Cancel</button>
+        <button class="btn" id="confirmBtn">Confirm</button>
       </div>
     </div>
   </div>
 
-  <footer class="footer">
-    <div>© 2025 TrustMe AI</div>
-    <div>Contact: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a> · <a href="https://t.me/trustmeai" target="_blank">Telegram</a></div>
-  </footer>
+  
+<div class="footer">
+  © 2025 TrustMe AI • Contact: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a> · <a href="https://t.me/" target="_blank">Telegram</a>
+</div>
+
 </body>
 </html>

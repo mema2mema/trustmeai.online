@@ -1,43 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
+
+<!doctype html>
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>TrustMe AI — Home</title>
-  <link rel="stylesheet" href="styles.css"/>
-  <script defer src="qrcode.min.js"></script>
-  <script defer src="app.js"></script>
+  <link rel="stylesheet" href="./styles.css?v=3"/>
+  <script src="./app.js?v=3" defer></script>
 </head>
-<body>
-  <header class="nav">
-    <div class="brand">TrustMe <span>AI</span></div>
-    <nav>
-      <a href="index.html" class="active">Home</a>
-      <a href="strategy.html">Strategy</a>
-      <a href="assets.html">Assets</a>
-      <a href="deposit.html">Deposit</a>
-      <a href="withdraw.html">Withdraw</a>
-    </nav>
-  </header>
+<body data-page="home">
+  
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand"><span class="logo-dot"></span> TrustMe AI</div>
+    <a href="/index.html">Home</a>
+    <a href="/strategy.html">Strategy</a>
+    <a href="/assets.html">Assets</a>
+    <a href="/deposit.html">Deposit</a>
+    <a href="/withdraw.html">Withdraw</a>
+    <span class="right badge">Aurora Glass UI</span>
+  </div>
+</nav>
 
-  <main class="hero">
-    <h1>Secure AI strategies for crypto yield</h1>
-    <p>Frosted glass dashboard. Live wallet with per‑network QR. Transparent fees. Activate T1–T4 with a click.</p>
-    <div class="cta">
-      <a class="btn" href="strategy.html">View Plans</a>
-      <a class="btn ghost" href="deposit.html">Deposit</a>
+  <div class="container">
+    <h1 style="font-size:40px;">Secure AI strategies for crypto yield</h1>
+    <p class="notice">Frosted-glass dashboard. Live wallet. Transparent fees. Activate T1–T4 with a click.</p>
+    <div class="flex" style="margin:14px 0 26px">
+      <a class="btn" href="/strategy.html">View Plans</a>
+      <a class="btn secondary" href="/deposit.html">Deposit</a>
     </div>
-  </main>
 
-  <section class="stats">
-    <div class="stat"><div class="label">Strategy Scale</div><div id="stat-scale" class="value">6048.256W</div></div>
-    <div class="stat"><div class="label">Participants</div><div id="stat-users" class="value">469.607W</div></div>
-    <div class="stat"><div class="label">Order Count</div><div id="stat-orders" class="value">944.522W</div></div>
-  </section>
+    <div class="kpi">
+      <div class="card item">
+        <div class="badge">Strategy Scale</div>
+        <div class="big" data-kpi="6048.256">6048.256W</div>
+      </div>
+      <div class="card item">
+        <div class="badge">Participants</div>
+        <div class="big" data-kpi="469.607">469.607W</div>
+      </div>
+      <div class="card item">
+        <div class="badge">Order Count</div>
+        <div class="big" data-kpi="944.522">944.522W</div>
+      </div>
+    </div>
 
-  <footer class="footer">
-    <div>© 2025 TrustMe AI</div>
-    <div>Contact: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a> · <a href="https://t.me/trustmeai" target="_blank">Telegram</a></div>
-  </footer>
+    <div class="section card" style="margin-top:24px">
+      <h2>Why TrustMe AI?</h2>
+      <div class="grid cols-4">
+        <div class="tier card">
+          <div class="bar"></div>
+          <h3>Transparent Security</h3>
+          <div class="notice">Every transaction traceable. Funds always secure.</div>
+        </div>
+        <div class="tier card">
+          <div class="bar"></div>
+          <h3>Automated Trading</h3>
+          <div class="notice">24/7 execution. No manual intervention.</div>
+        </div>
+        <div class="tier card">
+          <div class="bar"></div>
+          <h3>Real-Time Data</h3>
+          <div class="notice">Global market access. Live updates.</div>
+        </div>
+        <div class="tier card">
+          <div class="bar"></div>
+          <h3>AI Risk Control</h3>
+          <div class="notice">Dynamic monitoring. Auto protection.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<div class="footer">
+  © 2025 TrustMe AI • Contact: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a> · <a href="https://t.me/" target="_blank">Telegram</a>
+</div>
+
 </body>
 </html>

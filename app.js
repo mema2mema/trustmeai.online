@@ -1,179 +1,166 @@
-// Shared state (demo only)
-const store = {
-  history: JSON.parse(localStorage.getItem('tm_history')||'[]')
-};
 
-function saveHistory(){ localStorage.setItem('tm_history', JSON.stringify(store.history)); }
-
-// Utils
-const fmtTime = d => d.toLocaleString();
-function addHistory(row){
-  store.history.unshift(row);
-  saveHistory();
-  renderHistory();
-}
-function renderHistory(){
-  const strategyTbl = document.querySelector('#history-table tbody');
-  const depTbl = document.querySelector('#dep-history tbody');
-  const wdTbl = document.querySelector('#wd-history tbody');
-  const rows = store.history.slice(0,200).map(r=>`<tr><td>${r.time}</td><td>${r.type}</td><td>${Number(r.amount).toFixed(2)}</td><td>${(r.fee||0).toFixed(2)}</td><td>${r.status}</td></tr>`).join('');
-  if(strategyTbl) strategyTbl.innerHTML = rows;
-  if(depTbl) depTbl.innerHTML = rows;
-  if(wdTbl) wdTbl.innerHTML = rows;
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  renderHistory();
-
-  // Index counters wiggle (demo)
-  ['stat-scale','stat-users','stat-orders'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(!el) return;
-    setInterval(()=>{
-      const base = el.textContent;
-      el.textContent = base.replace(/\d+(\.\d+)?W/, (m)=>{
-        const num = parseFloat(m.replace('W','')) + (Math.random()*0.01-0.005);
-        return num.toFixed(3)+'W';
-      });
-    }, 2500);
-  });
-
-  // Strategy page
-  if(document.querySelector('.tiers')){
-    const modal = document.getElementById('plan-modal');
-    const title = document.getElementById('modal-title');
-    const range = document.getElementById('modal-range');
-    const est = document.getElementById('modal-est');
-    const amountInput = document.getElementById('modal-amount');
-    let current = null;
-
-    function openModal(tierEl){
-      const id = tierEl.dataset.id;
-      const min = Number(tierEl.dataset.min);
-      const max = Number(tierEl.dataset.max);
-      const rate = tierEl.dataset.rate;
-      current = {id,min,max,rate};
-      title.textContent = `Activate ${id}`;
-      range.textContent = `Min–Max: $${min.toLocaleString()}–$${max.toLocaleString()}`;
-      amountInput.value = '';
-      est.textContent = 'Estimated daily: —';
-      modal.hidden = false;
-      amountInput.focus();
+// Tiny hash-based pseudo QR (visual placeholder, deterministic)
+function drawPseudoQR(canvas, text){
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+  // hash
+  let hash = 2166136261;
+  for (let i=0;i<text.length;i++){ hash ^= text.charCodeAt(i); hash += (hash<<1) + (hash<<4) + (hash<<7) + (hash<<8) + (hash<<24); }
+  // draw 21x21 modules
+  const n=25, mSize = Math.floor(Math.min(w,h)/n);
+  const offX = Math.floor((w - n*mSize)/2);
+  const offY = Math.floor((h - n*mSize)/2);
+  for (let y=0;y<n;y++){
+    for (let x=0;x<n;x++){
+      hash = (hash ^ (hash>>>13)) * 16777619 >>> 0;
+      const on = (hash & 0x1ff) > 180; // ~25% density
+      ctx.fillStyle = on ? '#c8fff1' : 'transparent';
+      if(on) ctx.fillRect(offX + x*mSize, offY + y*mSize, mSize-1, mSize-1);
     }
+  }
+  // gradient overlay for a nice look
+  const g = ctx.createLinearGradient(0,0,w,h);
+  g.addColorStop(0,'rgba(103,232,249,.25)');
+  g.addColorStop(1,'rgba(34,197,94,.25)');
+  ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+}
+function $(sel,scope=document){return scope.querySelector(sel)}
+function $all(sel,scope=document){return [...scope.querySelectorAll(sel)]}
+function now(){return new Date().toLocaleString()}
+function addHistoryRow(tbody, row){ // row: {time,type,amount,fee,status}
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${row.time}</td><td>${row.type}</td><td>${row.amount.toFixed(2)}</td><td>${row.fee.toFixed(2)}</td><td>${row.status}</td>`;
+  tbody.prepend(tr);
+}
+function copyText(txt){
+  navigator.clipboard.writeText(txt).catch(()=>{});
+}
+function randomHex(n){const s='abcdef0123456789';let out='';while(out.length<n) out+=s[Math.floor(Math.random()*s.length)];return out}
+function randomTRON(){return 'T'+randomHex(33)}
+function randomEVM(){return '0x'+randomHex(40)}
 
-    document.querySelectorAll('[data-action="activate"]').forEach(btn=>{
-      btn.addEventListener('click', e=>openModal(e.currentTarget.closest('.tier')));
+// Page routers
+document.addEventListener('DOMContentLoaded',()=>{
+  const page = document.body.dataset.page;
+
+  // Nav active
+  const href = location.pathname.replace(/\/$/,'') || '/index.html';
+  $all('nav a').forEach(a=>{ if(a.getAttribute('href')===href) a.style.opacity='1' });
+
+  if(page==='home'){
+    // Nothing special; counters ticking
+    const nums = $all('[data-kpi]');
+    setInterval(()=>{
+      nums.forEach(el=>{
+        const base = parseFloat(el.dataset.kpi);
+        const jitter = (Math.random()-.5)*0.01*base;
+        el.textContent = (base + jitter).toFixed(3)+'W';
+      })
+    }, 2500);
+  }
+
+  if(page==='strategy'){
+    const tiers = [
+      { id:'T1', min:50,    max:999,    apy:'0.5%–1.0% / day' },
+      { id:'T2', min:1000,  max:9999,   apy:'1.0%–1.5% / day' },
+      { id:'T3', min:10000, max:19999,  apy:'1.5%–2.0% / day' },
+      { id:'T4', min:20000, max:100000, apy:'2.0%–3.0% / day' },
+    ];
+    const modal = $('.modal');
+    const title = $('#modalTitle');
+    const input = $('#amountInput');
+    const est = $('#estDaily');
+    const confirmBtn = $('#confirmBtn');
+    const closeBtn = $('#closeBtn');
+    const tbody = $('#historyBody');
+    let currentTier = null;
+
+    $all('[data-activate]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const id = btn.dataset.activate;
+        currentTier = tiers.find(t=>t.id===id);
+        title.textContent = `Activate ${id}`;
+        input.value='';
+        est.textContent='—';
+        modal.classList.add('show');
+        input.focus();
+      });
     });
-    document.getElementById('modal-close').onclick = ()=> modal.hidden = true;
-    document.getElementById('modal-cancel').onclick = ()=> modal.hidden = true;
+    closeBtn.addEventListener('click',()=>modal.classList.remove('show'));
+    $('#cancelBtn').addEventListener('click',()=>modal.classList.remove('show'));
 
-    amountInput?.addEventListener('input', ()=>{
-      if(!current) return;
-      const v = Number(amountInput.value||0);
-      // Estimate using mid rate of the band
-      let low=0, high=0;
-      if(current.id==='T1'){ low=0.005; high=0.01 }
-      if(current.id==='T2'){ low=0.01; high=0.015 }
-      if(current.id==='T3'){ low=0.015; high=0.02 }
-      if(current.id==='T4'){ low=0.02; high=0.03 }
-      const mid = (low+high)/2;
-      if(v>0) est.textContent = `Estimated daily: ${(v*mid).toFixed(2)} USDT`;
-      else est.textContent = 'Estimated daily: —';
+    input.addEventListener('input',()=>{
+      const v = parseFloat(input.value||'0');
+      if(!currentTier) return;
+      let rate = 0.008; // midpoint rough
+      if(currentTier.id==='T1') rate=0.0075;
+      if(currentTier.id==='T2') rate=0.0125;
+      if(currentTier.id==='T3') rate=0.0175;
+      if(currentTier.id==='T4') rate=0.025;
+      est.textContent = isFinite(v) && v>0 ? (v*rate).toFixed(2)+' USDT/day' : '—';
     });
 
-    document.getElementById('modal-confirm').onclick = ()=>{
-      if(!current) return;
-      const v = Number(amountInput.value||0);
-      if(isNaN(v) || v<current.min || v>current.max){
-        alert(`Amount must be between ${current.min} and ${current.max} USDT for ${current.id}.`);
+    confirmBtn.addEventListener('click',()=>{
+      const v = parseFloat(input.value||'0');
+      if(!currentTier) return;
+      if(!(v>=currentTier.min && v<=currentTier.max)){
+        alert(`Enter an amount between ${currentTier.min} and ${currentTier.max} USDT for ${currentTier.id}.`);
         return;
       }
-      addHistory({ time: fmtTime(new Date()), type:'lock', amount:v, fee:0, status:'active' });
-      modal.hidden = true;
-    };
+      addHistoryRow(tbody,{time:now(), type:'lock', amount:v, fee:0, status:'active'});
+      modal.classList.remove('show');
+    });
   }
 
-  // Deposit page
-  const genBtn = document.getElementById('gen-addr');
-  const netSel = document.getElementById('net-select');
-  const addr = document.getElementById('addr');
-  const copyBtn = document.getElementById('copy-addr');
-  const qrEl = document.getElementById('qr');
-  const scheduleBtn = document.getElementById('schedule');
+  if(page==='deposit'){
+    const netSel = $('#network');
+    const addr = $('#addr');
+    const copyBtn = $('#copyBtn');
+    const amountSel = $('#amountSel');
+    const delaySel = $('#delaySel');
+    const scheduleBtn = $('#scheduleBtn');
+    const qr = $('#qr');
+    const tbody = $('#historyBody');
+    const genBtn = $('#genBtn');
 
-  function makeAddr(net){
-    if(net==='TRC20'){
-      return 'T' + Math.random().toString(36).slice(2, 9) + Math.random().toString(36).slice(2, 9);
+    function ensureAddress(){
+      if(addr.value.trim()) return;
+      genAddress();
     }
-    // EVM-like
-    const hex = Array.from(crypto.getRandomValues(new Uint8Array(20))).map(b=>b.toString(16).padStart(2,'0')).join('');
-    return '0x' + hex;
-  }
-
-  function renderQR(text){
-    if(!qrEl) return;
-    qrEl.innerHTML='';
-    try{
-      const qr = new QRCode({text});
-      const size = 150;
-      const canvas = document.createElement('canvas');
-      canvas.width=size; canvas.height=size;
-      const ctx = canvas.getContext('2d');
-      const count = qr.getModuleCount();
-      const cell = size / count;
-      ctx.fillStyle = '#0B1220';
-      ctx.fillRect(0,0,size,size);
-      ctx.fillStyle = '#E6F1FF';
-      for(let r=0;r<count;r++){
-        for(let c=0;c<count;c++){
-          if(qr.isDark(r,c)){
-            ctx.fillRect(Math.round(c*cell), Math.round(r*cell), Math.ceil(cell), Math.ceil(cell));
-          }
-        }
-      }
-      qrEl.appendChild(canvas);
-    }catch(e){
-      const pre = document.createElement('div');
-      pre.textContent = text;
-      qrEl.appendChild(pre);
+    function genAddress(){
+      const net = netSel.value;
+      addr.value = net==='TRC20' ? randomTRON() : randomEVM();
+      drawPseudoQR(qr, addr.value);
     }
+    genBtn.addEventListener('click', genAddress);
+    netSel.addEventListener('change', genAddress);
+    copyBtn.addEventListener('click',()=>{ copyText(addr.value); copyBtn.textContent='Copied'; setTimeout(()=>copyBtn.textContent='Copy',900)});
+    scheduleBtn.addEventListener('click',()=>{
+      ensureAddress();
+      const v = parseFloat(amountSel.value||'0');
+      const d = parseInt(delaySel.value||'5',10);
+      if(!(v>0)) return;
+      const row = {time:now(), type:'deposit', amount:v, fee:0, status:'pending'};
+      addHistoryRow(tbody,row);
+      setTimeout(()=>{ row.status='confirmed'; addHistoryRow(tbody,{...row}); }, d*1000);
+    });
+    // init
+    genAddress();
   }
 
-  genBtn?.addEventListener('click', ()=>{
-    const a = makeAddr(netSel.value);
-    addr.value = a;
-    renderQR(a);
-  });
-  copyBtn?.addEventListener('click', ()=>{
-    if(!addr.value) return;
-    navigator.clipboard.writeText(addr.value);
-    copyBtn.textContent='Copied';
-    setTimeout(()=>copyBtn.textContent='Copy',900);
-  });
-
-  scheduleBtn?.addEventListener('click', ()=>{
-    if(!addr.value){ alert('Generate address first.'); return; }
-    const amt = Number(document.getElementById('demo-amount').value||0);
-    const delay = Math.max(1, Number(document.getElementById('demo-delay').value||5));
-    const timeStr = fmtTime(new Date());
-    addHistory({ time: timeStr, type:'deposit', amount:amt, fee:0, status:'pending' });
-    setTimeout(()=>{
-      // mark most recent matching pending as confirmed
-      const row = store.history.find(r=>r.type==='deposit' && r.status==='pending' && r.amount===amt && r.time===timeStr);
-      if(row){ row.status='confirmed'; saveHistory(); renderHistory(); }
-    }, delay*1000);
-  });
-
-  // Withdraw page
-  const wdBtn = document.getElementById('wd-submit');
-  wdBtn?.addEventListener('click', ()=>{
-    const to = document.getElementById('wd-to').value.trim();
-    const amt = Number(document.getElementById('wd-amt').value||0);
-    if(!/^T|0x/.test(to)){ alert('Enter a valid TRC20 (T...) or EVM (0x...) address.'); return; }
-    addHistory({ time: fmtTime(new Date()), type:'withdraw', amount:amt, fee:1, status:'pending' });
-    setTimeout(()=>{
-      const row = store.history.find(r=>r.type==='withdraw' && r.status==='pending' && r.amount===amt);
-      if(row){ row.status='sent'; saveHistory(); renderHistory(); }
-    }, 4000);
-  });
+  if(page==='withdraw'){
+    const to = $('#to');
+    const amt = $('#wamt');
+    const btn = $('#wsubmit');
+    const tbody = $('#historyBody');
+    btn.addEventListener('click',()=>{
+      const a = parseFloat(amt.value||'0');
+      const t = to.value.trim();
+      if(!/^T|0x/.test(t)){ alert('Enter a valid TRC20 (T...) or EVM (0x...) address'); return; }
+      if(!(a>0)){ alert('Enter amount'); return; }
+      addHistoryRow(tbody,{time:now(), type:'withdraw', amount:a, fee:1, status:'submitted'});
+      to.value=''; amt.value='';
+    });
+  }
 });
