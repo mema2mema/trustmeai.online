@@ -1,4 +1,4 @@
-/* TMAuth — minimal addon (no DOM injection, no guards) */
+/* TMAuth — minimal auth (no global UI) */
 ;(()=>{
   const NS = (window.TMAuth = window.TMAuth || {});
   function jget(k, d){ try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}catch(e){return d} }
@@ -11,7 +11,7 @@
     }
     try{ return btoa(t) }catch(e){ return t }
   }
-  NS.register = async ({email, pass, ref})=>{
+  NS.register = async ({email, pass, ref}) => {
     const users=jget('tm_users',[]);
     if(users.find(u=>u.email===email)) return false;
     const hash=await sha256(pass);
@@ -20,7 +20,7 @@
     jset('tm_auth', {email});
     return true;
   };
-  NS.login = async (email, pass)=>{
+  NS.login = async (email, pass) => {
     const users=jget('tm_users',[]);
     const hash=await sha256(pass);
     const u=users.find(u=>u.email===email && u.pass===hash);
@@ -28,6 +28,6 @@
     jset('tm_auth', {email:u.email});
     return true;
   };
-  NS.auth = ()=> jget('tm_auth', null);
-  NS.logout = ()=> { localStorage.removeItem('tm_auth'); };
+  NS.auth = () => jget('tm_auth', null);
+  NS.logout = () => { localStorage.removeItem('tm_auth'); location.href='index.html'; };
 })();
