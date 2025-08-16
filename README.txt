@@ -1,19 +1,25 @@
-TMAuth+ (safe patch)
-----------------------
-Files:
- - tm-auth.js  (namespaced auth + active link + optional page guard)
+TRUSTME AI — Auth + Guard (final, non-conflicting)
 
-What it does:
- - Adds Login/Register/Logout buttons only if you add <div id="authArea"></div>
- - Optional active nav highlight (underline on current page)
- - Optional page guard (redirects to login if <body data-auth="required">)
+FILES
+ - tm-auth.js   -> minimal auth (register/login/logout/localStorage)
+ - guard.js     -> optional page guard for protected pages
+ - login.html   -> login page
+ - register.html-> register page (email, password, retype, email code, referral)
 
-How to use:
- 1) Copy tm-auth.js to your site root (beside index.html)
- 2) In your header (optional UI), add:
-      <div id="authArea"></div>
-      <script src="tm-auth.js"></script>
- 3) To protect a page, add to the <body> tag:
-      <body data-auth="required">
- 4) To show the signed-in email next to Logout, set this in a tiny inline script after tm-auth.js:
-      <script> TMAuth.SHOW_USER = true; </script>
+HOW TO USE
+1) Upload all four files to your site root (next to index.html).
+
+2) DO NOT include tm-auth.js or guard.js on Home/Strategy/Assets/Deposit/Withdraw unless you want to protect a page.
+
+3) To protect a page (e.g., strategy.html):
+   - Add data-auth to the body tag:
+       <body data-auth="required">
+   - Add these two scripts (order matters) anywhere on the page (head or before </body>):
+       <script src="tm-auth.js"></script>
+       <script src="guard.js"></script>
+
+   If not logged in, users are redirected to login.html?next=thatpage.html
+
+4) Login/Register pages already include tm-auth.js and are isolated from your app code.
+
+5) If you change style.css path, update the <link rel="stylesheet"> in login/register pages.

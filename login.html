@@ -3,33 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <title>Login - TrustMe AI</title>
-  <link rel="stylesheet" href="styles/style.css">
-  <script src="tm-auth.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="auth-container">
-    <h2>Login</h2>
-    <form id="loginForm">
-      <input type="email" id="loginEmail" placeholder="Email" required><br>
-      <input type="password" id="loginPass" placeholder="Password" required><br>
-      <button type="submit" class="btn">Login</button>
-    </form>
-    <p>Don’t have an account? <a href="register.html">Register here</a></p>
+  <div class="auth-container" style="max-width:520px;margin:40px auto">
+    <div class="card">
+      <div class="stripe"></div>
+      <h2>Login</h2>
+      <form id="loginForm">
+        <label>Email</label>
+        <input type="email" id="loginEmail" class="input" placeholder="you@example.com" required>
+        <label style="margin-top:.6rem">Password</label>
+        <input type="password" id="loginPass" class="input" placeholder="••••••••" required>
+        <button type="submit" class="btn" style="width:100%;margin-top:.9rem">Login</button>
+      </form>
+      <p class="small" style="margin-top:.6rem">Don’t have an account? <a href="register.html">Register</a></p>
+    </div>
   </div>
 
+  <script src="tm-auth.js"></script>
   <script>
-    document.getElementById('loginForm').addEventListener('submit', async (e)=>{
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('loginEmail').value.trim();
+      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
       const pass  = document.getElementById('loginPass').value.trim();
-
       const ok = await TMAuth.login(email, pass);
       if(ok){
-        alert('✅ Login successful!');
+        alert('Login successful!');
         const next = new URLSearchParams(location.search).get('next') || 'index.html';
         location.href = next;
       } else {
-        alert('❌ Invalid email or password');
+        alert('Invalid email or password');
       }
     });
   </script>
