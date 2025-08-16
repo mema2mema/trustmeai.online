@@ -39,7 +39,8 @@ $("#btnGenerateDeposit").addEventListener("click", ()=>{
   }
   wallet.address = gen(net);
   $("#walletAddress").textContent = wallet.address;
-  $("#walletAddressWrap").classList.remove("hidden");
+  if (window.__renderDepositQR) { window.__renderDepositQR(); }
+  $("#walletAddressWrap"").classList.remove("hidden");
 });
 $("#btnCheckDeposit").addEventListener("click", ()=>{
   alert("This would poll backend for confirmations. Hook to your API.");
@@ -172,4 +173,75 @@ $("#year").textContent = new Date().getFullYear();
   const out = document.getElementById('feePreview');
   function update(){ if (out && sel) out.textContent = fees[sel.value] || fees.TRC20; }
   if (sel){ sel.addEventListener('change', update); update(); }
+})();
+
+
+// ===== Copy Address & QR Code =====
+(function(){
+  const copyBtn = document.getElementById('walletCopyBtn');
+  const addrEl = document.getElementById('walletAddress');
+  const qrWrap = document.getElementById('walletQr');
+  if(copyBtn && addrEl){
+    copyBtn.addEventListener('click', async ()=>{
+      try {
+        await navigator.clipboard.writeText(addrEl.textContent.trim());
+        alert('Address copied to clipboard');
+      } catch(e){ alert('Copy failed — you can select and copy manually.'); }
+    });
+  }
+  // Re-render QR whenever address changes
+  function renderQR(){
+    if(!qrWrap) return;
+    qrWrap.innerHTML='';
+    try { new QRCode(qrWrap, { text: addrEl.textContent.trim(), width: 160, height: 160 }); } catch(e){}
+  }
+  // Expose for generator to call
+  window.__renderDepositQR = renderQR;
+})();
+
+// ===== Dynamic Fee Preview =====
+(function(){
+  const fees = { TRC20: '~1 USDT (TRC20)', BEP20: '~0.5 USDT (BEP20)', ERC20: '~5 USDT (ERC20)' };
+  const sel = document.getElementById('walletNetwork');
+  const out = document.getElementById('feePreview');
+  function update(){ if(out && sel) out.textContent = fees[sel.value] || fees.TRC20; }
+  if(sel){ sel.addEventListener('change', update); update(); }
+})();
+
+// ===== Auto deposit simulation after address generation =====
+(function(){
+  let pendingTimer = null;
+  const genBtn = document.getElementById('btnGenerateDeposit');
+  function cancelTimer(){ if(pendingTimer){ clearTimeout(pendingTimer); pendingTimer=null; } }
+  function addHistoryRow(type, amount, fee, status){
+    const tbody = document.querySelector("#historyTable tbody");
+    if (!tbody) return;
+    const tr = document.createElement("tr");
+    const now = new Date().toISOString();
+    tr.innerHTML = `<td class="p-2 whitespace-nowrap">${new Date(now).toLocaleString()}</td>
+      <td class="p-2">${type}</td>
+      <td class="p-2">${Number(amount).toFixed(2)}</td>
+      <td class="p-2">${fee?Number(fee).toFixed(2):'0.00'}</td>
+      <td class="p-2">confirmed</td>`;
+    tbody.prepend(tr);
+  }
+  function credit(amount){
+    // Increase available balance
+    const el = document.getElementById("walletAvailable");
+    if (!el) return;
+    const cur = Number(el.textContent.replace(/,/g,'')) || 0;
+    const next = cur + amount;
+    el.textContent = next.toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+  if(genBtn){
+    genBtn.addEventListener('click', ()=>{
+      cancelTimer();
+      // Demo: credit 100 USDT after ~2 minutes
+      pendingTimer = setTimeout(()=>{
+        addHistoryRow('deposit', 100, 0, 'confirmed');
+        credit(100);
+        alert('Demo deposit confirmed: +100 USDT');
+      }, 120000); // 2 minutes
+    });
+  }
 })();
