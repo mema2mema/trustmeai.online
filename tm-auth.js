@@ -1,12 +1,12 @@
-/* TMAuth Core — namespaced, ZERO side‑effects (no header, no guards) */
+/* TMAuth — minimal auth only (no nav injection, no guard, no auto-style) */
 ;(() => {
   const NS = (window.TMAuth = window.TMAuth || {});
 
-  // storage helpers
+  // ---------- storage helpers ----------
   function jget(k, d){ try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}catch(e){return d} }
   function jset(k, v){ try{localStorage.setItem(k, JSON.stringify(v))}catch(e){} }
 
-  // hashing
+  // ---------- hashing ----------
   async function sha256(t){
     if (crypto && crypto.subtle){
       const enc = new TextEncoder().encode(t);
@@ -16,7 +16,7 @@
     try{ return btoa(t) }catch(e){ return t }
   }
 
-  // core api (no DOM usage)
+  // ---------- core api ----------
   NS.register = async ({email, pass, ref}) => {
     const users = jget('tm_users', []);
     if (users.find(u=>u.email===email)) return false;
@@ -36,6 +36,7 @@
     return true;
   };
 
-  NS.auth   = () => jget('tm_auth', null);
-  NS.logout = () => { localStorage.removeItem('tm_auth'); };
+  NS.auth  = () => jget('tm_auth', null);
+  NS.logout = () => { localStorage.removeItem('tm_auth'); location.reload(); };
+
 })();

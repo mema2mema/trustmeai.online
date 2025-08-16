@@ -1,13 +1,40 @@
-
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TrustMe AI — Login</title><link rel="stylesheet" href="style.css"></head><body>
-<div class="nav"><div class="brand"><div class="dot"></div>TrustMe AI</div><div class="links"><a href="index.html">Home</a></div></div>
-<div class="container">
-  <h1>Log In</h1>
-  <div class="card form" style="max-width:420px">
-    <input class="input" placeholder="Email">
-    <input class="input" placeholder="Password" type="password">
-    <button class="btn">Log In</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - TrustMe AI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="auth-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label>Email</label>
+      <input type="email" id="email" required>
+      
+      <label>Password</label>
+      <input type="password" id="password" required>
+      
+      <button type="submit">Login</button>
+    </form>
+    <p>Don't have an account? <a href="register.html">Register</a></p>
   </div>
-</div>
-</body></html>
+
+  <script src="tm-auth.js"></script>
+  <script>
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const pass  = document.getElementById('password').value.trim();
+      const ok = await TMAuth.login(email, pass);
+      if(ok){
+        alert("Login successful!");
+        location.href = "index.html"; // redirect to homepage after login
+      } else {
+        alert("Invalid email or password");
+      }
+    });
+  </script>
+</body>
+</html>

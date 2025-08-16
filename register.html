@@ -1,14 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register - TrustMe AI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="auth-container">
+    <h2>Create Account</h2>
+    <form id="registerForm">
+      <label>Email</label>
+      <input type="email" id="email" required>
 
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TrustMe AI — Register</title><link rel="stylesheet" href="style.css"></head><body>
-<div class="nav"><div class="brand"><div class="dot"></div>TrustMe AI</div><div class="links"><a href="index.html">Home</a></div></div>
-<div class="container">
-  <h1>Register</h1>
-  <div class="card form" style="max-width:480px">
-    <input class="input" placeholder="Email">
-    <input class="input" placeholder="Password" type="password">
-    <input class="input" placeholder="Referral (optional)">
-    <button class="btn">Create Account</button>
+      <label>Password</label>
+      <input type="password" id="password" required>
+
+      <label>Re-type Password</label>
+      <input type="password" id="password2" required>
+
+      <label>Referral Code (optional)</label>
+      <input type="text" id="ref">
+
+      <button type="submit">Register</button>
+    </form>
+    <p>Already have an account? <a href="login.html">Login</a></p>
   </div>
-</div>
-</body></html>
+
+  <script src="tm-auth.js"></script>
+  <script>
+    const form = document.getElementById('registerForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const pass  = document.getElementById('password').value.trim();
+      const pass2 = document.getElementById('password2').value.trim();
+      const ref   = document.getElementById('ref').value.trim();
+
+      if(pass !== pass2){
+        alert("Passwords do not match");
+        return;
+      }
+
+      const ok = await TMAuth.register({email, pass, ref});
+      if(ok){
+        alert("Registration successful! You are now logged in.");
+        location.href = "index.html"; // redirect after register
+      } else {
+        alert("Email already registered.");
+      }
+    });
+  </script>
+</body>
+</html>
