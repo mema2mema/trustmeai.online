@@ -67,3 +67,29 @@ hr.sep{border:0;border-top:1px solid var(--soft);margin:1rem 0;opacity:.8}
 /* Partner names as text, white color */
 .partner-name{color:#fff;font-weight:700;letter-spacing:.4px}
 .partner{background: transparent}
+
+
+/* Hex cards (Aurora Glass style) */
+.hex-card{
+  position:relative;
+  padding:28px 18px 34px;
+  border-radius:20px;
+  background: var(--glass);
+  border:1px solid var(--stroke);
+  clip-path: polygon(25% 0%, 75% 0%, 100% 30%, 100% 70%, 75% 100%, 25% 100%, 0% 70%, 0% 30%);
+  min-height: 240px;
+  display:flex;align-items:center;justify-content:center;
+}
+.hex-card::before{
+  content:""; position:absolute; inset:0;
+  background: radial-gradient(100px 80px at 50% 20%, rgba(34,197,94,.12), transparent 60%),
+              radial-gradient(120px 90px at 10% 90%, rgba(103,232,249,.10), transparent 60%);
+  filter: blur(8px);
+  border-radius:20px;
+  clip-path: inherit;
+}
+.hex-inner{ position:relative; text-align:center; max-width: 90%}
+.hex-icon{ color:#67e8f9; margin-bottom:.5rem; filter: drop-shadow(0 0 10px rgba(103,232,249,.25)); }
+.hex-card h3{ font-family:Poppins,Inter,sans-serif; font-weight:700; margin:.25rem 0 }
+.hex-card p{ color:#B6C2D9; font-size:.95rem; line-height:1.45 }
+@media (max-width:900px){ .grid.grid-3{ grid-template-columns:1fr !important } }
