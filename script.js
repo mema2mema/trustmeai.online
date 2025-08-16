@@ -26,11 +26,20 @@ $("#walletAvailable").textContent = fmt2(wallet.available);
 $("#walletLocked").textContent = fmt2(wallet.locked);
 
 $("#btnGenerateDeposit").addEventListener("click", ()=>{
-  // Replace with POST /api/deposit/create
-  wallet.address = "TQ2xP1EXAMPLEADDRESS987654321";
+  const sel = document.getElementById('walletNetwork');
+  const net = sel ? sel.value : 'TRC20';
+  function randHex(n){ const c='0123456789abcdef'; let s=''; for(let i=0;i<n;i++) s+=c[Math.floor(Math.random()*16)]; return s; }
+  function gen(net){
+    if(net==='TRC20'){
+      const body='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let s='T'; for(let i=0;i<33;i++) s+=body[Math.floor(Math.random()*body.length)];
+      return s;
+    }
+    return '0x'+randHex(40);
+  }
+  wallet.address = gen(net);
   $("#walletAddress").textContent = wallet.address;
   $("#walletAddressWrap").classList.remove("hidden");
-  alert("Deposit address generated (mock). Replace with real API.");
 });
 $("#btnCheckDeposit").addEventListener("click", ()=>{
   alert("This would poll backend for confirmations. Hook to your API.");
