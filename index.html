@@ -1,50 +1,51 @@
-<!doctype html><html><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>TrustMe AI — Home</title>
-<link rel="stylesheet" href="style.css">
-</head><body>
-<div class="nav">
-  <div class="nav-inner">
+<link rel="stylesheet" href="/style.css"/>
+</head>
+<body data-page="home">
+
+<nav>
+  <div class="inner">
     <div class="brand"><span class="brand-dot"></span>TrustMe AI</div>
-    <div>
-      <a href="index.html">Home</a>
-      <a href="strategy.html">Strategy</a>
-      <a href="assets.html">Assets</a>
-      <a href="deposit.html">Deposit</a>
-      <a href="withdraw.html">Withdraw</a>
+    <div class="menu">
+      <a href="/index.html" class="active">Home</a>
+      <a href="/strategy.html" class="">Strategy</a>
+      <a href="/assets.html" class="">Assets</a>
+      <a href="/deposit.html" class="">Deposit</a>
+      <a href="/withdraw.html" class="">Withdraw</a>
     </div>
   </div>
-</div>
-<section class="container hero">
-  <span class="badge">Aurora Glass UI</span>
+</nav>
+
+<section class="hero container">
   <h1>Secure AI strategies for crypto yield</h1>
   <p class="muted">Frosted glass dashboard. Live wallet. Transparent fees. Activate T1–T4 with a click.</p>
-  <div class="actions">
-    <a class="btn primary" href="strategy.html">View Plans</a>
-    <a class="btn" href="deposit.html">Deposit</a>
+  <div class="inline" style="margin-top:12px">
+    <a class="btn" href="/strategy.html">View Plans</a>
+    <a class="btn secondary" href="/deposit.html">Deposit</a>
   </div>
+
   <div class="kpis">
-    <div class="kpi"><div class="muted">Strategy Scale</div><div id="kpi-scale" style="font-size:28px;margin-top:6px">6048.256W</div></div>
-    <div class="kpi"><div class="muted">Participants</div><div id="kpi-part" style="font-size:28px;margin-top:6px">469.607W</div></div>
-    <div class="kpi"><div class="muted">Order Count</div><div id="kpi-ord" style="font-size:28px;margin-top:6px">944.522W</div></div>
+    <div class="kpi"><div class="small">Strategy Scale</div><div class="v">6,048.256W</div></div>
+    <div class="kpi"><div class="small">Participants</div><div class="v">469.607W</div></div>
+    <div class="kpi"><div class="small">Order Count</div><div class="v">944.522W</div></div>
   </div>
 </section>
-<section class="container">
-  <h2>Why TrustMe AI?</h2>
-  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
-    <div class="card"><h3>Transparent Security</h3><p class="muted">Every transaction traceable. Funds always secure.</p></div>
-    <div class="card"><h3>Automated Trading</h3><p class="muted">24/7 execution. No manual intervention.</p></div>
-    <div class="card"><h3>Real-Time Data</h3><p class="muted">Live market access with second-level updates.</p></div>
-    <div class="card"><h3>AI Risk Control</h3><p class="muted">Dynamic monitoring with auto stop-loss protection.</p></div>
-  </div>
-</section>
-<div class="footer">
-  <div class="container small">
-    <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between">
-      <div>© 2025 TrustMe AI</div>
-      <div>Contact: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a> · <a href="https://t.me/" target="_blank">Telegram</a></div>
+
+
+<footer>
+  <div class="footer-inner container">
+    <div>© 2025 TrustMe AI</div>
+    <div class="inline">
+      <a href="mailto:support@trustmeai.online">support@trustmeai.online</a>
+      <span>·</span>
+      <a href="https://t.me/trustmeai" target="_blank" rel="noopener">Telegram</a>
     </div>
   </div>
-</div>
-<script src="site.js"></script>
+</footer>
+<div class="toast"></div>
+<script src="/app.js"></script>
+
 </body></html>
