@@ -2,43 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Login - TrustMe AI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login — TrustMe AI</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .auth-box{max-width:520px;margin:48px auto}
+  </style>
 </head>
 <body>
-  <div class="auth-container" style="max-width:520px;margin:40px auto">
+  <main class="auth-box">
     <div class="card">
       <div class="stripe"></div>
       <h2>Login</h2>
       <form id="loginForm">
-        <label>Email</label>
-        <input type="email" id="loginEmail" class="input" placeholder="you@example.com" required>
-        <label style="margin-top:.6rem">Password</label>
-        <input type="password" id="loginPass" class="input" placeholder="••••••••" required>
-        <button type="submit" class="btn" style="width:100%;margin-top:.9rem">Login</button>
+        <label class="small">Email</label>
+        <input id="loginEmail" class="input" type="email" placeholder="you@example.com" required>
+        <label class="small" style="margin-top:.6rem">Password</label>
+        <input id="loginPass" class="input" type="password" placeholder="••••••••" required>
+        <button class="btn" style="width:100%;margin-top:.9rem">Login</button>
       </form>
-      <p class="small" style="margin-top:.6rem">
-        Don’t have an account? <a href="register.html">Register</a>
-      </p>
+      <p class="small" style="margin-top:.6rem">No account? <a href="register.html">Register</a></p>
+      <pre id="dbg" style="opacity:.7;font-size:.8rem"></pre>
     </div>
-  </div>
+  </main>
 
-  <script src="tm-auth.js"></script>
+  <script src="tm-auth.js" onerror="document.getElementById('dbg').textContent='ERROR: tm-auth.js failed to load (check filename & path)'"></script>
   <script>
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-      const pass  = document.getElementById('loginPass').value.trim();
-      const ok = await TMAuth.login(email, pass);
-      if(ok){
-        alert('✅ Login successful');
-        const next = new URLSearchParams(location.search).get('next') || 'index.html';
-        location.href = next;
-      } else {
-        alert('❌ Invalid email or password');
-      }
-    });
+    (function(){
+      const dbg = (t)=>document.getElementById('dbg').textContent = t || '';
+      if(!window.TMAuth){ dbg('TMAuth not found. Make sure tm-auth.js exists at site root.'); return; }
+      document.getElementById('loginForm').addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+        const pass  = document.getElementById('loginPass').value.trim();
+        try{
+          const ok = await TMAuth.login(email, pass);
+          if(!ok){ alert('Invalid email or password'); return; }
+          const next = new URLSearchParams(location.search).get('next') || 'index.html';
+          location.href = next;
+        }catch(err){ dbg('JS error: '+err.message); }
+      });
+    })();
   </script>
 </body>
 </html>
