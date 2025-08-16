@@ -1,14 +1,57 @@
+<!DOCTYPE html><html><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Register — TrustMe AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head><body data-auth-page="register">
 
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TrustMe AI — Register</title><link rel="stylesheet" href="style.css"></head><body>
-<div class="nav"><div class="brand"><div class="dot"></div>TrustMe AI</div><div class="links"><a href="index.html">Home</a></div></div>
-<div class="container">
-  <h1>Register</h1>
-  <div class="card form" style="max-width:480px">
-    <input class="input" placeholder="Email">
-    <input class="input" placeholder="Password" type="password">
-    <input class="input" placeholder="Referral (optional)">
-    <button class="btn">Create Account</button>
+<header>
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0; position:relative;">
+    <div class="brand"><div class="brand-badge"></div> <div style="letter-spacing:.4px">TrustMe AI</div></div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="strategy.html">Strategy</a>
+      <a href="assets.html">Assets</a>
+      <a href="deposit.html">Deposit</a>
+      <a href="withdraw.html">Withdraw</a>
+    </nav>
+    <div id="authArea" class="auth-area"></div>
   </div>
-</div>
+</header>
+
+<main class="container section" style="max-width:520px">
+  <div class="card">
+    <div class="stripe"></div>
+    <h1 style="font-family:Poppins,Inter,sans-serif;font-weight:700;margin-bottom:.6rem">Create Account</h1>
+    <label class="small">Name</label>
+    <input id="regName" class="input" type="text" placeholder="Your name">
+    <label class="small" style="margin-top:.6rem">Email</label>
+    <input id="regEmail" class="input" type="email" placeholder="you@example.com">
+    <label class="small" style="margin-top:.6rem">Password</label>
+    <input id="regPass" class="input" type="password" placeholder="At least 6 characters">
+    <label class="small" style="margin-top:.6rem">Confirm Password</label>
+    <input id="regPass2" class="input" type="password" placeholder="Repeat password">
+    <button id="regBtn" class="btn" style="width:100%;margin-top:.9rem">Create account</button>
+    <div class="small" style="margin-top:.6rem">Already have an account? <a href="login.html">Login</a></div>
+  </div>
+</main>
+
+<script src="script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.getElementById('regBtn').addEventListener('click', async ()=>{
+    const name = (document.getElementById('regName').value||'').trim();
+    const email = (document.getElementById('regEmail').value||'').trim().toLowerCase();
+    const pass = document.getElementById('regPass').value||'';
+    const pass2 = document.getElementById('regPass2').value||'';
+    if(!name) return alert('Enter your name');
+    if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return alert('Enter a valid email');
+    if(pass.length < 6) return alert('Password must be at least 6 characters');
+    if(pass !== pass2) return alert('Passwords do not match');
+    const ok = await tm_register({name, email, pass});
+    if(!ok) return alert('Email already exists');
+    const next = new URLSearchParams(location.search).get('next') || 'index.html';
+    location.href = next;
+  });
+});
+</script>
 </body></html>
