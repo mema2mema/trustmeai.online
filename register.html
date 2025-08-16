@@ -5,13 +5,17 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Register — TrustMe AI</title>
   <link rel="stylesheet" href="style.css"/>
-  <style>.auth-wrap{max-width:520px;margin:40px auto}</style>
+  <style>
+    .auth-wrap{max-width:520px;margin:40px auto}
+    .input{width:100%}
+    .btn{width:100%}
+  </style>
 </head>
 <body>
   <main class="container auth-wrap">
     <div class="card">
       <div class="stripe"></div>
-      <h1>Create Account</h1>
+      <h1 style="margin-bottom:.6rem">Create Account</h1>
 
       <label class="small">Email</label>
       <input id="regEmail" class="input" type="email" placeholder="you@example.com" required>
@@ -35,17 +39,15 @@
       <label class="small" style="margin-top:.6rem">Referral Code (optional)</label>
       <input id="regRef" class="input" type="text" placeholder="ABC123 (optional)">
 
-      <button id="regBtn" class="btn" style="width:100%;margin-top:.9rem">Create account</button>
+      <button id="regBtn" class="btn" style="margin-top:.9rem">Create account</button>
       <div class="small" style="margin-top:.6rem">Already have an account? <a href="login.html">Login</a></div>
     </div>
   </main>
 
-  <!-- keep your original site JS first (DO NOT REMOVE) -->
-  <script src="script.js"></script>
-  <!-- add our namespaced auth after -->
+  <!-- Do NOT include your site's script.js on this page -->
   <script src="tm-auth.js"></script>
   <script>
-    let TM_REG_CODE=null, TM_REG_EXP=0;
+    let REG_CODE=null, REG_EXP=0;
 
     document.getElementById('sendCodeBtn').addEventListener('click', ()=>{
       const email=(document.getElementById('regEmail').value||'').trim().toLowerCase();
@@ -54,9 +56,9 @@
       if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return alert('Enter a valid email first');
       if(pass.length<6) return alert('Password must be at least 6 characters');
       if(pass!==pass2)   return alert('Passwords do not match');
-      TM_REG_CODE = String(Math.floor(100000 + Math.random()*900000));
-      TM_REG_EXP  = Date.now() + 10*60*1000;
-      alert('Demo: your email code is ' + TM_REG_CODE + ' (valid 10 min)');
+      REG_CODE = String(Math.floor(100000 + Math.random()*900000));
+      REG_EXP  = Date.now() + 10*60*1000; // 10 min
+      alert('Demo: your email code is ' + REG_CODE + ' (valid 10 min)');
     });
 
     document.getElementById('regBtn').addEventListener('click', async ()=>{
@@ -65,16 +67,17 @@
       const pass2= document.getElementById('regPass2').value||'';
       const code = (document.getElementById('regCode').value||'').trim();
       const ref  = (document.getElementById('regRef').value||'').trim();
+
       if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return alert('Enter a valid email');
       if(pass.length<6) return alert('Password must be at least 6 characters');
       if(pass!==pass2)   return alert('Passwords do not match');
-      if(!TM_REG_CODE || Date.now()>TM_REG_EXP) return alert('Code expired. Click Send Code again.');
-      if(code!==TM_REG_CODE) return alert('Incorrect email confirmation code');
+      if(!REG_CODE || Date.now()>REG_EXP) return alert('Code expired. Click Send Code again.');
+      if(code!==REG_CODE) return alert('Incorrect email confirmation code');
 
       const ok = await TMAuth.register({email, pass, ref});
       if(!ok) return alert('Email already exists');
       const next = new URLSearchParams(location.search).get('next') || 'index.html';
-      location.href = next;
+      location.href = next; // auto-login & redirect
     });
   </script>
 </body>

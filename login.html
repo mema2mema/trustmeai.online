@@ -5,30 +5,34 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Login — TrustMe AI</title>
   <link rel="stylesheet" href="style.css"/>
-  <style>.auth-wrap{max-width:520px;margin:40px auto}</style>
+  <style>
+    .auth-wrap{max-width:520px;margin:40px auto}
+    .input{width:100%}
+    .btn{width:100%}
+  </style>
 </head>
 <body>
   <main class="container auth-wrap">
     <div class="card">
       <div class="stripe"></div>
-      <h1>Login</h1>
+      <h1 style="margin-bottom:.6rem">Login</h1>
       <label class="small">Email</label>
       <input id="loginEmail" class="input" type="email" placeholder="you@example.com" required>
       <label class="small" style="margin-top:.6rem">Password</label>
       <input id="loginPass" class="input" type="password" placeholder="••••••••" required>
-      <button id="loginBtn" class="btn" style="width:100%;margin-top:.9rem">Sign in</button>
+      <button id="loginBtn" class="btn" style="margin-top:.9rem">Sign in</button>
       <div class="small" style="margin-top:.6rem">No account? <a href="register.html">Register</a></div>
     </div>
   </main>
 
-  <!-- keep your original site JS first (DO NOT REMOVE) -->
-  <script src="script.js"></script>
-  <!-- add our namespaced auth after -->
+  <!-- IMPORTANT: do NOT include your site's script.js here to avoid any conflicts -->
   <script src="tm-auth.js"></script>
   <script>
     document.getElementById('loginBtn').addEventListener('click', async ()=>{
       const email=(document.getElementById('loginEmail').value||'').trim().toLowerCase();
       const pass = document.getElementById('loginPass').value||'';
+      if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return alert('Enter a valid email');
+      if(!pass) return alert('Enter your password');
       const ok = await TMAuth.login(email, pass);
       if(!ok){ alert('Invalid email or password.'); return; }
       const next = new URLSearchParams(location.search).get('next') || 'index.html';
