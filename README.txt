@@ -1,19 +1,19 @@
-TMAuth+ (safe patch)
-----------------------
-Files:
- - tm-auth.js  (namespaced auth + active link + optional page guard)
+TRUSTME AI — Navbar Clean + Auth Buttons
 
-What it does:
- - Adds Login/Register/Logout buttons only if you add <div id="authArea"></div>
- - Optional active nav highlight (underline on current page)
- - Optional page guard (redirects to login if <body data-auth="required">)
+WHAT THIS DOES
+ - Removes your old hard-coded Login/Register in the navbar
+ - Adds <div id="authArea"></div> automatically
+ - Renders Login/Register (logged out) OR email + Logout (logged in)
 
-How to use:
- 1) Copy tm-auth.js to your site root (beside index.html)
- 2) In your header (optional UI), add:
-      <div id="authArea"></div>
-      <script src="tm-auth.js"></script>
- 3) To protect a page, add to the <body> tag:
-      <body data-auth="required">
- 4) To show the signed-in email next to Logout, set this in a tiny inline script after tm-auth.js:
-      <script> TMAuth.SHOW_USER = true; </script>
+FILES
+ - tm-auth.js              (auth engine)
+ - tm-auth-header.js       (renders auth UI into #authArea)
+ - tm-auth-navbar-cleaner.js (removes old Login/Register and injects #authArea)
+ - login.html, register.html
+
+SETUP (add to every page after your header markup)
+ <script src="tm-auth.js" defer></script>
+ <script src="tm-auth-header.js" defer></script>
+ <script src="tm-auth-navbar-cleaner.js" defer></script>
+
+That’s it. No need to manually edit each header.

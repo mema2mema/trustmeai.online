@@ -29,5 +29,5 @@
     return true;
   };
   NS.auth = () => jget('tm_auth', null);
-  NS.logout = () => { localStorage.removeItem('tm_auth'); location.href='index.html'; };
+  NS.logout = () => { localStorage.removeItem('tm_auth'); location.reload(); };
 })();
