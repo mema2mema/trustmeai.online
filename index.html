@@ -101,7 +101,7 @@
     <label class="flex items-center gap-2 text-amber-700">
       Delay:
       <select id="demoDelay" class="border rounded p-1">
-        <option value="10">10s</option>
+        <option value="5" selected>5s</option><option value="10">10s</option>
         <option value="60">60s</option>
         <option value="120">120s</option>
       </select>
@@ -274,6 +274,28 @@
       </div>
     </section>
   </main>
+
+<!-- Activate Plan Modal -->
+<div id="planModal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-2xl w-[90%] max-w-md p-4">
+    <div class="flex items-center justify-between">
+      <h3 class="text-lg font-semibold">Activate <span id="planModalTier">T1</span></h3>
+      <button id="planModalClose" class="px-2 py-1 rounded-lg bg-gray-100">✕</button>
+    </div>
+    <div class="mt-2 text-sm">
+      <div>Min–Max: <span id="planModalRange">$50–$999</span></div>
+      <div class="mt-2">
+        <label class="text-sm">Amount (USDT)</label>
+        <input id="planAmount" type="number" class="w-full p-2 rounded-xl border mt-1" placeholder="Enter amount" />
+      </div>
+    </div>
+    <div class="mt-3 flex items-center justify-between">
+      <div class="text-xs opacity-70">Funds will be locked to this plan.</div>
+      <button id="planConfirm" class="px-4 py-2 rounded-xl bg-emerald-600 text-white">Confirm</button>
+    </div>
+  </div>
+</div>
+
 
   <footer class="p-6 text-center text-sm opacity-70">
     © <span id="year"></span> TrustMe AI • Terms • Privacy • Risk Disclosure

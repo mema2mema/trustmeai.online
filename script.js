@@ -252,3 +252,112 @@ $("#year").textContent = new Date().getFullYear();
     });
   }
 })();
+
+
+// ===== Copy Address + QR rendering =====
+(function(){
+  const addrEl = document.getElementById('walletAddress');
+  const copyBtn = document.getElementById('walletCopyBtn');
+  const qrWrap = document.getElementById('walletQr');
+  function renderQR(){
+    if(!qrWrap || !addrEl) return;
+    qrWrap.innerHTML='';
+    try { new QRCode(qrWrap, { text: addrEl.textContent.trim(), width: 160, height: 160 }); } catch(e){}
+  }
+  if(copyBtn && addrEl){
+    copyBtn.addEventListener('click', async ()=>{
+      try { await navigator.clipboard.writeText(addrEl.textContent.trim()); alert('Address copied'); }
+      catch(e){ alert('Copy failed. Select and copy manually.'); }
+    });
+  }
+  window.__renderDepositQR = renderQR;
+})();
+
+// ===== Ensure address generator triggers QR re-render =====
+(function(){
+  const btn = document.getElementById('btnGenerateDeposit');
+  if(btn){
+    const old = btn.onclick;
+    btn.addEventListener('click', ()=>{
+      setTimeout(()=>{ if(window.__renderDepositQR) window.__renderDepositQR(); }, 50);
+    });
+  }
+})();
+
+// ===== Demo Controls default delay = 5s =====
+(function(){
+  const delSel = document.getElementById('demoDelay');
+  if (delSel) { delSel.value = "5"; }
+})();
+
+// ===== Activate Plan modal =====
+(function(){
+  // Attach click listeners to "Activate Plan" buttons
+  const planModal = document.getElementById('planModal');
+  const tierSpan = document.getElementById('planModalTier');
+  const rangeSpan = document.getElementById('planModalRange');
+  const closeBtn = document.getElementById('planModalClose');
+  const confirmBtn = document.getElementById('planConfirm');
+  const amountInput = document.getElementById('planAmount');
+
+  function openModal(tier, min, max){
+    if(!planModal) return;
+    tierSpan.textContent = tier;
+    rangeSpan.textContent = `$${Number(min).toLocaleString()}–$${Number(max).toLocaleString()}`;
+    amountInput.value='';
+    planModal.classList.remove('hidden');
+    planModal.classList.add('flex');
+  }
+  function closeModal(){
+    planModal.classList.add('hidden');
+    planModal.classList.remove('flex');
+  }
+  if(closeBtn) closeBtn.addEventListener('click', closeModal);
+  if(planModal) planModal.addEventListener('click', (e)=>{ if(e.target===planModal) closeModal(); });
+
+  // Map card buttons
+  const cards = document.querySelectorAll('#tiers .rounded-2xl button, section .rounded-2xl button');
+  cards.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const card = btn.closest('.rounded-2xl');
+      if(!card) return;
+      const tier = card.querySelector('.text-xl.font-bold')?.textContent?.trim() || 'T1';
+      const priceText = card.querySelector('.opacity-80')?.textContent || '$50–$999 USDT';
+      const m = priceText.match(/\$([\d,]+).*\$([\d,]+)/);
+      const min = m ? Number(m[1].replace(/,/g,'')) : 50;
+      const max = m ? Number(m[2].replace(/,/g,'')) : 999;
+      openModal(tier, min, max);
+    });
+  });
+
+  // Confirm -> add lock row to History
+  function addHistoryRow(type, amount, fee, status){
+    const tbody = document.querySelector("#historyTable tbody");
+    if (!tbody) return;
+    const tr = document.createElement("tr");
+    const now = new Date().toISOString();
+    tr.innerHTML = `<td class="p-2 whitespace-nowrap">${new Date(now).toLocaleString()}</td>
+      <td class="p-2">${type}</td>
+      <td class="p-2">${Number(amount).toFixed(2)}</td>
+      <td class="p-2">${fee?Number(fee).toFixed(2):'0.00'}</td>
+      <td class="p-2">${status}</td>`;
+    tbody.prepend(tr);
+  }
+  function debit(amount){
+    const el = document.getElementById("walletAvailable");
+    if (!el) return;
+    const cur = Number(el.textContent.replace(/,/g,'')) || 0;
+    const next = Math.max(0, cur - amount);
+    el.textContent = next.toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+  if(confirmBtn){
+    confirmBtn.addEventListener('click', ()=>{
+      const amt = Number(amountInput.value || 0);
+      if(!amt || amt <= 0){ alert('Enter a valid amount'); return; }
+      debit(amt);
+      addHistoryRow('lock', amt, 0, 'active');
+      alert('Plan activated (demo). Funds locked.');
+      closeModal();
+    });
+  }
+})();
