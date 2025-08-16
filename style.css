@@ -93,3 +93,35 @@ hr.sep{border:0;border-top:1px solid var(--soft);margin:1rem 0;opacity:.8}
 .hex-card h3{ font-family:Poppins,Inter,sans-serif; font-weight:700; margin:.25rem 0 }
 .hex-card p{ color:#B6C2D9; font-size:.95rem; line-height:1.45 }
 @media (max-width:900px){ .grid.grid-3{ grid-template-columns:1fr !important } }
+
+
+/* Octagon cards (Aurora Glass style) */
+.oct-card{
+  position:relative;
+  padding:28px 18px 34px;
+  border-radius:20px;
+  background: var(--glass);
+  border:1px solid var(--stroke);
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  min-height: 240px;
+  display:flex;align-items:center;justify-content:center;
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.oct-card::before{
+  content:""; position:absolute; inset:0;
+  background: radial-gradient(120px 90px at 80% 20%, rgba(103,232,249,.16), transparent 60%),
+              radial-gradient(120px 90px at 10% 90%, rgba(34,197,94,.16), transparent 60%);
+  filter: blur(10px);
+  border-radius:20px;
+  clip-path: inherit;
+}
+.oct-card:hover{
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 10px 30px rgba(0,0,0,.25), 0 0 0 1px rgba(103,232,249,.25) inset;
+  border-color: rgba(103,232,249,.35);
+}
+.oct-inner{ position:relative; text-align:center; max-width: 90%}
+.oct-icon{ color:#67e8f9; margin-bottom:.5rem; filter: drop-shadow(0 0 10px rgba(103,232,249,.25)); }
+.oct-card h3{ font-family:Poppins,Inter,sans-serif; font-weight:700; margin:.25rem 0 }
+.oct-card p{ color:#B6C2D9; font-size:.95rem; line-height:1.45 }
+@media (max-width:900px){ .grid.grid-3{ grid-template-columns:1fr !important } }
