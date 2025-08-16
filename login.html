@@ -1,42 +1,13 @@
-<!DOCTYPE html><html><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Login — TrustMe AI</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css"></head><body data-auth-page="login">
-<header>
-  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0; position:relative;">
-    <div class="brand"><div class="brand-badge"></div> <div style="letter-spacing:.4px">TrustMe AI</div></div>
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="strategy.html">Strategy</a>
-      <a href="assets.html">Assets</a>
-      <a href="deposit.html">Deposit</a>
-      <a href="withdraw.html">Withdraw</a>
-    </nav>
-    <div id="authArea" class="auth-area"></div>
+
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TrustMe AI — Login</title><link rel="stylesheet" href="style.css"></head><body>
+<div class="nav"><div class="brand"><div class="dot"></div>TrustMe AI</div><div class="links"><a href="index.html">Home</a></div></div>
+<div class="container">
+  <h1>Log In</h1>
+  <div class="card form" style="max-width:420px">
+    <input class="input" placeholder="Email">
+    <input class="input" placeholder="Password" type="password">
+    <button class="btn">Log In</button>
   </div>
-</header>
-<main class="container section" style="max-width:520px">
-  <div class="card">
-    <div class="stripe"></div>
-    <h1 style="font-family:Poppins,Inter,sans-serif;font-weight:700;margin-bottom:.6rem">Login</h1>
-    <label class="small">Email</label>
-    <input id="loginEmail" class="input" type="email" placeholder="you@example.com">
-    <label class="small" style="margin-top:.6rem">Password</label>
-    <input id="loginPass" class="input" type="password" placeholder="••••••••">
-    <button id="loginBtn" class="btn" style="width:100%;margin-top:.9rem">Sign in</button>
-    <div class="small" style="margin-top:.6rem">No account? <a href="register.html">Register</a></div>
-  </div>
-</main>
-<script src="script.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', ()=>{
-  document.getElementById('loginBtn').addEventListener('click', async ()=>{
-    const email=(document.getElementById('loginEmail').value||'').trim().toLowerCase();
-    const pass=document.getElementById('loginPass').value||'';
-    const ok=await tm_login(email,pass);
-    if(!ok) return alert('Invalid email or password.');
-    const next=new URLSearchParams(location.search).get('next')||'index.html'; location.href=next;
-  });
-});
-</script></body></html>
+</div>
+</body></html>
