@@ -361,3 +361,131 @@ $("#year").textContent = new Date().getFullYear();
     });
   }
 })();
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Helper
+  const $id = (x)=>document.getElementById(x);
+  const tbody = document.querySelector("#historyTable tbody");
+  const availEl = $id("walletAvailable");
+
+  function fmt2(n){ return Number(n).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+  // Generate address per network
+  function randHex(n){ const c='0123456789abcdef'; let s=''; for(let i=0;i<n;i++) s+=c[Math.floor(Math.random()*16)]; return s; }
+  function genAddress(net){
+    if(net==='TRC20'){
+      const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let s='T'; for(let i=0;i<33;i++) s+=chars[Math.floor(Math.random()*chars.length)]; return s;
+    }
+    return '0x'+randHex(40);
+  }
+
+  // Fee preview
+  const fees = { TRC20: '~1 USDT (TRC20)', BEP20: '~0.5 USDT (BEP20)', ERC20: '~5 USDT (ERC20)' };
+  const netSel = $id('walletNetwork');
+  const feeOut = $id('feePreview');
+  if(netSel && feeOut){ const upd=()=>feeOut.textContent=fees[netSel.value]||fees.TRC20; netSel.addEventListener('change',upd); upd(); }
+
+  // Deposit generation
+  const genBtn = $id('btnGenerateDeposit');
+  const addrWrap = $id('walletAddressWrap');
+  const addrOut = $id('walletAddress');
+  const copyBtn = $id('walletCopyBtn');
+  const qrWrap = $id('walletQr');
+  const demoAmtSel = $id('demoAmount');
+  const demoDelaySel = $id('demoDelay');
+  const demoStatus = $id('demoStatus');
+  let pendingTimer = null;
+
+  function renderQR(){
+    if(!qrWrap || !addrOut || typeof QRCode==='undefined') return;
+    qrWrap.innerHTML='';
+    new QRCode(qrWrap, { text: addrOut.textContent.trim(), width: 160, height: 160 });
+  }
+  if(copyBtn && addrOut){
+    copyBtn.addEventListener('click', async ()=>{
+      try{ await navigator.clipboard.writeText(addrOut.textContent.trim()); alert('Address copied'); }catch(e){ alert('Copy failed'); }
+    });
+  }
+  function addHistoryRow(type, amount, fee, status){
+    if(!tbody) return;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="p-2 whitespace-nowrap">${new Date().toLocaleString()}</td>
+    <td class="p-2">${type}</td>
+    <td class="p-2">${fmt2(amount)}</td>
+    <td class="p-2">${fmt2(fee||0)}</td>
+    <td class="p-2">${status}</td>`;
+    tbody.prepend(tr);
+  }
+  function credit(amount){
+    if(!availEl) return;
+    const cur = Number(availEl.textContent.replace(/,/g,''))||0;
+    availEl.textContent = fmt2(cur + amount);
+  }
+  function debit(amount){
+    if(!availEl) return;
+    const cur = Number(availEl.textContent.replace(/,/g,''))||0;
+    availEl.textContent = fmt2(Math.max(0, cur - amount));
+  }
+
+  if(genBtn){
+    genBtn.addEventListener('click', ()=>{
+      if(!netSel) return;
+      const addr = genAddress(netSel.value);
+      if(addrOut) addrOut.textContent = addr;
+      if(addrWrap) addrWrap.classList.remove('hidden');
+      renderQR();
+
+      // schedule demo deposit
+      if(pendingTimer) clearTimeout(pendingTimer);
+      const amount = demoAmtSel ? Number(demoAmtSel.value) : 100;
+      const delay = demoDelaySel ? Number(demoDelaySel.value) : 5;
+      if(demoStatus) demoStatus.textContent = `Demo deposit scheduled: +${amount} USDT in ~${delay}s...`;
+      addHistoryRow('deposit', amount, 0, 'pending');
+      pendingTimer = setTimeout(()=>{
+        credit(amount);
+        addHistoryRow('deposit', amount, 0, 'confirmed');
+        if(demoStatus) demoStatus.textContent = `Demo deposit confirmed: +${amount} USDT`;
+      }, delay*1000);
+    });
+  }
+
+  // Activate Plan modal
+  const modal = $id('planModal');
+  const tierSpan = $id('planModalTier');
+  const rangeSpan = $id('planModalRange');
+  const amtInput = $id('planAmount');
+  const closeBtn = $id('planModalClose');
+  const confirmBtn = $id('planConfirm');
+  function openModal(tier, min, max){
+    if(tierSpan) tierSpan.textContent = tier;
+    if(rangeSpan) rangeSpan.textContent = `$${min.toLocaleString()}–$${max.toLocaleString()}`;
+    if(amtInput) amtInput.value = '';
+    modal.classList.remove('hidden'); modal.classList.add('flex');
+  }
+  function closeModal(){ modal.classList.add('hidden'); modal.classList.remove('flex'); }
+  if(closeBtn) closeBtn.addEventListener('click', closeModal);
+  if(modal) modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
+
+  document.querySelectorAll('button.activate-plan, button[data-tier]').forEach(btn=>{
+    btn.classList.add('activate-plan');
+    btn.addEventListener('click', ()=>{
+      const tier = btn.dataset.tier || btn.closest('.rounded-2xl')?.querySelector('.text-xl.font-bold')?.textContent?.trim() || 'T1';
+      const min = Number(btn.dataset.min || 50);
+      const max = Number(btn.dataset.max || 999);
+      openModal(tier, min, max);
+    });
+  });
+
+  if(confirmBtn){
+    confirmBtn.addEventListener('click', ()=>{
+      const val = Number(amtInput.value||0);
+      if(!val || val<1){ alert('Enter a valid amount'); return; }
+      debit(val);
+      addHistoryRow('lock', val, 0, 'active');
+      alert('Plan activated (demo).');
+      closeModal();
+    });
+  }
+});
