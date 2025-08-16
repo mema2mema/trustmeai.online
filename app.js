@@ -29,6 +29,30 @@ function $(sel,scope=document){return scope.querySelector(sel)}
 function $all(sel,scope=document){return [...scope.querySelectorAll(sel)]}
 function now(){return new Date().toLocaleString()}
 function addHistoryRow(tbody, row){ // row: {time,type,amount,fee,status}
+  // UI row
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${row.time}</td><td>${row.type}</td><td>${(row.amount||0).toFixed(2)}</td><td>${(row.fee||0).toFixed(2)}</td><td>${row.status}</td>`;
+  if (tbody && tbody.prepend) tbody.prepend(tr);
+
+  // Persist to localStorage
+  try {
+    const key = 'tm_tx';
+    const list = JSON.parse(localStorage.getItem(key) || '[]');
+    list.push({ time: row.time, type: row.type, amount: Number(row.amount||0), fee: Number(row.fee||0), status: row.status });
+    localStorage.setItem(key, JSON.stringify(list));
+  } catch(e){ console.warn('persist tx failed', e); }
+
+  // Update cached balance
+  try {
+    const txs = JSON.parse(localStorage.getItem('tm_tx') || '[]');
+    const balance = txs.reduce((acc, t) => {
+      if (t.type === 'deposit' && t.status === 'confirmed') return acc + Number(t.amount||0);
+      if (t.type === 'withdraw') return acc - Number(t.amount||0) - Number(t.fee||0);
+      return acc;
+    }, 0);
+    localStorage.setItem('tm_balance', String(balance));
+  } catch(e){}
+}
   const tr = document.createElement('tr');
   tr.innerHTML = `<td>${row.time}</td><td>${row.type}</td><td>${row.amount.toFixed(2)}</td><td>${row.fee.toFixed(2)}</td><td>${row.status}</td>`;
   tbody.prepend(tr);
@@ -162,5 +186,37 @@ document.addEventListener('DOMContentLoaded',()=>{
       addHistoryRow(tbody,{time:now(), type:'withdraw', amount:a, fee:1, status:'submitted'});
       to.value=''; amt.value='';
     });
+  }
+});
+
+
+
+// --- Assets page renderer ---
+document.addEventListener('DOMContentLoaded', ()=>{
+  if (document.body.dataset.page === 'assets') {
+    const balEl = document.querySelector('#balanceValue');
+    const tbody = document.querySelector('#portfolioBody');
+    const histBody = document.querySelector('#historyBody');
+    try {
+      const balance = parseFloat(localStorage.getItem('tm_balance') || '0');
+      if (balEl) balEl.textContent = balance.toFixed(2);
+      const txs = JSON.parse(localStorage.getItem('tm_tx') || '[]');
+
+      // Portfolio (simple single-asset USDT)
+      if (tbody) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>USDT</td><td>${balance.toFixed(2)}</td><td>$${balance.toFixed(2)}</td>`;
+        tbody.appendChild(tr);
+      }
+
+      // Recent history (10)
+      if (histBody) {
+        [...txs.slice(-10).reverse()].forEach(t => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${t.time}</td><td>${t.type}</td><td>${(t.amount||0).toFixed(2)}</td><td>${(t.fee||0).toFixed(2)}</td><td>${t.status}</td>`;
+          histBody.appendChild(tr);
+        });
+      }
+    } catch(e) { console.warn('assets render failed', e); }
   }
 });
