@@ -1,4 +1,25 @@
 
+// ---- Wallet helpers (localStorage-based) ----
+function tm_getTxs(){ try{return JSON.parse(localStorage.getItem('tm_tx')||'[]')}catch(e){return[]} }
+function tm_setTxs(arr){ try{localStorage.setItem('tm_tx', JSON.stringify(arr||[]))}catch(e){} }
+function tm_addTx(tx){ const list = tm_getTxs(); list.push(tx); tm_setTxs(list); }
+function tm_now(){ return new Date().toLocaleString(); }
+function tm_balance(){
+  const txs = tm_getTxs();
+  return txs.reduce((acc,t)=>{
+    if(t.type==='deposit' && t.status==='confirmed') return acc + Number(t.amount||0);
+    if(t.type==='withdraw') return acc - Number(t.amount||0) - Number(t.fee||0);
+    return acc;
+  }, 0);
+}
+function tm_updateBalanceEls(){
+  const bal = tm_balance();
+  const els = document.querySelectorAll('#walletAvailable, #balanceValue');
+  els.forEach(el=>{ if(el) el.textContent = bal.toFixed(2); });
+}
+document.addEventListener('DOMContentLoaded', tm_updateBalanceEls);
+
+
 function setActiveNav(){
   const path = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   document.querySelectorAll('header .nav a').forEach(a=>{
@@ -71,3 +92,56 @@ function bindActivatePlan(){
     });
   });
 }
+
+
+function bindActivatePlan(){
+  document.querySelectorAll('[data-tier]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const tier = btn.dataset.tier;
+      const min = Number(btn.dataset.min||0);
+      const max = Number(btn.dataset.max||0);
+      const modal = document.createElement('div');
+      modal.style.position='fixed'; modal.style.inset='0'; modal.style.background='rgba(0,0,0,.55)';
+      modal.style.display='flex'; modal.style.alignItems='center'; modal.style.justifyContent='center'; modal.style.zIndex='9999';
+      modal.innerHTML = `
+      <div class="card" style="width:92%;max-width:480px">
+        <div class="stripe"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <h3 style="font-size:1.1rem;font-weight:800">Activate ${tier}</h3>
+          <button id="mClose" class="btn-ghost">Close</button>
+        </div>
+        <div class="small" style="margin-top:.35rem">Min–Max: $${min.toLocaleString()}–$${max.toLocaleString()}</div>
+        <label class="small" style="margin-top:.6rem">Amount (USDT)</label>
+        <input id="mAmt" type="number" class="input" placeholder="Enter amount">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.8rem">
+          <div class="small">Funds will be deposited and plan set to active (demo)</div>
+          <button id="mConfirm" class="btn">Confirm</button>
+        </div>
+      </div>`;
+      document.body.appendChild(modal);
+      modal.querySelector('#mClose').onclick=()=>modal.remove();
+      modal.onclick=(e)=>{ if(e.target===modal) modal.remove(); };
+      modal.querySelector('#mConfirm').onclick=()=>{
+        const amt = Number(modal.querySelector('#mAmt').value||0);
+        if(!(amt>0)) return alert('Enter amount');
+        if(amt < min || amt > max) return alert(`Amount must be between ${min} and ${max} USDT`);
+        // Record a deposit (confirmed) from plan activation
+        tm_addTx({time:tm_now(), type:'deposit', amount:amt, fee:0, status:'confirmed', source:'plan-'+tier});
+        tm_updateBalanceEls();
+        // Append to strategy history table if present
+        const tbody = document.querySelector('#historyTable tbody');
+        if(tbody){
+          const tr1 = document.createElement('tr');
+          tr1.innerHTML = `<td>${tm_now()}</td><td>deposit</td><td>${amt.toFixed(2)}</td><td>0.00</td><td>confirmed</td>`;
+          tbody.prepend(tr1);
+          const tr2 = document.createElement('tr');
+          tr2.innerHTML = `<td>${tm_now()}</td><td>plan-${tier}</td><td>${amt.toFixed(2)}</td><td>0.00</td><td>active</td>`;
+          tbody.prepend(tr2);
+        }
+        alert('Plan activated and deposit recorded (demo).');
+        modal.remove();
+      };
+    });
+  });
+}
+
