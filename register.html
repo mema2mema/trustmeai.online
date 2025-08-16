@@ -17,19 +17,23 @@
   </div>
 </nav>
 <section class="wrap">
-  <h1>Assets</h1>
+  <h1>Register</h1>
   <div class="grid grid-2">
     <div class="card">
-      <div class="kpi"><div class="pill">Available <span id="avail" style="margin-left:6px">0.00</span></div>
-      <div class="pill">Locked <span id="locked" style="margin-left:6px">0.00</span></div></div>
-      <p class="small" style="margin-top:10px">This is a demo: balances are stored locally in your browser.</p>
+      <label class="small">Email</label>
+      <input id="regEmail" class="input" placeholder="you@example.com"/>
+      <label class="small" style="margin-top:10px">Password</label>
+      <input id="regPass" type="password" class="input" placeholder="At least 6 characters"/>
+      <label class="small" style="margin-top:10px">Referral (optional)</label>
+      <input id="regRef" class="input" placeholder="TM-XXXX"/>
+      <div style="margin-top:10px">
+        <button id="doRegister" class="btn" type="button">Register</button>
+      </div>
+      <p class="small" style="margin-top:10px">Demo only. Accounts live in your browser.</p>
     </div>
     <div class="card">
-      <h3>Recent</h3>
-      <table class="table" id="recent">
-        <thead><tr><th>Time</th><th>Type</th><th>Amount</th></tr></thead>
-        <tbody></tbody>
-      </table>
+      <h3>Already have an account?</h3>
+      <a class="btn-ghost" href="login.html">Log in</a>
     </div>
   </div>
 </section>

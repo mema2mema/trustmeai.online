@@ -1,112 +1,82 @@
-<!DOCTYPE html><html><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TrustMe AI — Home</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=167">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head><body>
 
-<header>
-  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
-    <div class="brand"><div class="brand-badge"></div> <div style="letter-spacing:.4px">TrustMe AI</div></div>
-    <nav class="nav">
-      <a href="index.html">Home</a><a href="strategy.html">Strategy</a><a href="assets.html">Assets</a><a href="deposit.html">Deposit</a><a href="withdraw.html">Withdraw</a>
-    </nav>
-    <div class="nav"><a class="btn-ghost" href="#">Log In</a><a class="btn" href="#">Register</a></div>
+<nav>
+  <div class="wrap">
+    <div class="brand"><div class="dot"></div> TrustMe AI</div>
+    <div class="grow"></div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="strategy.html">Strategy</a></li>
+      <li><a href="assets.html">Assets</a></li>
+      <li><a href="deposit.html">Deposit</a></li>
+      <li><a href="withdraw.html">Withdraw</a></li>
+    </ul>
+    <div style="display:flex; gap:10px">
+      <a class="btn-ghost btn-sm" href="login.html">Log In</a>
+      <a class="btn btn-sm" href="register.html">Register</a>
+    </div>
   </div>
-</header>
-
+</nav>
 <section class="hero">
-  <div class="blob"></div>
-  <div class="container">
-    <h1>Secure AI strategies for crypto yield</h1>
-    <div class="hero-sub">Frosted‑glass dashboard. Live wallet. Transparent fees. Activate T1–T4 plans with a click.</div>
-    <div class="actions"><a class="btn" href="strategy.html">View Plans</a><a class="btn-ghost" href="deposit.html">Deposit</a></div>
-  </div>
-</section>
-<section class="strategy-section">
-  <div class="container">
-    <h2 class="strategy-title">Why TrustMe AI?</h2>
-    <p class="strategy-intro">We combine transparent security, automated execution, real‑time market data, and intelligent risk control to help you invest with confidence.</p>
-    <div class="strategy-grid">
-      <div class="strategy-card" data-feature="transparent"><div class="card-stripe"></div><div class="card-content"><div class="icon">🔒</div><div class="more">Learn more ▸</div><h3>Transparent Security</h3><p>Every transaction traceable. Funds always secure.</p></div></div>
-      <div class="strategy-card" data-feature="automated"><div class="card-stripe"></div><div class="card-content"><div class="icon">🤖</div><div class="more">Learn more ▸</div><h3>Automated Trading</h3><p>24/7 AI execution. No manual intervention.</p></div></div>
-      <div class="strategy-card" data-feature="realtime"><div class="card-stripe"></div><div class="card-content"><div class="icon">📊</div><div class="more">Learn more ▸</div><h3>Real‑Time Data</h3><p>Global market access. Live second‑level updates.</p></div></div>
-      <div class="strategy-card" data-feature="risk"><div class="card-stripe"></div><div class="card-content"><div class="icon">⚡</div><div class="more">Learn more ▸</div><h3>AI Risk Control</h3><p>Dynamic monitoring. Auto stop‑loss protection.</p></div></div>
-    </div>
-  </div>
-</section>
-<section class="section">
-  <div class="container">
-    <div class="kpis">
-      <div class="card kpi"><div class="label">Strategy Scale</div><div class="val" data-count="6048.256">0W</div></div>
-      <div class="card kpi"><div class="label">Participants</div><div class="val" data-count="469.607">0W</div></div>
-      <div class="card kpi"><div class="label">Order Count</div><div class="val" data-count="944.522">0W</div></div>
-    </div>
-    <div class="ticker" style="margin-top:1rem">
-      <div class="ticker-item"><strong>ETH</strong> &nbsp; 4,426.43 <span class="pct down">-0.29%</span></div>
-      <div class="ticker-item"><strong>BTC</strong> &nbsp; 117,462.76 <span class="pct up">+0.10%</span></div>
-      <div class="ticker-item"><strong>SOL</strong> &nbsp; 186.64 <span class="pct up">+0.50%</span></div>
-      <div class="ticker-item"><strong>ADA</strong> &nbsp; 0.9503 <span class="pct up">+0.53%</span></div>
-      <div class="ticker-item"><strong>XRP</strong> &nbsp; 3.0982 <span class="pct up">+0.66%</span></div>
-    </div>
-  </div>
-</section>
-<section class="section">
-  <div class="container grid grid-2">
-    <div class="card">
-      <div style="font-weight:800">🔥 Hot List</div>
-      <table class="table" style="margin-top:.5rem" id="hotTable">
-        <thead><tr><th>Symbol</th><th>Price (USDT)</th><th>24h %</th></tr></thead>
-        <tbody>
-          <tr><td>ETH/USDT</td><td>4,426.43</td><td class="pct down">-0.29%</td></tr>
-          <tr><td>BTC/USDT</td><td>117,462.76</td><td class="pct up">+0.10%</td></tr>
-          <tr><td>SOL/USDT</td><td>186.64</td><td class="pct up">+0.50%</td></tr>
-          <tr><td>ADA/USDT</td><td>0.9503</td><td class="pct up">+0.53%</td></tr>
-          <tr><td>XRP/USDT</td><td>3.0982</td><td class="pct up">+0.66%</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="card">
-      <div style="font-weight:800">📈 Top Gainers (24h)</div>
-      <table class="table" style="margin-top:.5rem" id="gainersTable">
-        <thead><tr><th>Symbol</th><th>Price (USDT)</th><th>24h %</th></tr></thead>
-        <tbody>
-          <tr><td>XRP/USDT</td><td>3.0982</td><td class="pct up">+0.66%</td></tr>
-          <tr><td>ADA/USDT</td><td>0.9503</td><td class="pct up">+0.53%</td></tr>
-          <tr><td>BNB/USDT</td><td>532.27</td><td class="pct up">+0.53%</td></tr>
-          <tr><td>SOL/USDT</td><td>186.64</td><td class="pct up">+0.48%</td></tr>
-          <tr><td>DOT/USDT</td><td>3.9070</td><td class="pct up">+0.30%</td></tr>
-        </tbody>
-      </table>
-      <canvas id="gainersChart" style="margin-top:1rem;height:260px"></canvas>
+  <div class="wrap">
+    <div class="grid grid-2">
+      <div>
+        <div class="badge">Aurora Glass UI</div>
+        <h1>Secure AI strategies<br/>for crypto yield</h1>
+        <p class="small">Frosted glass dashboard. Live wallet. Transparent fees. Activate T1–T4 with a click.</p>
+        <div style="display:flex; gap:10px; margin-top:12px">
+          <a class="btn" href="strategy.html">View Plans</a>
+          <a class="btn-ghost" href="deposit.html">Deposit</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="kpi">
+          <div class="pill">Strategy Scale <span id="kpi-scale" style="margin-left:8px">—</span></div>
+          <div class="pill">Participants <span id="kpi-participants" style="margin-left:8px">—</span></div>
+          <div class="pill">Order Count <span id="kpi-orders" style="margin-left:8px">—</span></div>
+        </div>
+        <div style="margin-top:16px" class="small">Live demo values update every refresh.</div>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="section" style="padding-top:0">
-  <div class="container">
-    <h2 style="font-family:Poppins,Inter,sans-serif;font-weight:700">Partners</h2>
-    <div class="partner-grid" style="margin-top:1rem">
-      <div class="partner-btn">Binance</div>
-      <div class="partner-btn">OKX</div>
-      <div class="partner-btn">Kraken</div>
-      <div class="partner-btn">KuCoin</div>
-      <div class="partner-btn">Bybit</div>
-      <div class="partner-btn">Gate</div>
-      <div class="partner-btn">Gemini</div>
-      <div class="partner-btn">crypto.com</div>
-      <div class="partner-btn">Bitget</div>
+<section class="wrap">
+  <h2>Why TrustMe AI?</h2>
+  <div class="grid grid-4">
+    <div class="card center" style="flex-direction:column;">
+      <div class="badge">Transparent Security</div>
+      <p class="small" style="text-align:center">Every transaction traceable. Funds always secure.</p>
     </div>
-  </div>
-</section>
-<section class="section">
-  <div class="container">
-    <div class="kpi-chart">
-      <h3 style="margin-top:0">Market Movers (demo)</h3>
-      <canvas id="moversChart" height="140"></canvas>
+    <div class="card center" style="flex-direction:column;">
+      <div class="badge">Automated Trading</div>
+      <p class="small" style="text-align:center">24/7 execution. No manual intervention.</p>
+    </div>
+    <div class="card center" style="flex-direction:column;">
+      <div class="badge">Real-Time Data</div>
+      <p class="small" style="text-align:center">Global market access with second-level updates.</p>
+    </div>
+    <div class="card center" style="flex-direction:column;">
+      <div class="badge">AI Risk Control</div>
+      <p class="small" style="text-align:center">Dynamic monitoring. Auto stop-loss protection.</p>
     </div>
   </div>
 </section>
 
+<div class="footer">
+  <div>© TrustMe AI 2025 — Build v1.7.1</div>
+  <div class="links">
+    <a href="index.html">Home</a> · 
+    <a href="strategy.html">Strategy</a> · 
+    <a href="assets.html">Assets</a> · 
+    <a href="deposit.html">Deposit</a> · 
+    <a href="withdraw.html">Withdraw</a>
+  </div>
+  <div class="footer-cta">
+    <a class="badge-link" href="mailto:support@trustmeai.online">📧 Email: support@trustmeai.online</a>
+    <a class="badge-link" href="https://t.me/trustmeai_support" target="_blank">📲 Telegram</a>
+  </div>
+</div>
 
+<div class="modal-back" id="modal"><div class="modal card" id="modal-body"></div></div>
+<div class="toast" id="toast"></div>
+<script src="script.js?v=171"></script>

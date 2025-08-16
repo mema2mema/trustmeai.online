@@ -1,97 +1,59 @@
-<!DOCTYPE html><html><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Withdraw — TrustMe AI</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=167"></head><body>
 
-<header>
-  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
-    <div class="brand"><div class="brand-badge"></div> <div style="letter-spacing:.4px">TrustMe AI</div></div>
-    <nav class="nav">
-      <a href="index.html">Home</a><a href="strategy.html">Strategy</a><a href="assets.html">Assets</a><a href="deposit.html">Deposit</a><a href="withdraw.html">Withdraw</a>
-    </nav>
-    <div class="nav"><a class="btn-ghost" href="#">Log In</a><a class="btn" href="#">Register</a></div>
+<nav>
+  <div class="wrap">
+    <div class="brand"><div class="dot"></div> TrustMe AI</div>
+    <div class="grow"></div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="strategy.html">Strategy</a></li>
+      <li><a href="assets.html">Assets</a></li>
+      <li><a href="deposit.html">Deposit</a></li>
+      <li><a href="withdraw.html">Withdraw</a></li>
+    </ul>
+    <div style="display:flex; gap:10px">
+      <a class="btn-ghost btn-sm" href="login.html">Log In</a>
+      <a class="btn btn-sm" href="register.html">Register</a>
+    </div>
   </div>
-</header>
-
-<main class="container section">
-  <h1 style="font-family:Poppins,Inter,sans-serif;font-weight:700;text-align:center">Withdraw</h1>
-  <div class="grid grid-2" style="margin-top:1rem">
-    <section class="card">
-      <div class="stripe"></div>
+</nav>
+<section class="wrap">
+  <h1>Withdraw</h1>
+  <div class="grid grid-2">
+    <div class="card">
       <label class="small">To Address</label>
-      <input id="wdAddr" class="input" placeholder="T... / 0x...">
-      <label class="small" style="margin-top:.5rem">Amount (USDT)</label>
-      <input id="wdAmt" type="number" class="input" placeholder="10">
-      <button id="btnWithdraw" class="btn" style="margin-top:.6rem">Submit</button>
-      <p class="small" style="margin-top:.5rem">Network fee preview: ~1 USDT (TRC20). Large withdrawals may require manual approval.</p>
-    </section>
-    <section class="card">
-      <div class="stripe" style="opacity:.5"></div>
-      <h2 style="font-family:Poppins,Inter,sans-serif;font-weight:700">History</h2>
-      <table id="historyTable" class="table"><thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead><tbody></tbody></table>
-    </section>
-<section class="section">
-  <div class="container">
-    <div class="kpi-chart">
-      <h3 style="margin-top:0">Market Movers (demo)</h3>
-      <canvas id="moversChart" height="140"></canvas>
+      <input id="wdTo" class="input" placeholder="T... or 0x..."/>
+      <label class="small" style="margin-top:10px">Amount (USDT)</label>
+      <input id="wdAmt" class="input" placeholder="Enter amount"/>
+      <div class="small" style="margin-top:8px">Network fee preview: ~1 USDT (TRC20). Large withdrawals may require manual approval.</div>
+      <div style="margin-top:10px">
+        <button id="wdSubmit" type="button" class="btn">Submit</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>History</h3>
+      <table class="table" id="wdHistory">
+        <thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead>
+        <tbody></tbody>
+      </table>
     </div>
   </div>
 </section>
 
+<div class="footer">
+  <div>© TrustMe AI 2025 — Build v1.7.1</div>
+  <div class="links">
+    <a href="index.html">Home</a> · 
+    <a href="strategy.html">Strategy</a> · 
+    <a href="assets.html">Assets</a> · 
+    <a href="deposit.html">Deposit</a> · 
+    <a href="withdraw.html">Withdraw</a>
   </div>
-</main>
-
-<footer>
-  <div class="container" style="text-align:center">
-    <div class="brand" style="justify-content:center"><div class="brand-badge"></div> <div>TrustMe AI</div></div>
-    <div class="nav" style="justify-content:center;margin-top:8px">
-      <a href="index.html">Home</a><a href="strategy.html">Strategy</a><a href="assets.html">Assets</a><a href="deposit.html">Deposit</a><a href="withdraw.html">Withdraw</a>
-    </div>
-    <div class="small" style="margin-top:10px">
-<div class="container">
-  <div class="footer-nav">
-    <a href="./index.html">Home</a>
-    <a href="./strategy.html">Strategy</a>
-    <a href="./assets.html">Assets</a>
-    <a href="./deposit.html">Deposit</a>
-    <a href="./withdraw.html">Withdraw</a>
-  </div>
-  <div class="footer-links">
-    <a class="footer-pill" href="mailto:support@trustmeai.online">📧 support@trustmeai.online</a>
-    <a class="footer-pill" href="https://t.me/trustmeai_placeholder" target="_blank" rel="noopener">📲 Telegram</a>
+  <div class="footer-cta">
+    <a class="badge-link" href="mailto:support@trustmeai.online">📧 Email: support@trustmeai.online</a>
+    <a class="badge-link" href="https://t.me/trustmeai_support" target="_blank">📲 Telegram</a>
   </div>
 </div>
 
-Build v1.6.7 · © TrustMe AI 2025</div>
-  </div>
-  <div class="support-widget">
-    <div id="supportPanel" class="support-panel">
-      <div class="support-title">Need help?</div>
-      <div class="support-sub">Reach us on Telegram or Email.</div>
-      <div class="support-row">
-        <a class="support-btn" href="https://t.me/trustmeai_placeholder" target="_blank" rel="noopener">Telegram</a>
-        <a class="support-btn" href="mailto:support@trustmeai.online">Email</a>
-      </div>
-    </div>
-    <button id="supportFab" class="support-fab" aria-label="Support">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M21 12c0 3.866-3.806 7-8.5 7-.93 0-1.82-.12-2.65-.34L4 20l1.6-3.2C4.61 15.67 4 13.91 4 12 4 8.134 7.806 5 12.5 5S21 8.134 21 12Z" stroke="white" stroke-opacity=".85" stroke-width="1.5"/>
-        <circle cx="10" cy="12" r="1" fill="white"/><circle cx="13" cy="12" r="1" fill="white"/><circle cx="16" cy="12" r="1" fill="white"/>
-      </svg>
-    </button>
-  </div>
-</footer>
-
-<script src="script.js?v=167"></script>
-<script>
-document.getElementById('btnWithdraw').addEventListener('click', function(){
-  var amt = Number(document.getElementById('wdAmt').value||0);
-  if(!amt||amt<=0) return alert('Enter amount');
-  var tbody=document.querySelector('#historyTable tbody'); var tr=document.createElement('tr');
-  tr.innerHTML='<td>'+new Date().toLocaleString()+'</td><td>withdraw</td><td>'+amt.toFixed(2)+'</td><td>0.00</td><td>submitted</td>'; tbody.prepend(tr);
-  alert('Withdrawal submitted (demo).');
-});
-</script>
-</body></html>
+<div class="modal-back" id="modal"><div class="modal card" id="modal-body"></div></div>
+<div class="toast" id="toast"></div>
+<script src="script.js?v=171"></script>
