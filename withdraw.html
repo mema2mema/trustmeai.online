@@ -28,7 +28,7 @@
       <label class="small" style="margin-top:.5rem">Amount (USDT)</label>
       <input id="wdAmt" type="number" class="input" placeholder="10">
       <button id="btnWithdraw" class="btn" style="margin-top:.6rem">Submit</button>
-      <p class="small" style="margin-top:.5rem">Network fee preview: <span id="feePreview">~1 USDT (TRC20)</span>. Large withdrawals may require manual approval.</p>
+      <p class="small" style="margin-top:.5rem">Network fee preview: ~1 USDT (TRC20). Large withdrawals may require manual approval.</p>
     </section>
     <section class="card">
       <div class="stripe" style="opacity:.5"></div>
@@ -38,7 +38,7 @@
   </div>
 </main>
 
-<footer class="footer">
+<footer class="section" style="border-top:1px solid var(--soft);background:linear-gradient(0deg, rgba(2,6,23,.7), rgba(2,6,23,0))">
   <div class="container" style="text-align:center">
     <div class="brand" style="justify-content:center"><div class="brand-badge"></div> <div>TrustMe AI</div></div>
     <div class="nav" style="justify-content:center;margin-top:8px">
@@ -54,7 +54,6 @@
 
 <script src="script.js"></script>
 <script>
-bindFees();
 document.getElementById('btnWithdraw').addEventListener('click', function(){
   var amt = Number(document.getElementById('wdAmt').value||0);
   if(!amt||amt<=0) return alert('Enter amount');
