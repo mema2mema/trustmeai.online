@@ -154,3 +154,13 @@ let refPie = new Chart(ctx, {
 
 // Footer year
 $("#year").textContent = new Date().getFullYear();
+
+
+// Dynamic fee preview by network
+(function(){
+  const fees = { TRC20: '~1 USDT (TRC20)', BEP20: '~0.3 USDT (BEP20)', ERC20: '~5–15 USDT (ERC20)' };
+  const sel = document.getElementById('walletNetwork') || document.querySelector('#wallet select, #walletNetwork');
+  const out = document.getElementById('feePreview');
+  function update(){ if (out && sel) out.textContent = fees[sel.value] || fees.TRC20; }
+  if (sel){ sel.addEventListener('change', update); update(); }
+})();
