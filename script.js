@@ -81,7 +81,33 @@ async function tm_register({name,email,pass}){ const users=tm_ls_get('tm_users',
 async function tm_login(email,pass){ const users=tm_ls_get('tm_users',[]); const hash=await tm_hash(pass); const u=users.find(u=>u.email===email&&u.pass===hash); if(!u) return false; tm_ls_set('tm_auth',{email:u.email,name:u.name}); return true; }
 function tm_logout(){ localStorage.removeItem('tm_auth'); location.reload(); }
 function tm_auth(){ return tm_ls_get('tm_auth',null); }
-function tm_updateAuthUI(){ const a=tm_auth(); const area=document.getElementById('authArea'); if(!area) return; area.innerHTML=''; if(a){ const span=document.createElement('span'); span.className='auth-email'; span.textContent=a.name||a.email; const btn=document.createElement('button'); btn.className='btn'; btn.textContent='Logout'; btn.onclick=tm_logout; area.appendChild(span); area.appendChild(btn); } else { const path=(location.pathname.split('/').pop()||'index.html'); const login=document.createElement('a'); login.href='login.html?next='+encodeURIComponent(path); login.className='btn'; login.textContent='Login'; const reg=document.createElement('a'); reg.href='register.html?next='+encodeURIComponent(path); reg.className='btn'; reg.textContent='Register'; area.appendChild(login); area.appendChild(reg);} }
+
+function tm_updateAuthUI(){
+  const a = tm_auth();
+  const area = document.getElementById('authArea');
+  if(!area) return;
+  area.innerHTML = '';
+  if(a){
+    const btn = document.createElement('button');
+    btn.className = 'btn';
+    btn.textContent = 'Logout';
+    btn.onclick = tm_logout;
+    area.appendChild(btn);
+  } else {
+    const path = (location.pathname.split('/').pop()||'index.html');
+    const login = document.createElement('a');
+    login.href = 'login.html?next=' + encodeURIComponent(path);
+    login.className = 'btn-ghost';
+    login.textContent = 'Login';
+    const reg = document.createElement('a');
+    reg.href = 'register.html?next=' + encodeURIComponent(path);
+    reg.className = 'btn';
+    reg.textContent = 'Register';
+    area.appendChild(login);
+    area.appendChild(reg);
+  }
+}
+ else { const path=(location.pathname.split('/').pop()||'index.html'); const login=document.createElement('a'); login.href='login.html?next='+encodeURIComponent(path); login.className='btn'; login.textContent='Login'; const reg=document.createElement('a'); reg.href='register.html?next='+encodeURIComponent(path); reg.className='btn'; reg.textContent='Register'; area.appendChild(login); area.appendChild(reg);} }
 document.addEventListener('DOMContentLoaded', ()=>{ tm_updateAuthUI(); const body=document.body; if(body&&body.getAttribute('data-auth')==='required'){ if(!tm_auth()){ const next=encodeURIComponent(location.pathname.split('/').pop()||'index.html'); location.href='login.html?next='+next; } } });
 
 
