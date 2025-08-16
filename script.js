@@ -64,13 +64,10 @@ function addHistory(row){
 
 // Strategy tiers
 const tiers = [
-  { code: "S0", range: "1%–2%", min: 100, max: 200, risk: 2 },
-  { code: "S1", range: "0.8%–1.5%", min: 50, max: 1000, risk: 2 },
-  { code: "S2", range: "1%–1.8%", min: 1000, max: 5000, risk: 3 },
-  { code: "S3", range: "1.2%–2.1%", min: 5000, max: 25000, risk: 4 },
-  { code: "S4", range: "1.4%–2.4%", min: 10000, max: 65000, risk: 5 },
-  { code: "S5", range: "1.6%–2.7%", min: 15000, max: 150000, risk: 6 },
-  { code: "S6", range: "2%–3%", min: 30000, max: 1000000, risk: 7 },
+  { code: "T1", range: "0.5%–1.0%", min: 50, max: 1000, risk: 2 },
+  { code: "T2", range: "1.0%–1.5%", min: 500, max: 5000, risk: 3 },
+  { code: "T3", range: "1.5%–2.0%", min: 3000, max: 25000, risk: 5 },
+  { code: "T4", range: "2.0%–3.0%", min: 10000, max: 1000000, risk: 7 },
 ];
 const tiersWrap = $("#tiers");
 tiers.forEach(t=>{
@@ -89,30 +86,12 @@ tiers.forEach(t=>{
         <div class="h-full bg-orange-400" style="width:${riskPct}%"></div>
       </div>
     </div>
-    <button class="mt-3 w-full rounded-xl py-2 bg-emerald-600 text-white">Select</button>
+    <button class="mt-3 w-full rounded-xl py-2 bg-emerald-600 text-white">Activate Plan</button>
   `;
   tiersWrap.appendChild(card);
 });
 
-// RedHawk simulator
-function proj(amount, dailyPct, days, reinvest){
-  let v = amount, r = dailyPct/100;
-  for (let d=0; d<days; d++){
-    const gain = v * r;
-    if (reinvest) v += gain;
-  }
-  return v;
-}
-function updateSim(){
-  const A = Number($("#simAmount").value||0);
-  const p = Number($("#simDaily").value||0);
-  const R = $("#simReinvest").checked;
-  const days = 30;
-  $("#simDaysOut").textContent = days;
-  $("#simOut").textContent = fmt2(proj(A,p,days,R));
-}
-["#simAmount","#simDaily","#simTrades","#simReinvest"].forEach(id=>{
-  document.addEventListener("input",(e)=>{ if (e.target.matches(id)) updateSim(); });
+// (RedHawk simulator removed for user site) });
 });
 updateSim();
 
