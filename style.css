@@ -57,3 +57,13 @@ header{position:sticky;top:0;z-index:50;background: linear-gradient(180deg, rgba
 .small{font-size:.85rem;color:#B6C2D9}
 hr.sep{border:0;border-top:1px solid var(--soft);margin:1rem 0;opacity:.8}
 @media (max-width: 900px){ .hero-wrap{grid-template-columns:1fr} }
+
+
+/* Centered Strategy Scale card on home */
+.center-card{max-width:520px;margin-left:auto;margin-right:auto}
+@media(min-width:1024px){ .center-card{max-width:560px} }
+/* Hide the original hero right Strategy Scale card now that we center it */
+.hide-hero-right{display:none}
+/* Partner names as text, white color */
+.partner-name{color:#fff;font-weight:700;letter-spacing:.4px}
+.partner{background: transparent}
