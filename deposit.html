@@ -1,73 +1,69 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Deposit — TrustMe AI</title>
-<link rel="stylesheet" href="/style.css"/>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Deposit — TrustMe AI</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <script defer src="qrcode.min.js"></script>
+  <script defer src="app.js"></script>
 </head>
-<body data-page="deposit">
+<body>
+  <header class="nav">
+    <div class="brand">TrustMe <span>AI</span></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="strategy.html">Strategy</a>
+      <a href="assets.html">Assets</a>
+      <a href="deposit.html" class="active">Deposit</a>
+      <a href="withdraw.html">Withdraw</a>
+    </nav>
+  </header>
 
-<nav>
-  <div class="inner">
-    <div class="brand"><span class="brand-dot"></span>TrustMe AI</div>
-    <div class="menu">
-      <a href="/index.html" class="">Home</a>
-      <a href="/strategy.html" class="">Strategy</a>
-      <a href="/assets.html" class="">Assets</a>
-      <a href="/deposit.html" class="active">Deposit</a>
-      <a href="/withdraw.html" class="">Withdraw</a>
-    </div>
-  </div>
-</nav>
+  <main class="page">
+    <h2>Deposit</h2>
 
-<div class="container">
-  <h2 class="section-title">Deposit</h2>
-  <div class="card">
-    <div class="grid-2">
-      <div>
-        <label class="small">Network</label>
-        <div class="inline">
-          <select id="net" class="input" style="max-width:240px">
-            <option>TRC20</option>
-            <option>BEP20</option>
-            <option>ERC20</option>
+    <div class="wallet-card">
+      <div class="row">
+        <label class="select">
+          <span>Network</span>
+          <select id="net-select">
+            <option value="TRC20">TRC20 (cheap)</option>
+            <option value="BEP20">BEP20 (cheap)</option>
+            <option value="ERC20">ERC20</option>
           </select>
-          <button id="gen" class="btn">Generate Address</button>
-        </div>
-        <div style="margin-top:10px">
-          <input id="addr" class="input" placeholder="Your deposit address"/>
-        </div>
-        <div class="inline" style="margin-top:10px">
-          <button id="copy" class="btn secondary">Copy</button>
-          <input id="demo-amt" class="input" type="number" value="50" style="max-width:120px"/>
-          <input id="demo-delay" class="input" type="number" value="5" style="max-width:90px"/>
-          <button id="demo-go" class="btn">Schedule demo deposit</button>
-        </div>
-        <div class="small muted" style="margin-top:8px">Address generated per network. Demo deposit will appear in history.</div>
+        </label>
+        <button class="btn" id="gen-addr">Generate Address</button>
       </div>
-      <div class="qr"><canvas id="qr" width="170" height="170"></canvas></div>
-    </div>
-  </div>
 
-  <h3 class="section-title" style="margin-top:24px">History</h3>
-  <div class="card">
-    <table class="table">
+      <div class="row">
+        <label class="input grow">
+          <span>Your deposit address</span>
+          <input id="addr" readonly placeholder="—"/>
+        </label>
+        <button class="btn ghost" id="copy-addr">Copy</button>
+        <div id="qr" class="qr"></div>
+      </div>
+
+      <div class="row">
+        <label class="input narrow"><span>USDT</span><input id="demo-amount" type="number" value="50"/></label>
+        <label class="input narrow"><span>Delay (s)</span><input id="demo-delay" type="number" value="5"/></label>
+        <button class="btn" id="schedule">Schedule demo deposit</button>
+      </div>
+
+      <div class="muted" id="addr-note">Address generated per network. Demo deposit will appear in history.</div>
+    </div>
+
+    <h3>History</h3>
+    <table class="table" id="dep-history">
       <thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead>
-      <tbody id="dep-body"></tbody>
+      <tbody></tbody>
     </table>
-  </div>
-</div>
+  </main>
 
-<footer>
-  <div class="footer-inner container">
+  <footer class="footer">
     <div>© 2025 TrustMe AI</div>
-    <div class="inline">
-      <a href="mailto:support@trustmeai.online">support@trustmeai.online</a>
-      <span>·</span>
-      <a href="https://t.me/trustmeai" target="_blank" rel="noopener">Telegram</a>
-    </div>
-  </div>
-</footer>
-<div class="toast"></div>
-<script src="/app.js"></script>
-
-</body></html>
+    <div>Contact: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a> · <a href="https://t.me/trustmeai" target="_blank">Telegram</a></div>
+  </footer>
+</body>
+</html>
