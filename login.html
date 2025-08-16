@@ -3,7 +3,6 @@
 <title>Login — TrustMe AI</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css"></head><body data-auth-page="login">
-
 <header>
   <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0; position:relative;">
     <div class="brand"><div class="brand-badge"></div> <div style="letter-spacing:.4px">TrustMe AI</div></div>
@@ -17,7 +16,6 @@
     <div id="authArea" class="auth-area"></div>
   </div>
 </header>
-
 <main class="container section" style="max-width:520px">
   <div class="card">
     <div class="stripe"></div>
@@ -30,19 +28,15 @@
     <div class="small" style="margin-top:.6rem">No account? <a href="register.html">Register</a></div>
   </div>
 </main>
-
 <script src="script.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', ()=>{
-  const btn = document.getElementById('loginBtn');
-  btn.addEventListener('click', async ()=>{
-    const email = (document.getElementById('loginEmail').value||'').trim().toLowerCase();
-    const pass = document.getElementById('loginPass').value||'';
-    const ok = await tm_login(email, pass);
-    if(!ok){ alert('Invalid email or password.'); return; }
-    const next = new URLSearchParams(location.search).get('next') || 'index.html';
-    location.href = next;
+  document.getElementById('loginBtn').addEventListener('click', async ()=>{
+    const email=(document.getElementById('loginEmail').value||'').trim().toLowerCase();
+    const pass=document.getElementById('loginPass').value||'';
+    const ok=await tm_login(email,pass);
+    if(!ok) return alert('Invalid email or password.');
+    const next=new URLSearchParams(location.search).get('next')||'index.html'; location.href=next;
   });
 });
-</script>
-</body></html>
+</script></body></html>

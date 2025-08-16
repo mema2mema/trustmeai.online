@@ -59,90 +59,30 @@ hr.sep{border:0;border-top:1px solid var(--soft);margin:1rem 0;opacity:.8}
 @media (max-width: 900px){ .hero-wrap{grid-template-columns:1fr} }
 
 
-/* Centered Strategy Scale card on home */
-.center-card{max-width:520px;margin-left:auto;margin-right:auto}
-@media(min-width:1024px){ .center-card{max-width:560px} }
-/* Hide the original hero right Strategy Scale card now that we center it */
-.hide-hero-right{display:none}
-/* Partner names as text, white color */
+/* === Center the main nav links in header === */
+header .container{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
+header .brand{ display:flex; align-items:center; gap:.5rem; }
+header .nav{ flex:1; display:flex; align-items:center; justify-content:center; gap:22px; }
+.auth-area{ position: static !important; right:auto; top:auto; height:auto; margin-left:auto; display:flex; align-items:center; gap:.5rem; }
+@media (max-width:900px){ header .container{ flex-wrap:wrap; } header .nav{ order:3; width:100%; justify-content:center; margin-top:8px; } .auth-area{ order:2; margin-left:0; } }
+
 .partner-name{color:#fff;font-weight:700;letter-spacing:.4px}
 .partner{background: transparent}
 
-
-/* Hex cards (Aurora Glass style) */
-.hex-card{
-  position:relative;
-  padding:28px 18px 34px;
-  border-radius:20px;
-  background: var(--glass);
-  border:1px solid var(--stroke);
-  clip-path: polygon(25% 0%, 75% 0%, 100% 30%, 100% 70%, 75% 100%, 25% 100%, 0% 70%, 0% 30%);
-  min-height: 240px;
-  display:flex;align-items:center;justify-content:center;
-}
-.hex-card::before{
-  content:""; position:absolute; inset:0;
-  background: radial-gradient(100px 80px at 50% 20%, rgba(34,197,94,.12), transparent 60%),
-              radial-gradient(120px 90px at 10% 90%, rgba(103,232,249,.10), transparent 60%);
-  filter: blur(8px);
-  border-radius:20px;
-  clip-path: inherit;
-}
-.hex-inner{ position:relative; text-align:center; max-width: 90%}
-.hex-icon{ color:#67e8f9; margin-bottom:.5rem; filter: drop-shadow(0 0 10px rgba(103,232,249,.25)); }
-.hex-card h3{ font-family:Poppins,Inter,sans-serif; font-weight:700; margin:.25rem 0 }
-.hex-card p{ color:#B6C2D9; font-size:.95rem; line-height:1.45 }
-@media (max-width:900px){ .grid.grid-3{ grid-template-columns:1fr !important } }
-
-
 /* Octagon cards (Aurora Glass style) */
-.oct-card{
-  position:relative;
-  padding:28px 18px 34px;
-  border-radius:20px;
-  background: var(--glass);
-  border:1px solid var(--stroke);
-  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
-  min-height: 240px;
-  display:flex;align-items:center;justify-content:center;
-  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
-}
-.oct-card::before{
-  content:""; position:absolute; inset:0;
-  background: radial-gradient(120px 90px at 80% 20%, rgba(103,232,249,.16), transparent 60%),
-              radial-gradient(120px 90px at 10% 90%, rgba(34,197,94,.16), transparent 60%);
-  filter: blur(10px);
-  border-radius:20px;
-  clip-path: inherit;
-}
-.oct-card:hover{
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 10px 30px rgba(0,0,0,.25), 0 0 0 1px rgba(103,232,249,.25) inset;
-  border-color: rgba(103,232,249,.35);
-}
+.oct-card{ position:relative; padding:28px 18px 34px; border-radius:20px; background: var(--glass); border:1px solid var(--stroke);
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%); min-height: 240px;
+  display:flex;align-items:center;justify-content:center; transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; }
+.oct-card::before{ content:""; position:absolute; inset:0;
+  background: radial-gradient(120px 90px at var(--gx,80%) var(--gy,20%), rgba(103,232,249,.16), transparent 60%),
+              radial-gradient(120px 90px at calc(100% - var(--gx,20%)) calc(100% - var(--gy,80%)), rgba(34,197,94,.16), transparent 60%);
+  filter: blur(10px); border-radius:20px; clip-path: inherit; }
+.oct-card:hover{ transform: translateY(-2px) scale(1.01); box-shadow: 0 14px 40px rgba(0,0,0,.3), 0 0 0 1px rgba(103,232,249,.28) inset; border-color: rgba(103,232,249,.35); }
 .oct-inner{ position:relative; text-align:center; max-width: 90%}
 .oct-icon{ color:#67e8f9; margin-bottom:.5rem; filter: drop-shadow(0 0 10px rgba(103,232,249,.25)); }
 .oct-card h3{ font-family:Poppins,Inter,sans-serif; font-weight:700; margin:.25rem 0 }
 .oct-card p{ color:#B6C2D9; font-size:.95rem; line-height:1.45 }
 @media (max-width:900px){ .grid.grid-3{ grid-template-columns:1fr !important } }
-
-
-/* Extra glow when hovering oct-cards */
-.oct-card:hover::before{
-  background: radial-gradient(120px 90px at 80% 20%, rgba(103,232,249,.28), transparent 60%),
-              radial-gradient(120px 90px at 10% 90%, rgba(34,197,94,.28), transparent 60%);
-}
-
-/* Tilt & parallax for oct-cards */
-.oct-card{ will-change: transform, box-shadow; transform-style: preserve-3d; perspective: 800px; }
-.oct-card::before{
-  /* use CSS vars for glow position */
-  background: radial-gradient(120px 90px at var(--gx,80%) var(--gy,20%), rgba(103,232,249,.16), transparent 60%),
-              radial-gradient(120px 90px at calc(100% - var(--gx,20%)) calc(100% - var(--gy,80%)), rgba(34,197,94,.16), transparent 60%);
-}
-.oct-card .oct-inner{ transform: translateZ(20px); }
-.oct-card:hover{ box-shadow: 0 14px 40px rgba(0,0,0,.3), 0 0 0 1px rgba(103,232,249,.28) inset; }
-
-.auth-area{ position:absolute; right:12px; top:0; display:flex; gap:.5rem; align-items:center; height:100%; }
-.auth-area .btn{ padding:.4rem .7rem; font-size:.9rem }
-.auth-email{ color:#B6C2D9; font-size:.9rem; }
+.center-card{max-width:520px;margin-left:auto;margin-right:auto}
+@media(min-width:1024px){ .center-card{max-width:560px} }
+.hide-hero-right{display:none}

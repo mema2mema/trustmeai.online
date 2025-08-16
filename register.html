@@ -3,7 +3,6 @@
 <title>Register — TrustMe AI</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css"></head><body data-auth-page="register">
-
 <header>
   <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0; position:relative;">
     <div class="brand"><div class="brand-badge"></div> <div style="letter-spacing:.4px">TrustMe AI</div></div>
@@ -17,7 +16,6 @@
     <div id="authArea" class="auth-area"></div>
   </div>
 </header>
-
 <main class="container section" style="max-width:520px">
   <div class="card">
     <div class="stripe"></div>
@@ -34,24 +32,21 @@
     <div class="small" style="margin-top:.6rem">Already have an account? <a href="login.html">Login</a></div>
   </div>
 </main>
-
 <script src="script.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', ()=>{
   document.getElementById('regBtn').addEventListener('click', async ()=>{
-    const name = (document.getElementById('regName').value||'').trim();
-    const email = (document.getElementById('regEmail').value||'').trim().toLowerCase();
-    const pass = document.getElementById('regPass').value||'';
-    const pass2 = document.getElementById('regPass2').value||'';
+    const name=(document.getElementById('regName').value||'').trim();
+    const email=(document.getElementById('regEmail').value||'').trim().toLowerCase();
+    const pass=document.getElementById('regPass').value||'';
+    const pass2=document.getElementById('regPass2').value||'';
     if(!name) return alert('Enter your name');
-    if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return alert('Enter a valid email');
-    if(pass.length < 6) return alert('Password must be at least 6 characters');
-    if(pass !== pass2) return alert('Passwords do not match');
-    const ok = await tm_register({name, email, pass});
+    if(!email||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return alert('Enter a valid email');
+    if(pass.length<6) return alert('Password must be at least 6 characters');
+    if(pass!==pass2) return alert('Passwords do not match');
+    const ok=await tm_register({name,email,pass});
     if(!ok) return alert('Email already exists');
-    const next = new URLSearchParams(location.search).get('next') || 'index.html';
-    location.href = next;
+    const next=new URLSearchParams(location.search).get('next')||'index.html'; location.href=next;
   });
 });
-</script>
-</body></html>
+</script></body></html>
