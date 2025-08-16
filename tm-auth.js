@@ -2,9 +2,11 @@
 ;(() => {
   const NS = (window.TMAuth = window.TMAuth || {});
 
+  // ---------- storage helpers ----------
   function jget(k, d){ try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(d))}catch(e){return d} }
   function jset(k, v){ try{localStorage.setItem(k, JSON.stringify(v))}catch(e){} }
 
+  // ---------- hashing ----------
   async function sha256(t){
     if (crypto && crypto.subtle){
       const enc = new TextEncoder().encode(t);
@@ -14,6 +16,7 @@
     try{ return btoa(t) }catch(e){ return t }
   }
 
+  // ---------- core api ----------
   NS.register = async ({email, pass, ref}) => {
     const users = jget('tm_users', []);
     if (users.find(u=>u.email===email)) return false;
@@ -34,5 +37,6 @@
   };
 
   NS.auth  = () => jget('tm_auth', null);
-  NS.logout = () => { localStorage.removeItem('tm_auth'); };
+  NS.logout = () => { localStorage.removeItem('tm_auth'); location.reload(); };
+
 })();
