@@ -16,25 +16,34 @@
   </div>
 </header>
 
-
 <section class="hero">
+  <div class="blob"></div>
   <div class="container">
     <h1>Secure AI strategies for crypto yield</h1>
     <div class="hero-sub">Frosted‑glass dashboard. Live wallet. Transparent fees. Activate T1–T4 plans with a click.</div>
-    <div class="actions">
-      <a class="btn" href="strategy.html">View Plans</a>
-      <a class="btn-ghost" href="deposit.html">Deposit</a>
+    <div class="actions"><a class="btn" href="strategy.html">View Plans</a><a class="btn-ghost" href="deposit.html">Deposit</a></div>
+  </div>
+</section>
+<section class="strategy-section">
+  <div class="container">
+    <h2 class="strategy-title">Why TrustMe AI?</h2>
+    <p class="strategy-intro">We combine transparent security, automated execution, real‑time market data, and intelligent risk control to help you invest with confidence.</p>
+    <div class="strategy-grid">
+      <div class="strategy-card"><div class="card-stripe"></div><div class="card-content"><div class="icon">🔒</div><h3>Transparent Security</h3><p>Every transaction traceable. Funds always secure.</p></div></div>
+      <div class="strategy-card"><div class="card-stripe"></div><div class="card-content"><div class="icon">🤖</div><h3>Automated Trading</h3><p>24/7 AI execution. No manual intervention.</p></div></div>
+      <div class="strategy-card"><div class="card-stripe"></div><div class="card-content"><div class="icon">📊</div><h3>Real‑Time Data</h3><p>Global market access. Live second‑level updates.</p></div></div>
+      <div class="strategy-card"><div class="card-stripe"></div><div class="card-content"><div class="icon">⚡</div><h3>AI Risk Control</h3><p>Dynamic monitoring. Auto stop‑loss protection.</p></div></div>
     </div>
-
-    <!-- KPI block centered -->
+  </div>
+</section>
+<section class="section">
+  <div class="container">
     <div class="kpis">
       <div class="card kpi"><div class="label">Strategy Scale</div><div class="val" data-count="6048.256">0W</div></div>
       <div class="card kpi"><div class="label">Participants</div><div class="val" data-count="469.607">0W</div></div>
       <div class="card kpi"><div class="label">Order Count</div><div class="val" data-count="944.522">0W</div></div>
     </div>
-
-    <!-- ticker -->
-    <div class="ticker">
+    <div class="ticker" style="margin-top:1rem">
       <div class="ticker-item"><strong>ETH</strong> &nbsp; 4,426.43 <span class="pct down">-0.29%</span></div>
       <div class="ticker-item"><strong>BTC</strong> &nbsp; 117,462.76 <span class="pct up">+0.10%</span></div>
       <div class="ticker-item"><strong>SOL</strong> &nbsp; 186.64 <span class="pct up">+0.50%</span></div>
@@ -43,7 +52,6 @@
     </div>
   </div>
 </section>
-
 <section class="section">
   <div class="container grid grid-2">
     <div class="card">
@@ -75,7 +83,21 @@
     </div>
   </div>
 </section>
-
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <h2 style="font-family:Poppins,Inter,sans-serif;font-weight:700">Partners</h2>
+    <div class="grid grid-4" style="margin-top:1rem">
+      <div class="card partner"><img src="https://dummyimage.com/140x30/edf2f7/9ca3af&text=Binance"></div>
+      <div class="card partner"><img src="https://dummyimage.com/140x30/edf2f7/9ca3af&text=OKX"></div>
+      <div class="card partner"><img src="https://dummyimage.com/140x30/edf2f7/9ca3af&text=Kraken"></div>
+      <div class="card partner"><img src="https://dummyimage.com/140x30/edf2f7/9ca3af&text=KuCoin"></div>
+      <div class="card partner"><img src="https://dummyimage.com/140x30/edf2f7/9ca3af&text=Bybit"></div>
+      <div class="card partner"><img src="https://dummyimage.com/140x30/edf2f7/9ca3af&text=Gate"></div>
+      <div class="card partner"><img src="https://dummyimage.com/140x30/edf2f7/9ca3af&text=Gemini"></div>
+      <div class="card partner"><img src="https://dummyimage.com/140x30/edf2f7/9ca3af&text=crypto.com"></div>
+    </div>
+  </div>
+</section>
 
 <footer>
   <div class="container" style="text-align:center">
@@ -85,8 +107,25 @@
     </div>
     <div class="small" style="margin-top:10px">© TrustMe AI 2025</div>
   </div>
+  <div class="support-widget">
+    <div id="supportPanel" class="support-panel">
+      <div class="support-title">Need help?</div>
+      <div class="support-sub">Reach us on Telegram or Email.</div>
+      <div class="support-row">
+        <a class="support-btn" href="https://t.me/trustmeai_placeholder" target="_blank" rel="noopener">Telegram</a>
+        <a class="support-btn" href="mailto:support@trustmeai.online">Email</a>
+      </div>
+    </div>
+    <button id="supportFab" class="support-fab" aria-label="Support">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M21 12c0 3.866-3.806 7-8.5 7-.93 0-1.82-.12-2.65-.34L4 20l1.6-3.2C4.61 15.67 4 13.91 4 12 4 8.134 7.806 5 12.5 5S21 8.134 21 12Z" stroke="white" stroke-opacity=".85" stroke-width="1.5"/>
+        <circle cx="10" cy="12" r="1" fill="white"/><circle cx="13" cy="12" r="1" fill="white"/><circle cx="16" cy="12" r="1" fill="white"/>
+      </svg>
+    </button>
+  </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="script.js"></script>
 <script>animateCounters(); buildGainersChart();</script>
 </body></html>

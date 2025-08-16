@@ -16,18 +16,8 @@ function animateCounters(){
   });
 }
 
-/* yield preview per tier */
-function rangePct(tier){
-  switch(tier){
-    case 'T1': return [0.5,1.0];
-    case 'T2': return [1.0,1.5];
-    case 'T3': return [1.5,2.0];
-    case 'T4': return [2.0,3.0];
-    default: return [1,1.5];
-  }
-}
+function rangePct(tier){ switch(tier){ case 'T1': return [0.5,1.0]; case 'T2': return [1.0,1.5]; case 'T3': return [1.5,2.0]; case 'T4': return [2.0,3.0]; default: return [1,1.5]; } }
 
-/* QR + address + copy */
 function randHex(n){const c='0123456789abcdef';let s='';for(let i=0;i<n;i++)s+=c[Math.floor(Math.random()*16)];return s;}
 function genAddress(net){if(net==='TRC20'){const b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';let s='T';for(let i=0;i<33;i++)s+=b[Math.floor(Math.random()*b.length)];return s;}return '0x'+randHex(40);}
 
@@ -64,7 +54,6 @@ function bindWalletDemo(){
   });
 }
 
-/* centered modal + yield preview */
 function openModal(html){
   const m=document.createElement('div'); m.className='modal'; m.innerHTML=html; document.body.appendChild(m); document.body.classList.add('noscroll');
   m.addEventListener('click',e=>{ if(e.target===m){ document.body.classList.remove('noscroll'); m.remove(); } });
@@ -111,20 +100,27 @@ function bindActivatePlan(){
   });
 }
 
-/* chart from table (Top Gainers) */
 function buildGainersChart(){
   const c=document.getElementById('gainersChart'); if(!c) return;
   const rows=[...document.querySelectorAll('#gainersTable tbody tr')];
   const labels=[], values=[];
   rows.forEach(r=>{ labels.push(r.children[0].textContent.trim()); values.push(parseFloat((r.children[2].textContent||'').replace('+','').replace('%',''))||0); });
   const ctx=c.getContext('2d');
-  new Chart(ctx,{
-    type:'bar',
-    data:{ labels, datasets:[{ label:'24h %', data:values }] },
-    options:{
-      responsive:true,
-      plugins:{ legend:{display:false}},
-      scales:{ x:{grid:{display:false}}, y:{grid:{color:'rgba(255,255,255,.08)'}, ticks:{callback:(v)=>v+'%'}}}
-    }
+  new Chart(ctx,{ type:'bar', data:{ labels, datasets:[{ label:'24h %', data:values }] },
+    options:{ responsive:true, plugins:{ legend:{display:false}}, scales:{ x:{grid:{display:false}}, y:{grid:{color:'rgba(255,255,255,.08)'}, ticks:{callback:(v)=>v+'%'}}} }
   });
 }
+
+function bindSupportWidget(){
+  const fab=document.getElementById('supportFab'); const panel=document.getElementById('supportPanel');
+  if(!fab||!panel) return;
+  fab.addEventListener('click', ()=>{ panel.classList.toggle('open'); });
+  document.addEventListener('click', (e)=>{
+    if(!panel.contains(e.target) && !fab.contains(e.target)) panel.classList.remove('open');
+  });
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  if (document.querySelector('[data-count]')) animateCounters();
+  bindSupportWidget();
+});
