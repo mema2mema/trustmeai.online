@@ -1,1 +1,104 @@
-<!DOCTYPE html><html><head><link rel='stylesheet' href='css/style.css'></head><body><header><a href='index.html'>Back Home</a></header><h1>Deposit</h1><p>Coming soon...</p></body></html>
+
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TrustMe AI — Deposit</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="nav">
+  <div class="brand"><div class="dot"></div>TrustMe AI</div>
+  <div class="links">
+    <a href="index.html">Home</a>
+    <a href="strategy.html">Strategy</a>
+    <a href="assets.html">Assets</a>
+    <a href="deposit.html">Deposit</a>
+    <a href="withdraw.html">Withdraw</a>
+  </div>
+</div>
+<div class="container">
+  <h1>Deposit</h1>
+  <div class="card">
+    <div class="form">
+      <div class="grid-2">
+        <select id="net" class="input select">
+          <option value="TRC20">TRC20 (cheap)</option>
+          <option value="BEP20">BEP20</option>
+          <option value="ERC20">ERC20</option>
+        </select>
+        <button id="gen" class="btn">Generate Address</button>
+      </div>
+      <div class="grid-2">
+        <div class="addr">
+          <input id="addr" class="input" placeholder="Your address will appear here" readonly>
+          <button id="copy" class="copy">Copy</button>
+        </div>
+        <canvas id="qr" class="qr"></canvas>
+      </div>
+      <div class="row">
+        <select id="demoAmt" class="input select" style="max-width:180px">
+          <option>25</option><option selected>50</option><option>100</option><option>200</option>
+        </select>
+        <select id="demoDelay" class="input select" style="max-width:180px">
+          <option>5</option><option>10</option><option>15</option>
+        </select>
+        <button id="schedule" class="btn secondary">Schedule demo deposit</button>
+      </div>
+      <div class="help" id="status">No demo deposit scheduled.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <h3>History</h3>
+    <table class="table" id="hdep">
+      <thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+// simple "fake QR": draw blocks based on char codes so it looks unique
+function drawFakeQR(el, text){
+  const ctx = el.getContext('2d'), N=21, s=6;
+  el.width=el.height=N*s;
+  ctx.fillStyle='rgba(255,255,255,.06)'; ctx.fillRect(0,0,el.width,el.height);
+  for(let y=0;y<N;y++){
+    for(let x=0;x<N;x++){
+      const v = (text.charCodeAt((x*y + x + y) % text.length) + x*7 + y*13) % 9;
+      if(v>6){ ctx.fillStyle = '#E6F0FF'; ctx.fillRect(x*s,y*s,s-1,s-1); }
+    }
+  }
+}
+function makeAddr(net){
+  if(net==='TRC20') return 'T'+Math.random().toString(36).slice(2,9)+Math.random().toString(36).slice(2,10);
+  return '0x'+Math.random().toString(16).slice(2)+Math.random().toString(16).slice(2,10);
+}
+const netEl = document.getElementById('net');
+const addrEl = document.getElementById('addr');
+const genEl = document.getElementById('gen');
+const copyEl = document.getElementById('copy');
+const qrEl = document.getElementById('qr');
+const statusEl = document.getElementById('status');
+
+genEl.onclick=()=>{
+  const a = makeAddr(netEl.value);
+  addrEl.value = a;
+  drawFakeQR(qrEl,a);
+  statusEl.textContent='Address generated for '+netEl.value+'.';
+};
+copyEl.onclick=()=>{
+  addrEl.select(); document.execCommand('copy');
+  copyEl.textContent='Copied'; setTimeout(()=>copyEl.textContent='Copy',900);
+};
+document.getElementById('schedule').onclick=()=>{
+  const amt = parseFloat(document.getElementById('demoAmt').value);
+  const delay = parseInt(document.getElementById('demoDelay').value);
+  statusEl.textContent = `Demo deposit of ${amt} USDT will arrive in ~${delay}s...`;
+  setTimeout(()=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${new Date().toLocaleString()}</td><td>deposit (${netEl.value})</td><td>${amt.toFixed(2)}</td><td>0.00</td><td>confirmed</td>`;
+    document.querySelector('#hdep tbody').prepend(tr);
+    statusEl.textContent = 'Demo deposit confirmed.';
+  }, delay*1000);
+};
+</script>
+</body></html>
