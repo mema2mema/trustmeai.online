@@ -1,84 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Register — TrustMe AI</title>
-  <link rel="stylesheet" href="style.css"/>
-  <style>
-    .auth-wrap{max-width:520px;margin:40px auto}
-    .input{width:100%}
-    .btn{width:100%}
-  </style>
-</head>
-<body>
-  <main class="container auth-wrap">
-    <div class="card">
-      <div class="stripe"></div>
-      <h1 style="margin-bottom:.6rem">Create Account</h1>
 
-      <label class="small">Email</label>
-      <input id="regEmail" class="input" type="email" placeholder="you@example.com" required>
-
-      <label class="small" style="margin-top:.6rem">Password</label>
-      <input id="regPass" class="input" type="password" placeholder="At least 6 characters" required>
-
-      <label class="small" style="margin-top:.6rem">Re-type Password</label>
-      <input id="regPass2" class="input" type="password" placeholder="Repeat password" required>
-
-      <div class="grid grid-2" style="margin-top:.6rem;gap:.6rem">
-        <div>
-          <label class="small">Email Code</label>
-          <input id="regCode" class="input" type="text" placeholder="6-digit code">
-        </div>
-        <div style="display:flex;align-items:flex-end">
-          <button id="sendCodeBtn" class="btn" type="button" style="width:100%">Send Code</button>
-        </div>
-      </div>
-
-      <label class="small" style="margin-top:.6rem">Referral Code (optional)</label>
-      <input id="regRef" class="input" type="text" placeholder="ABC123 (optional)">
-
-      <button id="regBtn" class="btn" style="margin-top:.9rem">Create account</button>
-      <div class="small" style="margin-top:.6rem">Already have an account? <a href="login.html">Login</a></div>
-    </div>
-  </main>
-
-  <!-- Do NOT include your site's script.js on this page -->
-  <script src="tm-auth.js"></script>
-  <script>
-    let REG_CODE=null, REG_EXP=0;
-
-    document.getElementById('sendCodeBtn').addEventListener('click', ()=>{
-      const email=(document.getElementById('regEmail').value||'').trim().toLowerCase();
-      const pass = document.getElementById('regPass').value||'';
-      const pass2= document.getElementById('regPass2').value||'';
-      if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return alert('Enter a valid email first');
-      if(pass.length<6) return alert('Password must be at least 6 characters');
-      if(pass!==pass2)   return alert('Passwords do not match');
-      REG_CODE = String(Math.floor(100000 + Math.random()*900000));
-      REG_EXP  = Date.now() + 10*60*1000; // 10 min
-      alert('Demo: your email code is ' + REG_CODE + ' (valid 10 min)');
-    });
-
-    document.getElementById('regBtn').addEventListener('click', async ()=>{
-      const email=(document.getElementById('regEmail').value||'').trim().toLowerCase();
-      const pass = document.getElementById('regPass').value||'';
-      const pass2= document.getElementById('regPass2').value||'';
-      const code = (document.getElementById('regCode').value||'').trim();
-      const ref  = (document.getElementById('regRef').value||'').trim();
-
-      if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return alert('Enter a valid email');
-      if(pass.length<6) return alert('Password must be at least 6 characters');
-      if(pass!==pass2)   return alert('Passwords do not match');
-      if(!REG_CODE || Date.now()>REG_EXP) return alert('Code expired. Click Send Code again.');
-      if(code!==REG_CODE) return alert('Incorrect email confirmation code');
-
-      const ok = await TMAuth.register({email, pass, ref});
-      if(!ok) return alert('Email already exists');
-      const next = new URLSearchParams(location.search).get('next') || 'index.html';
-      location.href = next; // auto-login & redirect
-    });
-  </script>
-</body>
-</html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TrustMe AI — Register</title><link rel="stylesheet" href="style.css"></head><body>
+<div class="nav"><div class="brand"><div class="dot"></div>TrustMe AI</div><div class="links"><a href="index.html">Home</a></div></div>
+<div class="container">
+  <h1>Register</h1>
+  <div class="card form" style="max-width:480px">
+    <input class="input" placeholder="Email">
+    <input class="input" placeholder="Password" type="password">
+    <input class="input" placeholder="Referral (optional)">
+    <button class="btn">Create Account</button>
+  </div>
+</div>
+</body></html>
