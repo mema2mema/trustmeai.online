@@ -1,75 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TrustMe AI - Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TrustMe AI — Dashboard</title>
+  <meta name="description" content="TrustMe AI dashboard with wallet, strategy tiers, live calculator, crypto hot list, referral pie chart." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="./style.dashboard.css" />
 </head>
-<body>
-  <header>
-    <h1>TrustMe AI Dashboard</h1>
-    <p>Smarter, safer AI-powered growth</p>
+<body class="bg-gray-50 text-gray-900">
+  <!-- HERO -->
+  <header class="bg-gradient-to-r from-emerald-500 to-teal-500 text-white p-6 md:p-10 shadow">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-6 items-center">
+      <div>
+        <h1 class="text-3xl md:text-4xl font-bold">TrustMe AI</h1>
+        <p class="mt-2 opacity-90">Transparent automated trading. Real metrics. Your keys to growth.</p>
+        <div class="mt-4 flex gap-3">
+          <a href="#wallet" class="px-4 py-2 rounded-2xl bg-white text-emerald-600 shadow">Deposit</a>
+          <a href="#wallet" class="px-4 py-2 rounded-2xl bg-black/20">Withdraw</a>
+          <a href="#faq" class="px-4 py-2 rounded-2xl bg-black/20">Tutorials</a>
+        </div>
+      </div>
+
+      <!-- Live Calculator -->
+      <div class="bg-white/10 rounded-2xl p-4 backdrop-blur">
+        <h3 class="font-semibold mb-3">Live Profit Calculator</h3>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <label class="space-y-1">
+            <span>Amount (USDT)</span>
+            <input id="calcAmount" type="number" class="w-full rounded-xl p-2 text-gray-900" value="1000" />
+          </label>
+          <label class="space-y-1">
+            <span>Daily %</span>
+            <input id="calcDaily" type="number" step="0.1" class="w-full rounded-xl p-2 text-gray-900" value="1.2" />
+          </label>
+          <label class="space-y-1">
+            <span>Days</span>
+            <input id="calcDays" type="number" class="w-full rounded-xl p-2 text-gray-900" value="30" />
+          </label>
+          <label class="flex items-center gap-2 mt-6">
+            <input id="calcReinvest" type="checkbox" checked />
+            <span>Auto Reinvest</span>
+          </label>
+        </div>
+        <div class="mt-3 text-sm">Projected Value: <span id="calcOut" class="font-bold">—</span></div>
+      </div>
+    </div>
   </header>
 
-  <section id="calculator">
-    <h2>Live Profit Calculator</h2>
-    <div>
-      <label>Amount (USDT)</label>
-      <input type="number" id="calcAmount" value="1000" />
-      <label>Daily %</label>
-      <input type="number" id="calcPercent" value="1.0" step="0.1" />
-      <button onclick="calculateProfit()">Calculate</button>
-    </div>
-    <p id="calcResult"></p>
-  </section>
-
-  <section id="strategies">
-    <h2>Investment Plans</h2>
-    <div class="tiers">
-      <div class="tier-card">
-        <h3>T1</h3>
-        <p>Daily Returns: 0.5% – 1.0%</p>
-        <p>Risk: Low</p>
-        <button>Activate Plan</button>
+  <main class="max-w-6xl mx-auto p-4 md:p-6 space-y-8">
+    <!-- PARTNER LOGOS -->
+    <section class="bg-white rounded-2xl p-4 shadow">
+      <h2 class="text-lg font-semibold">API-supported exchanges</h2>
+      <div class="mt-3 grid grid-cols-2 md:grid-cols-6 gap-3 items-center opacity-80 text-center text-sm">
+        <div class="p-3 border rounded-xl">Binance</div>
+        <div class="p-3 border rounded-xl">Kraken</div>
+        <div class="p-3 border rounded-xl">Bybit</div>
+        <div class="p-3 border rounded-xl">Bitget</div>
+        <div class="p-3 border rounded-xl">OKX</div>
+        <div class="p-3 border rounded-xl">KuCoin</div>
       </div>
-      <div class="tier-card">
-        <h3>T2</h3>
-        <p>Daily Returns: 1.0% – 1.5%</p>
-        <p>Risk: Moderate</p>
-        <button>Activate Plan</button>
-      </div>
-      <div class="tier-card">
-        <h3>T3</h3>
-        <p>Daily Returns: 1.5% – 2.0%</p>
-        <p>Risk: Balanced</p>
-        <button>Activate Plan</button>
-      </div>
-      <div class="tier-card">
-        <h3>T4</h3>
-        <p>Daily Returns: 2.0% – 3.0%</p>
-        <p>Risk: High</p>
-        <button>Activate Plan</button>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="wallet">
-    <h2>Wallet</h2>
-    <button onclick="mockDeposit()">Generate Deposit (TRC20)</button>
-    <button onclick="mockWithdraw()">Withdraw</button>
-    <table id="history">
-      <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
-      <tbody></tbody>
-    </table>
-  </section>
+    <!-- WALLET -->
+    <section id="wallet" class="grid md:grid-cols-3 gap-4">
+      <div class="md:col-span-1 bg-white rounded-2xl p-4 shadow">
+        <h2 class="text-lg font-semibold">Wallet</h2>
+        <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
+          <div class="p-3 rounded-xl bg-gray-50">
+            <div class="opacity-70">Available (USDT)</div>
+            <div id="walletAvailable" class="text-2xl font-bold">0.00</div>
+          </div>
+          <div class="p-3 rounded-xl bg-gray-50">
+            <div class="opacity-70">Locked</div>
+            <div id="walletLocked" class="text-2xl font-bold">0.00</div>
+          </div>
+        </div>
+        <div class="mt-3">
+          <label class="text-sm">Network</label>
+          <select id="walletNetwork" class="w-full mt-1 p-2 rounded-xl border">
+            <option>TRC20</option>
+            <option disabled>ERC20 (soon)</option>
+            <option disabled>BEP20 (soon)</option>
+          </select>
+        </div>
+        <div class="mt-3 flex gap-2">
+          <button id="btnGenerateDeposit" class="flex-1 rounded-xl px-3 py-2 bg-emerald-600 text-white">Generate Deposit</button>
+          <button id="btnCheckDeposit" class="rounded-xl px-3 py-2 bg-gray-100">Check</button>
+        </div>
+        <div id="walletAddressWrap" class="mt-3 text-sm hidden">
+          <div class="opacity-70">Your address</div>
+          <div id="walletAddress" class="font-mono break-all bg-gray-50 p-2 rounded-xl">—</div>
+          <div class="mt-1 text-xs opacity-70">Send only USDT on the selected network.</div>
+        </div>
+      </div>
 
-  <section id="referrals">
-    <h2>Referral Program</h2>
-    <canvas id="referralChart" width="300" height="300"></canvas>
-  </section>
+      <div class="md:col-span-2 bg-white rounded-2xl p-4 shadow">
+        <h3 class="font-semibold">Withdraw</h3>
+        <form id="withdrawForm" class="grid md:grid-cols-4 gap-3 mt-3 text-sm">
+          <label class="md:col-span-2">
+            <span>To Address</span>
+            <input name="to" placeholder="T..." class="w-full p-2 mt-1 rounded-xl border" />
+          </label>
+          <label>
+            <span>Amount (USDT)</span>
+            <input name="amount" type="number" step="0.01" class="w-full p-2 mt-1 rounded-xl border" />
+          </label>
+          <button class="self-end rounded-xl px-4 py-2 bg-emerald-600 text-white">Submit</button>
+        </form>
+        <p class="mt-2 text-xs opacity-70">Network fee preview ~1 USDT on TRC20. Large withdrawals may require manual approval.</p>
 
-  <script src="script.js"></script>
+        <h4 class="mt-6 font-semibold">History</h4>
+        <div class="mt-2 overflow-x-auto">
+          <table class="w-full text-sm" id="historyTable">
+            <thead class="text-left opacity-70">
+              <tr>
+                <th class="p-2">Time</th>
+                <th class="p-2">Type</th>
+                <th class="p-2">Amount</th>
+                <th class="p-2">Fee</th>
+                <th class="p-2">Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- STRATEGY TIERS -->
+    <section class="bg-white rounded-2xl p-4 shadow">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-semibold">Strategy Plans (T1–T4)</h2>
+        <div class="text-xs opacity-70">AI Risk Bar helps you choose realistically</div>
+      </div>
+      <div id="tiers" class="grid md:grid-cols-3 gap-3 mt-3"></div>
+    </section>
+
+    <!-- CRYPTO HOT LIST -->
+    <section class="bg-white rounded-2xl p-4 shadow">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-semibold">Crypto Hot List</h2>
+        <div class="text-xs opacity-70">Top movers (Binance 24h)</div>
+      </div>
+      <div class="mt-3 overflow-x-auto">
+        <table class="w-full text-sm" id="hotlistTable">
+          <thead class="text-left opacity-70">
+            <tr><th class="p-2">Symbol</th><th class="p-2">Price (USDT)</th><th class="p-2">24h %</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- REFERRAL PIE CHART -->
+    <section class="bg-white rounded-2xl p-4 shadow">
+      <h2 class="text-lg font-semibold">Referral Distribution</h2>
+      <div class="grid md:grid-cols-2 gap-3 items-center mt-3">
+        <div>
+          <div class="text-sm">Your link</div>
+          <div id="refLink" class="font-mono bg-gray-50 p-2 rounded-xl break-all">https://trustmeai.online/?ref=TM-ABCD12</div>
+          <div class="text-xs opacity-70 mt-1">3-level commissions. Instant notifications via Telegram.</div>
+        </div>
+        <div><canvas id="refPie" height="180"></canvas></div>
+      </div>
+    </section>
+
+    <!-- SUPPORT & LEGAL -->
+    <section id="faq" class="grid md:grid-cols-3 gap-4">
+      <div class="bg-white rounded-2xl p-4 shadow">
+        <h3 class="font-semibold">Support</h3>
+        <p class="text-sm opacity-80">Questions? We reply fast.</p>
+        <div class="mt-3 flex gap-2">
+          <a class="px-3 py-2 rounded-xl bg-emerald-600 text-white" href="mailto:support@trustmeai.online">Email Support</a>
+          <a class="px-3 py-2 rounded-xl bg-gray-100" href="#">Telegram</a>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl p-4 shadow md:col-span-2">
+        <h3 class="font-semibold">Transparency</h3>
+        <ul class="list-disc ml-5 text-sm mt-2 space-y-1">
+          <li>All deposits and withdrawals are tracked with TXIDs.</li>
+          <li>We display real profit logs with timestamps.</li>
+          <li>You control reinvestment and withdrawals anytime.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="p-6 text-center text-sm opacity-70">
+    © <span id="year"></span> TrustMe AI • Terms • Privacy • Risk Disclosure
+  </footer>
+
+  <script src="./script.dashboard.js"></script>
 </body>
 </html>
