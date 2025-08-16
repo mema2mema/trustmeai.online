@@ -1,43 +1,118 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TrustMe AI — Home</title>
-  <link rel="stylesheet" href="styles.css"/>
-  <script defer src="qrcode.min.js"></script>
-  <script defer src="app.js"></script>
-</head>
-<body>
-  <header class="nav">
-    <div class="brand">TrustMe <span>AI</span></div>
-    <nav>
-      <a href="index.html" class="active">Home</a>
+<!DOCTYPE html><html><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TrustMe AI — Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head><body>
+
+<header>
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
+    <div class="brand"><div class="brand-badge"></div> <div style="letter-spacing:.4px">TrustMe AI</div></div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
       <a href="strategy.html">Strategy</a>
       <a href="assets.html">Assets</a>
       <a href="deposit.html">Deposit</a>
       <a href="withdraw.html">Withdraw</a>
     </nav>
-  </header>
+    <div class="nav"><a class="btn-ghost" href="#">Log In</a><a class="btn" href="#">Register</a></div>
+  </div>
+</header>
 
-  <main class="hero">
-    <h1>Secure AI strategies for crypto yield</h1>
-    <p>Frosted glass dashboard. Live wallet with per‑network QR. Transparent fees. Activate T1–T4 with a click.</p>
-    <div class="cta">
-      <a class="btn" href="strategy.html">View Plans</a>
-      <a class="btn ghost" href="deposit.html">Deposit</a>
+<section class="hero">
+  <div class="blob"></div>
+  <div class="container hero-wrap">
+    <div>
+      <h1 style="font-family:Poppins,Inter,sans-serif;font-weight:700;font-size:2.4rem;margin:.2rem 0">Secure AI strategies for crypto yield</h1>
+      <div class="small" style="max-width:56ch">Frosted‑glass dashboard. Live wallet. Transparent fees. Activate T1–T4 plans with a click.</div>
+      <div style="display:flex;gap:.6rem;margin-top:1rem">
+        <a class="btn" href="strategy.html">View Plans</a>
+        <a class="btn-ghost" href="deposit.html">Deposit</a>
+      </div>
+      <div class="ticker">
+        <div class="ticker-item"><div class="sym">• ETH</div><div>4,426.43 <span class="pct down">-0.29%</span></div></div>
+        <div class="ticker-item"><div class="sym">• BTC</div><div>117,462.76 <span class="pct up">+0.10%</span></div></div>
+        <div class="ticker-item"><div class="sym">• SOL</div><div>186.64 <span class="pct up">+0.50%</span></div></div>
+        <div class="ticker-item"><div class="sym">• ADA</div><div>0.9503 <span class="pct up">+0.53%</span></div></div>
+        <div class="ticker-item"><div class="sym">• XRP</div><div>3.0982 <span class="pct up">+0.66%</span></div></div>
+      </div>
     </div>
-  </main>
+    <div class="card">
+      <div class="stripe"></div>
+      <div class="kpi"><div class="label">Strategy Scale</div><div class="val" data-count="6048.256">0W</div></div>
+      <div class="grid grid-2" style="margin-top:.8rem">
+        <div class="card" style="background:var(--soft)">
+          <div class="kpi"><div class="label">Participants</div><div class="val" data-count="469.607">0W</div></div>
+        </div>
+        <div class="card" style="background:var(--soft)">
+          <div class="kpi"><div class="label">Order Count</div><div class="val" data-count="944.522">0W</div></div>
+        </div>
+      </div>
+      <a href="strategy.html" class="btn" style="margin-top:.9rem">Learn More</a>
+    </div>
+  </div>
+</section>
 
-  <section class="stats">
-    <div class="stat"><div class="label">Strategy Scale</div><div id="stat-scale" class="value">6048.256W</div></div>
-    <div class="stat"><div class="label">Participants</div><div id="stat-users" class="value">469.607W</div></div>
-    <div class="stat"><div class="label">Order Count</div><div id="stat-orders" class="value">944.522W</div></div>
-  </section>
+<section class="section">
+  <div class="container grid grid-2">
+    <div class="card">
+      <div style="font-weight:800">🔥 Hot List</div>
+      <table class="table" style="margin-top:.5rem">
+        <thead><tr><th>Symbol</th><th>Price (USDT)</th><th>24h %</th></tr></thead>
+        <tbody>
+          <tr><td>ETH/USDT</td><td>4,426.43</td><td class="pct down">-0.29%</td></tr>
+          <tr><td>BTC/USDT</td><td>117,462.76</td><td class="pct up">+0.10%</td></tr>
+          <tr><td>SOL/USDT</td><td>186.64</td><td class="pct up">+0.50%</td></tr>
+          <tr><td>ADA/USDT</td><td>0.9503</td><td class="pct up">+0.53%</td></tr>
+          <tr><td>XRP/USDT</td><td>3.0982</td><td class="pct up">+0.66%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div style="font-weight:800">🏆 Top Gainers</div>
+      <table class="table" style="margin-top:.5rem">
+        <thead><tr><th>Symbol</th><th>Price (USDT)</th><th>24h %</th></tr></thead>
+        <tbody>
+          <tr><td>XRP/USDT</td><td>3.0982</td><td class="pct up">+0.66%</td></tr>
+          <tr><td>ADA/USDT</td><td>0.9503</td><td class="pct up">+0.53%</td></tr>
+          <tr><td>BNB/USDT</td><td>532.27</td><td class="pct up">+0.53%</td></tr>
+          <tr><td>SOL/USDT</td><td>186.64</td><td class="pct up">+0.48%</td></tr>
+          <tr><td>DOT/USDT</td><td>3.9070</td><td class="pct up">+0.30%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
-  <footer class="footer">
-    <div>© 2025 TrustMe AI</div>
-    <div>Contact: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a> · <a href="https://t.me/trustmeai" target="_blank">Telegram</a></div>
-  </footer>
-</body>
-</html>
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <h2 style="font-family:Poppins,Inter,sans-serif;font-weight:700">Partners</h2>
+    <div class="grid grid-4" style="margin-top:1rem">
+      <div class="card partner"><img src="https://dummyimage.com/140x30/edf2f7/9ca3af&text=Binance"></div>
+      <div class="card partner"><img src="https://dummyimage.com/140x30/edf2f7/9ca3af&text=OKX"></div>
+      <div class="card partner"><img src="https://dummyimage.com/140x30/edf2f7/9ca3af&text=Kraken"></div>
+      <div class="card partner"><img src="https://dummyimage.com/140x30/edf2f7/9ca3af&text=KuCoin"></div>
+      <div class="card partner"><img src="https://dummyimage.com/140x30/edf2f7/9ca3af&text=Bybit"></div>
+      <div class="card partner"><img src="https://dummyimage.com/140x30/edf2f7/9ca3af&text=Gate"></div>
+      <div class="card partner"><img src="https://dummyimage.com/140x30/edf2f7/9ca3af&text=Gemini"></div>
+      <div class="card partner"><img src="https://dummyimage.com/140x30/edf2f7/9ca3af&text=crypto.com"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container" style="text-align:center">
+    <div class="brand" style="justify-content:center"><div class="brand-badge"></div> <div>TrustMe AI</div></div>
+    <div class="nav" style="justify-content:center;margin-top:8px">
+      <a href="index.html">Home</a>
+      <a href="strategy.html">Strategy</a>
+      <a href="assets.html">Assets</a>
+      <a href="deposit.html">Deposit</a>
+      <a href="withdraw.html">Withdraw</a>
+    </div>
+    <div class="small" style="margin-top:10px">© TrustMe AI 2025</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>animateCounters();</script>
+</body></html>

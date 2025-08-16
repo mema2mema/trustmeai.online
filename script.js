@@ -1,224 +1,73 @@
 
-const $ = (sel, root=document) => root.querySelector(sel);
-const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
-const fmt = (n) => Number(n||0).toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2});
-
-function showToast(msg){
-  const t = $("#toast"); if(!t) return;
-  t.textContent = msg; t.classList.add("show");
-  setTimeout(()=> t.classList.remove("show"), 2000);
-}
-
-// Modal
-function openModal(innerHTML){
-  const back = $("#modal"), body=$("#modal-body");
-  if(!back || !body) return;
-  body.innerHTML = innerHTML;
-  back.style.display = "flex";
-  back.onclick = (e)=>{ if(e.target.id==="modal") closeModal(); };
-  $$(".btn-ghost[data-close], [data-close]").forEach(el=> el.addEventListener("click", closeModal));
-}
-function closeModal(){ const back=$("#modal"); if(back) back.style.display="none"; }
-
-// Storage helpers
-const LS = {
-  read(k, def){ try{ return JSON.parse(localStorage.getItem(k)) ?? def }catch(e){ return def; } },
-  write(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
-};
-
-// Demo state
-const STATE = LS.read("tm_state", {
-  wallet:{ available: 0, locked: 0 },
-  history: [], // {time,type,amount,fee,status}
-  kpis:{ scale: 6048.256, participants: 469.607, orders: 944.522 },
-  users:[], // {email, pass}
-  session:null
-});
-function save(){ LS.write("tm_state", STATE); }
-
-// Home KPIs
-(function initHome(){
-  const s=$("#kpi-scale"), p=$("#kpi-participants"), o=$("#kpi-orders");
-  if(s){ s.textContent = STATE.kpis.scale.toFixed(3)+"W"; }
-  if(p){ p.textContent = STATE.kpis.participants.toFixed(3)+"W"; }
-  if(o){ o.textContent = STATE.kpis.orders.toFixed(3)+"W"; }
-})();
-
-// History render
-function renderHistory(tableSel="#history tbody"){
-  const tb = $(tableSel); if(!tb) return;
-  tb.innerHTML = STATE.history.slice().reverse().map(h=>{
-    return `<tr>
-      <td>${new Date(h.time).toLocaleString()}</td>
-      <td>${h.type}</td>
-      <td>${fmt(h.amount)}</td>
-      <td>${fmt(h.fee)}</td>
-      <td>${h.status}</td>
-    </tr>`;
-  }).join("");
-}
-
-// Strategy
-const TIER_LIMITS = {
-  T1:{min:50, max:999},
-  T2:{min:1000, max:9999},
-  T3:{min:10000, max:19999},
-  T4:{min:20000, max:100000},
-};
-function validateTierAmount(tier, amt){
-  const lim = TIER_LIMITS[tier]; if(!lim) return {ok:false, msg:"Unknown tier"};
-  if(isNaN(amt) || amt<=0) return {ok:false, msg:"Enter a valid amount"};
-  if(amt<lim.min || amt>lim.max) return {ok:false, msg:`Amount must be between ${lim.min} and ${lim.max} USDT`};
-  if(amt > (STATE.wallet.available||0)) return {ok:false, msg:"Insufficient available balance. Please deposit."};
-  return {ok:true};
-}
-function addHistoryRow(date, type, amount, fee, status){
-  STATE.history.push({time: date.toISOString(), type, amount, fee, status});
-  if(type==="lock"){ STATE.wallet.available -= amount; STATE.wallet.locked += amount; }
-  save();
-  renderHistory("#history tbody");
-  renderWalletBits();
-}
-function showTierModal(tier){
-  const lim=TIER_LIMITS[tier];
-  const html = `
-    <div class="card panel" style="padding:1rem 1rem 1.2rem">
-      <div class="stripe"></div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
-        <h3 style="margin:0">Activate ${tier}</h3>
-        <button class="btn-ghost" data-close>Close</button>
-      </div>
-      <p class="small" style="opacity:.85;margin:.25rem 0 .75rem 0">Min–Max: ${lim.min.toLocaleString()}–${lim.max.toLocaleString()} USDT</p>
-      <input id="tierAmountInput" class="input" placeholder="Enter amount" inputmode="decimal"/>
-      <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:.9rem">
-        <button class="btn-ghost" data-close>Cancel</button>
-        <button class="btn" id="tierConfirmBtn" type="button">Confirm</button>
-      </div>
-    </div>`;
-  openModal(html);
-  const input = $("#tierAmountInput");
-  const doSubmit = ()=>{
-    const amt = parseFloat(String(input.value||"0").replace(/[, ]/g,''));
-    const v=validateTierAmount(tier, amt);
-    if(!v.ok){ alert(v.msg); return; }
-    addHistoryRow(new Date(), "lock", amt, 0, "active"); 
-    closeModal(); showToast(`${tier} activated: ${fmt(amt)} USDT`);
-  };
-  $("#tierConfirmBtn").addEventListener("click", doSubmit, {once:true});
-  input.addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); doSubmit(); } });
-}
-// Delegate clicks
-document.addEventListener("click", (e)=>{
-  const el = e.target.closest("[data-tier]");
-  if(!el) return;
-  e.preventDefault();
-  showTierModal(el.getAttribute("data-tier"));
-}, true);
-
-// Render initial history
-renderHistory("#history tbody");
-
-// Wallet bits
-function renderWalletBits(){
-  const a=$("#avail"), l=$("#locked");
-  const a2=$("#avail2"), l2=$("#locked2");
-  [a,a2].forEach(n=> n && (n.textContent = fmt(STATE.wallet.available)));
-  [l,l2].forEach(n=> n && (n.textContent = fmt(STATE.wallet.locked)));
-  const wh=$("#walletHistory tbody"); if(wh){
-    wh.innerHTML = STATE.history.filter(h=>["deposit","withdraw"].includes(h.type)).slice().reverse().map(h=>`
-      <tr><td>${new Date(h.time).toLocaleString()}</td><td>${h.type}</td><td>${fmt(h.amount)}</td><td>${fmt(h.fee)}</td><td>${h.status}</td></tr>`).join("");
-  }
-  const rr=$("#recent tbody"); if(rr){
-    rr.innerHTML = STATE.history.slice().reverse().slice(0,6).map(h=>`
-      <tr><td>${new Date(h.time).toLocaleString()}</td><td>${h.type}</td><td>${fmt(h.amount)}</td></tr>`).join("");
-  }
-}
-renderWalletBits();
-
-// QR simple visual
-
-function drawFakeQR(canvas, text){
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width = canvas.height = 160;
-  ctx.fillStyle = "#fff"; ctx.fillRect(0,0,W,W);
-  ctx.fillStyle = "#000";
-  const cell=8;
-  for(let y=0;y<W/cell;y++){
-    for(let x=0;x<W/cell;x++){
-      if( ((x*y + x + y) % 7)===0 ) ctx.fillRect(x*cell,y*cell,cell,cell);
-    }
-  }
-  ctx.fillStyle="#fff";
-  ctx.fillRect(40,70,80,20);
-  ctx.fillStyle="#000";
-  ctx.font="bold 14px Arial"; ctx.textAlign="center"; ctx.fillText("USDT",80,85);
-}
-
-
-function genAddrFor(net){
-  if(net==="TRC20") return "T" + Math.random().toString(36).slice(2,10) + Math.random().toString(36).slice(2,10);
-  return "0x" + Math.random().toString(16).slice(2,18) + Math.random().toString(16).slice(2,18);
-}
-(function initDeposit(){
-  const gen=$("#genAddr"); if(!gen) return;
-  const netSel=$("#net"), addr=$("#addr"), status=$("#demoStatus"), qr=$("#qr"), netLbl=$("#netLabel");
-  const amtSel=$("#demoAmt"), delaySel=$("#demoDelay");
-  const checkBtn=$("#checkDeposits"), copy=$("#copyAddr"), clear=$("#clearAddr");
-  function updateQR(){
-    if(qr && addr.value){ drawFakeQR(qr, addr.value); }
-  }
-  gen.addEventListener("click", ()=>{
-    const net = netSel.value; const a = genAddrFor(net);
-    addr.value = a; if(netLbl) netLbl.textContent = net;
-    updateQR();
-    const amt = parseFloat(amtSel.value);
-    const delay = parseInt(delaySel.value)*1000;
-    status.textContent = `Demo: +${fmt(amt)} in ${delay/1000}s…`;
-    setTimeout(()=>{
-      STATE.wallet.available += amt;
-      STATE.history.push({time:new Date().toISOString(), type:"deposit", amount:amt, fee:0, status:"confirmed"});
-      save(); renderWalletBits(); status.textContent = "Demo deposit confirmed.";
-      showToast(`Deposit confirmed: ${fmt(amt)} USDT`);
-    }, delay);
+function setActiveNav(){
+  const path = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  document.querySelectorAll('header .nav a').forEach(a=>{
+    const href = a.getAttribute('href').toLowerCase();
+    if((!href && path==='index.html') || href===path) a.classList.add('active');
   });
-  checkBtn.addEventListener("click", ()=>{ renderWalletBits(); showToast("Checked. No pending items."); });
-  copy.addEventListener("click", async ()=>{
-    if(!addr.value) return;
-    try{ await navigator.clipboard.writeText(addr.value); showToast("Address copied"); }catch(e){ alert("Copy failed"); }
+}
+document.addEventListener('DOMContentLoaded', setActiveNav);
+function animateCounters(){
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const target = Number(el.getAttribute('data-count')) || 0;
+    const dur = 1200; const start = performance.now();
+    function tick(t){ const p = Math.min(1, (t-start)/dur); el.textContent = (target*p).toFixed(3) + 'W'; if(p<1) requestAnimationFrame(tick); }
+    requestAnimationFrame(tick);
   });
-  clear.addEventListener("click", ()=>{ addr.value=""; const ctx=qr.getContext('2d'); ctx.clearRect(0,0,qr.width,qr.height); });
-  netSel.addEventListener("change", ()=>{ if(netLbl){ netLbl.textContent = netSel.value; } updateQR(); });
-  updateQR();
-})();
-
-// Withdraw
-(function initWithdraw(){
-  const s=$("#wdSubmit"); if(!s) return;
-  s.addEventListener("click", ()=>{
-    const to=$("#wdTo").value.trim(); const amt=parseFloat($("#wdAmt").value);
-    if(!to){ alert("Enter withdraw address"); return; }
-    if(isNaN(amt) || amt<=0){ alert("Enter valid amount"); return; }
-    if(amt > (STATE.wallet.available||0)){ alert("Insufficient balance"); return; }
-    const fee = 1.00;
-    STATE.wallet.available -= (amt + fee);
-    STATE.history.push({time:new Date().toISOString(), type:"withdraw", amount:amt, fee, status:"pending"});
-    save(); renderWalletBits(); showToast("Withdrawal submitted (demo)");
+}
+const FEES = { TRC20: '~1 USDT (TRC20)', BEP20: '~0.5 USDT (BEP20)', ERC20: '~5 USDT (ERC20)' };
+function bindFees(){ const sel=document.getElementById('walletNetwork'); const out=document.getElementById('feePreview'); if(sel && out){ const fn=()=>{out.textContent=FEES[sel.value]||FEES.TRC20}; sel.addEventListener('change',fn); fn(); } }
+function randHex(n){const c='0123456789abcdef';let s='';for(let i=0;i<n;i++)s+=c[Math.floor(Math.random()*16)];return s;}
+function genAddress(net){if(net==='TRC20'){const b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';let s='T';for(let i=0;i<33;i++)s+=b[Math.floor(Math.random()*b.length)];return s;}return '0x'+randHex(40);}
+function bindWalletDemo(){
+  const gen=document.getElementById('btnGenerateDeposit'); if(!gen) return;
+  const addrEl=document.getElementById('walletAddress'); const qr=document.getElementById('walletQr');
+  const amtSel=document.getElementById('demoAmount'); const delaySel=document.getElementById('demoDelay'); const status=document.getElementById('demoStatus');
+  const balanceEl=document.getElementById('walletAvailable'); const copyBtn=document.getElementById('walletCopyBtn');
+  if(copyBtn){ copyBtn.addEventListener('click', async ()=>{ try { await navigator.clipboard.writeText(addrEl.value || addrEl.textContent || ''); alert('Address copied'); } catch(e){ alert('Copy failed'); } }); }
+  function renderQR(text){ if(!qr) return; qr.innerHTML=''; if(window.QRCode){ new QRCode(qr,{text,width:160,height:160,colorDark:'#EAF2FF',colorLight:'rgba(255,255,255,0)'}); } }
+  gen.addEventListener('click', ()=>{
+    const net=document.getElementById('walletNetwork').value; const addr=genAddress(net);
+    if(addrEl.tagName==='INPUT') addrEl.value=addr; else addrEl.textContent=addr;
+    renderQR(addr);
+    const amt=Number(amtSel?.value||100), delay=Number(delaySel?.value||5);
+    if(status) status.textContent=`Demo deposit scheduled: +${amt} USDT in ~${delay}s...`;
+    const tbody=document.querySelector('#historyTable tbody'); if(tbody){ const tr=document.createElement('tr'); tr.innerHTML=`<td>${new Date().toLocaleString()}</td><td>deposit</td><td>${amt.toFixed(2)}</td><td>0.00</td><td>pending</td>`; tbody.prepend(tr); }
+    setTimeout(()=>{ if(balanceEl){ const cur=Number(balanceEl.textContent)||0; balanceEl.textContent=(cur+amt).toFixed(2); }
+      if(tbody){ const tr=document.createElement('tr'); tr.innerHTML=`<td>${new Date().toLocaleString()}</td><td>deposit</td><td>${amt.toFixed(2)}</td><td>0.00</td><td>confirmed</td>`; tbody.prepend(tr); }
+      if(status) status.textContent=`Demo deposit confirmed: +${amt} USDT`; }, delay*1000);
   });
-})();
-
-// Auth (demo)
-(function auth(){
-  const r=$("#doRegister"), l=$("#doLogin");
-  if(r){ r.addEventListener("click", ()=>{
-    const email=$("#regEmail").value.trim(), pass=$("#regPass").value.trim();
-    if(!email || pass.length<6){ alert("Enter a valid email and 6+ char password"); return; }
-    if(STATE.users.some(u=>u.email===email)){ alert("Email already exists"); return; }
-    STATE.users.push({email, pass}); STATE.session=email; save(); showToast("Registered!"); location.href="index.html";
-  });}
-  if(l){ l.addEventListener("click", ()=>{
-    const email=$("#loginEmail").value.trim(), pass=$("#loginPass").value.trim();
-    const ok=STATE.users.find(u=>u.email===email && u.pass===pass);
-    if(!ok){ alert("Invalid credentials"); return; }
-    STATE.session=email; save(); showToast("Logged in!"); location.href="index.html";
-  });}
-})();
+}
+function bindActivatePlan(){
+  document.querySelectorAll('[data-tier]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const tier=btn.dataset.tier, min=Number(btn.dataset.min),max=Number(btn.dataset.max);
+      const modal=document.createElement('div');
+      modal.className='fixed inset-0'; modal.style.background='rgba(0,0,0,.45)'; modal.style.display='flex'; modal.style.alignItems='center'; modal.style.justifyContent='center';
+      modal.innerHTML=`
+      <div class="card" style="width:92%;max-width:440px">
+        <div class="stripe"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <h3 style="font-size:1.1rem;font-weight:800">Activate ${tier}</h3>
+          <button id="mClose" class="btn-ghost">Close</button>
+        </div>
+        <div class="small" style="margin-top:.35rem">Min–Max: $${min.toLocaleString()}–$${max.toLocaleString()}</div>
+        <label class="small" style="margin-top:.6rem">Amount (USDT)</label>
+        <input id="mAmt" type="number" class="input" placeholder="Enter amount">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.8rem">
+          <div class="small">Funds will be locked to this plan (demo)</div>
+          <button id="mConfirm" class="btn">Confirm</button>
+        </div>
+      </div>`;
+      document.body.appendChild(modal);
+      modal.querySelector('#mClose').onclick=()=>modal.remove();
+      modal.onclick=(e)=>{ if(e.target===modal) modal.remove(); }
+      modal.querySelector('#mConfirm').onclick=()=>{
+        const amt=Number(modal.querySelector('#mAmt').value||0); if(!amt||amt<=0) return alert('Enter amount');
+        const bal=document.getElementById('walletAvailable'); if(bal){ const cur=Number(bal.textContent)||0; if(cur<amt) return alert('Insufficient balance'); bal.textContent=(cur-amt).toFixed(2); }
+        const tbody=document.querySelector('#historyTable tbody'); if(tbody){ const tr=document.createElement('tr'); tr.innerHTML=`<td>${new Date().toLocaleString()}</td><td>lock</td><td>${amt.toFixed(2)}</td><td>0.00</td><td>active</td>`; tbody.prepend(tr); }
+        alert('Plan activated (demo).'); modal.remove();
+      };
+    });
+  });
+}

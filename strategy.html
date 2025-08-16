@@ -1,98 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Strategy — TrustMe AI</title>
-  <link rel="stylesheet" href="styles.css"/>
-  <script defer src="app.js"></script>
-</head>
-<body>
-  <header class="nav">
-    <div class="brand">TrustMe <span>AI</span></div>
-    <nav>
+<!DOCTYPE html><html><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strategy — TrustMe AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head><body>
+
+<header>
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
+    <div class="brand"><div class="brand-badge"></div> <div style="letter-spacing:.4px">TrustMe AI</div></div>
+    <nav class="nav">
       <a href="index.html">Home</a>
-      <a href="strategy.html" class="active">Strategy</a>
+      <a href="strategy.html">Strategy</a>
       <a href="assets.html">Assets</a>
       <a href="deposit.html">Deposit</a>
       <a href="withdraw.html">Withdraw</a>
     </nav>
-  </header>
+    <div class="nav"><a class="btn-ghost" href="#">Log In</a><a class="btn" href="#">Register</a></div>
+  </div>
+</header>
 
-  <main class="page">
-    <h2>Strategy Plans (T1–T4)</h2>
-
-    <div class="tiers">
-      <div class="tier" data-id="T1" data-min="50" data-max="999" data-rate="0.5–1.0% / day">
-        <div class="tier-head">
-          <span class="tier-name">T1</span>
-          <span class="pill">0.5%–1.0% / day</span>
-        </div>
-        <div class="tier-body">$50–$999 USDT</div>
-        <button class="btn" data-action="activate">Activate Plan</button>
-      </div>
-
-      <div class="tier" data-id="T2" data-min="1000" data-max="9999" data-rate="1.0–1.5% / day">
-        <div class="tier-head">
-          <span class="tier-name">T2</span>
-          <span class="pill">1.0%–1.5% / day</span>
-        </div>
-        <div class="tier-body">$1,000–$9,999 USDT</div>
-        <button class="btn" data-action="activate">Activate Plan</button>
-      </div>
-
-      <div class="tier" data-id="T3" data-min="10000" data-max="19999" data-rate="1.5–2.0% / day">
-        <div class="tier-head">
-          <span class="tier-name">T3</span>
-          <span class="pill">1.5%–2.0% / day</span>
-        </div>
-        <div class="tier-body">$10,000–$19,999 USDT</div>
-        <button class="btn" data-action="activate">Activate Plan</button>
-      </div>
-
-      <div class="tier" data-id="T4" data-min="20000" data-max="100000" data-rate="2.0–3.0% / day">
-        <div class="tier-head">
-          <span class="tier-name">T4</span>
-          <span class="pill">2.0%–3.0% / day</span>
-        </div>
-        <div class="tier-body">$20,000–$100,000 USDT</div>
-        <button class="btn" data-action="activate">Activate Plan</button>
-      </div>
+<main class="container section">
+  <h1 style="font-family:Poppins,Inter,sans-serif;font-weight:700">Strategy Plans (T1–T4)</h1>
+  <div class="grid grid-3" style="margin-top:1rem">
+    <div class="card">
+      <div class="stripe"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><div class="text-xl" style="font-weight:800">T1</div><span class="badge">0.5%–1.0% / day</span></div>
+      <div class="small" style="margin-top:.25rem">$50–$999 USDT</div>
+      <button class="btn" style="width:100%;margin-top:.8rem" data-tier="T1" data-min="50" data-max="999">Activate Plan</button>
     </div>
-
-    <h3>History</h3>
-    <table class="table" id="history-table">
-      <thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead>
-      <tbody></tbody>
-    </table>
-  </main>
-
-  <!-- Modal -->
-  <div class="modal" id="plan-modal" hidden>
-    <div class="modal-card">
-      <div class="modal-glow"></div>
-      <div class="modal-head">
-        <h4 id="modal-title">Activate T?</h4>
-        <button class="icon" id="modal-close">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="muted" id="modal-range">Min–Max: —</div>
-        <label class="input">
-          <span>Amount (USDT)</span>
-          <input type="number" id="modal-amount" placeholder="Enter amount"/>
-        </label>
-        <div class="muted" id="modal-est">Estimated daily: —</div>
-      </div>
-      <div class="modal-actions">
-        <button class="btn ghost" id="modal-cancel">Cancel</button>
-        <button class="btn" id="modal-confirm">Confirm</button>
-      </div>
+    <div class="card">
+      <div class="stripe"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><div class="text-xl" style="font-weight:800">T2</div><span class="badge">1.0%–1.5% / day</span></div>
+      <div class="small" style="margin-top:.25rem">$1,000–$9,999 USDT</div>
+      <button class="btn" style="width:100%;margin-top:.8rem" data-tier="T2" data-min="1000" data-max="9999">Activate Plan</button>
+    </div>
+    <div class="card">
+      <div class="stripe"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><div class="text-xl" style="font-weight:800">T3</div><span class="badge">1.5%–2.0% / day</span></div>
+      <div class="small" style="margin-top:.25rem">$10,000–$19,999 USDT</div>
+      <button class="btn" style="width:100%;margin-top:.8rem" data-tier="T3" data-min="10000" data-max="19999">Activate Plan</button>
+    </div>
+    <div class="card" style="grid-column:1 / -1">
+      <div class="stripe"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><div class="text-xl" style="font-weight:800">T4</div><span class="badge">2.0%–3.0% / day</span></div>
+      <div class="small" style="margin-top:.25rem">$20,000–$100,000 USDT</div>
+      <button class="btn" style="width:100%;margin-top:.8rem" data-tier="T4" data-min="20000" data-max="100000">Activate Plan</button>
     </div>
   </div>
+  <section class="card" style="margin-top:1rem">
+    <div class="stripe" style="opacity:.5"></div>
+    <h2 style="font-family:Poppins,Inter,sans-serif;font-weight:700">History</h2>
+    <table id="historyTable" class="table"><thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead><tbody></tbody></table>
+  </section>
+</main>
 
-  <footer class="footer">
-    <div>© 2025 TrustMe AI</div>
-    <div>Contact: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a> · <a href="https://t.me/trustmeai" target="_blank">Telegram</a></div>
-  </footer>
-</body>
-</html>
+<footer class="footer">
+  <div class="container" style="text-align:center">
+    <div class="brand" style="justify-content:center"><div class="brand-badge"></div> <div>TrustMe AI</div></div>
+    <div class="nav" style="justify-content:center;margin-top:8px">
+      <a href="index.html">Home</a>
+      <a href="strategy.html">Strategy</a>
+      <a href="assets.html">Assets</a>
+      <a href="deposit.html">Deposit</a>
+      <a href="withdraw.html">Withdraw</a>
+    </div>
+    <div class="small" style="margin-top:10px">© TrustMe AI 2025</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>bindActivatePlan();</script>
+</body></html>
