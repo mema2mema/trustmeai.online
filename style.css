@@ -87,3 +87,14 @@ footer{border-top:1px solid var(--soft);background:linear-gradient(0deg, rgba(2,
 @media (max-width: 560px){
   .strategy-grid{grid-template-columns:1fr}
 }
+
+/* v1.5 partner text buttons */
+.partner-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.partner-btn{display:flex;align-items:center;justify-content:center;height:56px;border-radius:14px;
+  background:var(--glass); border:1px solid var(--stroke); color:#FFF; font-weight:700; letter-spacing:.25px;
+}
+.partner-btn:hover{filter:brightness(1.08)}
+
+/* make feature tiles look like tabs and clickable */
+.strategy-card{cursor:pointer; position:relative}
+.strategy-card .more{position:absolute;right:12px;top:12px;font-size:.85rem;color:#B6C2D9}

@@ -124,3 +124,30 @@ document.addEventListener('DOMContentLoaded', ()=>{
   if (document.querySelector('[data-count]')) animateCounters();
   bindSupportWidget();
 });
+
+// v1.5 Feature modals
+const FEATURE_INFO={
+  transparent:{title:'Transparent Security', body:'Every transaction is traceable on-chain. We show fees, addresses, and time-stamped records to keep your funds secure and auditable.'},
+  automated:{title:'Automated Trading', body:'Our bots execute 24/7 with predefined risk rules. No manual timing required — you get consistent, rules-based entries and exits.'},
+  realtime:{title:'Real-Time Data', body:'We aggregate market feeds across major exchanges to react quickly to volatility spikes and changes in liquidity.'},
+  risk:{title:'AI Risk Control', body:'Dynamic position sizing, layered stop-loss, and circuit breakers help protect capital in extreme conditions.'}
+};
+function bindFeatureCards(){
+  document.querySelectorAll('[data-feature]').forEach(card=>{
+    card.addEventListener('click',()=>{
+      const key=card.getAttribute('data-feature');
+      const info=FEATURE_INFO[key]||{title:'Info',body:'Details coming soon.'};
+      openModal(`
+        <div class="card panel">
+          <div class="stripe"></div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <h3 style="margin:0">${info.title}</h3>
+            <button class="btn-ghost" data-close>Close</button>
+          </div>
+          <p class="small" style="margin-top:.6rem">${info.body}</p>
+        </div>
+      `);
+    });
+  });
+}
+document.addEventListener('DOMContentLoaded', bindFeatureCards);
