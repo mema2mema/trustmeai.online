@@ -6,11 +6,10 @@
     const css = `
 .user-menu{position:relative;display:inline-block;}
 .user-toggle{cursor:pointer;font-weight:600;padding:6px 12px;background:var(--soft);border-radius:6px;border:0;color:inherit}
-.user-dropdown{display:none;position:absolute;right:0;top:calc(100% + 6px);background:var(--panel,#0d1224);border:1px solid rgba(255,255,255,.08);border-radius:12px;min-width:200px;max-height:220px;overflow:auto;box-shadow:0 12px 30px rgba(0,0,0,.35);z-index:1000}
+.user-dropdown{display:none;position:absolute;right:0;top:calc(100% + 6px);background:var(--panel,#0d1224);border:1px solid rgba(255,255,255,.08);border-radius:12px;min-width:200px;max-height:260px;overflow:auto;box-shadow:0 12px 30px rgba(0,0,0,.35);z-index:1000}
 .user-dropdown.show{display:block;}
 .user-dropdown a, .user-dropdown button{display:block;width:100%;text-align:left;padding:10px 12px;color:#EAF2FF;text-decoration:none;background:transparent;border:0;cursor:pointer;font:inherit}
 .user-dropdown a:hover, .user-dropdown button:hover{background:rgba(255,255,255,.06);}
-.user-dropdown a.active{font-weight:700;color:#4da6ff;}
     `;
     const style = document.createElement("style");
     style.id = "authDropdownStyles";
@@ -25,21 +24,21 @@
     if (!authArea) return;
 
     const email = localStorage.getItem("tmUserEmail");
-    if (email) {
-      // detect current page
-      const current = location.pathname.split("/").pop();
+    const current = location.pathname.split("/").pop();
 
+    if (email) {
       authArea.innerHTML = `
         <div class="user-menu">
           <button class="user-toggle" id="userToggle">Hi, ${email} ▾</button>
           <div class="user-dropdown" id="userMenu">
             <a href="account.html" ${current==="account.html"?"class='active'":""}>Account Center</a>
             <a href="profile.html" ${current==="profile.html"?"class='active'":""}>My Profile</a>
-            <a href="team.html" ${current==="team.html"?"class='active'":""}>My Team</a>
             <a href="strategy.html" ${current==="strategy.html"?"class='active'":""}>Strategy Plans</a>
             <a href="deposit.html" ${current==="deposit.html"?"class='active'":""}>Deposit</a>
             <a href="withdraw.html" ${current==="withdraw.html"?"class='active'":""}>Withdraw</a>
-            <a href="settings.html" ${current==="settings.html"?"class='active'":""}>Settings</a>
+            <a href="help.html" ${current==="help.html"?"class='active'":""}>Help</a>
+            <a href="rules.html" ${current==="rules.html"?"class='active'":""}>Rules</a>
+            <a href="feedback.html" ${current==="feedback.html"?"class='active'":""}>Feedback</a>
             <button id="copyReferral">Copy Referral Link</button>
             <button id="tmLogoutBtn">Log Out</button>
           </div>
