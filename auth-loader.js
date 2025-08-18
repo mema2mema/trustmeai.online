@@ -29,6 +29,7 @@
         <div class="user-menu">
           <button class="user-toggle" id="userToggle">Hi, ${email} ▾</button>
           <div class="user-dropdown" id="userMenu">
+            <a href="account.html">Account Center</a>
             <a href="profile.html">My Profile</a>
             <a href="strategy.html">Strategy Plans</a>
             <a href="deposit.html">Deposit</a>
@@ -43,11 +44,18 @@
       const menu   = document.getElementById("userMenu");
 
       function closeAll() { menu.classList.remove("show"); }
+
       toggle?.addEventListener("click", (e) => {
         e.stopPropagation();
         menu.classList.toggle("show");
       });
-      document.addEventListener("click", closeAll);
+
+      // Avoid stacking multiple document click handlers on re-render
+      if (window.__tmAuthDocClickHandler) {
+        document.removeEventListener("click", window.__tmAuthDocClickHandler);
+      }
+      window.__tmAuthDocClickHandler = () => closeAll();
+      document.addEventListener("click", window.__tmAuthDocClickHandler);
 
       document.getElementById("tmLogoutBtn")?.addEventListener("click", () => {
         if (window.tmLogout) window.tmLogout();
@@ -59,8 +67,11 @@
       });
 
       document.getElementById("copyReferral")?.addEventListener("click", async () => {
-        // Placeholder referral link; customize later
-        const ref = location.origin + "/?ref=" + encodeURIComponent(email);
+        // Use invite code if present, else fallback to email
+        const invite = localStorage.getItem("tmInviteCode");
+        const ref = invite
+          ? (location.origin + "/?ref=" + encodeURIComponent(invite))
+          : (location.origin + "/?ref=" + encodeURIComponent(email));
         try { await navigator.clipboard.writeText(ref); alert("Referral link copied!"); }
         catch { alert(ref); }
         closeAll();
