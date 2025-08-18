@@ -2,7 +2,7 @@
 
 function fmt(ts) {
   if (!ts) return "—";
-  try { return new Date(ts).toLocaleString(); } catch { return ts; }
+  try { return new Date(Number(ts)).toLocaleString(); } catch { return ts; }
 }
 
 function ensureDefaults(email) {
@@ -11,9 +11,13 @@ function ensureDefaults(email) {
   if (!nick && email) {
     localStorage.setItem("tmNickname", email.split("@")[0]);
   }
-  // membership
+  // membership default -> T1
   if (!localStorage.getItem("tmMembership")) {
-    localStorage.setItem("tmMembership", "S0");
+    localStorage.setItem("tmMembership", "T1");
+  }
+  // registration time placeholder
+  if (!localStorage.getItem("tmRegTime")) {
+    localStorage.setItem("tmRegTime", Date.now().toString());
   }
 }
 
@@ -21,20 +25,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const email = localStorage.getItem("tmUserEmail") || "";
   if (!email) {
     // not logged in → show login modal
-    openModal && openModal("loginModal");
+    window.openModal && openModal("loginModal");
   }
 
   ensureDefaults(email);
 
-  // Populate
   const $ = (id) => document.getElementById(id);
 
-  $("piEmail").textContent = email || "—";
-  $("piNick").textContent  = localStorage.getItem("tmNickname") || "—";
-  $("piPhone").textContent = localStorage.getItem("tmPhone") || "—";
-  $("piLevel").textContent = localStorage.getItem("tmMembership") || "S0";
-  $("piReg").textContent   = fmt(localStorage.getItem("tmRegTime"));
-  $("piLast").textContent  = fmt(localStorage.getItem("tmLastLogin"));
+  const refresh = () => {
+    $("piEmail").textContent = localStorage.getItem("tmUserEmail") || "—";
+    $("piNick").textContent  = localStorage.getItem("tmNickname") || "—";
+    $("piPhone").textContent = localStorage.getItem("tmPhone") || "—";
+    $("piLevel").textContent = localStorage.getItem("tmMembership") || "T1";
+    $("piReg").textContent   = fmt(localStorage.getItem("tmRegTime"));
+    $("piLast").textContent  = fmt(localStorage.getItem("tmLastLogin"));
+  };
+  refresh();
 
   // Edit nickname
   $("piEditNick")?.addEventListener("click", () => {
@@ -42,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const val = prompt("Enter nickname", current);
     if (val !== null) {
       localStorage.setItem("tmNickname", val.trim() || current);
-      $("piNick").textContent = localStorage.getItem("tmNickname") || "—";
+      refresh();
     }
   });
 
@@ -52,19 +58,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const val = prompt("Enter phone number", current);
     if (val !== null) {
       localStorage.setItem("tmPhone", val.trim());
-      $("piPhone").textContent = localStorage.getItem("tmPhone") || "—";
+      refresh();
     }
   });
 
   // Copy email / phone
   $("piCopyEmail")?.addEventListener("click", async () => {
-    try { await navigator.clipboard.writeText(email); alert("Email copied"); }
-    catch { alert(email); }
+    const e = localStorage.getItem("tmUserEmail") || "";
+    try { await navigator.clipboard.writeText(e); alert("Email copied"); }
+    catch { alert(e); }
   });
   $("piCopyPhone")?.addEventListener("click", async () => {
     const p = localStorage.getItem("tmPhone") || "";
     if (!p) return alert("No phone saved");
     try { await navigator.clipboard.writeText(p); alert("Phone copied"); }
     catch { alert(p); }
+  });
+
+  // Edit membership level (T1–T4)
+  $("piEditLevel")?.addEventListener("click", () => {
+    const current = localStorage.getItem("tmMembership") || "T1";
+    const val = prompt("Set membership level (T1, T2, T3, T4)", current);
+    if (val) {
+      const v = val.toUpperCase().trim();
+      if (["T1","T2","T3","T4"].includes(v)) {
+        localStorage.setItem("tmMembership", v);
+        refresh();
+        alert("Membership updated to " + v);
+      } else {
+        alert("Invalid level. Use T1, T2, T3 or T4.");
+      }
+    }
   });
 });

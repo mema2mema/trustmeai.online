@@ -23,6 +23,10 @@
 <input id="loginEmail" class="input" type="email" placeholder="you@example.com" autocomplete="username">
 <label class="small" style="margin-top:.5rem">Password</label>
 <input id="loginPass" class="input" type="password" placeholder="••••••••" autocomplete="current-password">
+<div style="display:flex;align-items:center;gap:.5rem;margin-top:.5rem">
+  <input id="loginShowPass" type="checkbox">
+  <label class="small" for="loginShowPass">Show password</label>
+</div>
 `;
     const registerBody = `
 <label class="small">Full Name</label>
@@ -31,6 +35,10 @@
 <input id="regEmail" class="input" type="email" placeholder="you@example.com" autocomplete="email">
 <label class="small" style="margin-top:.5rem">Password</label>
 <input id="regPass" class="input" type="password" placeholder="Create a password" autocomplete="new-password">
+<div style="display:flex;align-items:center;gap:.5rem;margin-top:.5rem">
+  <input id="regShowPass" type="checkbox">
+  <label class="small" for="regShowPass">Show password</label>
+</div>
 <label class="small" style="margin-top:.5rem">Referral (optional)</label>
 <input id="regRef" class="input" type="text" placeholder="Referral code">
 `;
@@ -69,17 +77,33 @@
       e.preventDefault(); closeModal("registerModal"); openModal("loginModal");
     });
 
-    // ====== SUBMIT HANDLERS (with timestamps) ======
+    // Show password toggles
+    const bindShow = (chkId, inputId) => {
+      const c = document.getElementById(chkId), i = document.getElementById(inputId);
+      c && i && c.addEventListener("change", () => { i.type = c.checked ? "text" : "password"; });
+    };
+    bindShow("loginShowPass", "loginPass");
+    bindShow("regShowPass", "regPass");
+
+    // Email validation
+    const validEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+
+    // ====== SUBMIT HANDLERS (with timestamps & validation) ======
 
     // LOGIN submit
     document.getElementById("btnLoginSubmit")?.addEventListener("click", function () {
       const email = (document.getElementById("loginEmail") || {}).value?.trim();
       const pass  = (document.getElementById("loginPass") || {}).value;
       if (!email || !pass) return alert("Enter email and password");
+      if (!validEmail(email)) return alert("Please enter a valid email address.");
 
       localStorage.setItem("tmUserEmail", email);
       // update last login time
       localStorage.setItem("tmLastLogin", Date.now().toString());
+      // ensure membership exists
+      if (!localStorage.getItem("tmMembership")) {
+        localStorage.setItem("tmMembership", "T1");
+      }
 
       document.dispatchEvent(new CustomEvent("tm-auth-changed"));
       closeModal("loginModal");
@@ -90,11 +114,13 @@
       const email = (document.getElementById("regEmail") || {}).value?.trim();
       const pass  = (document.getElementById("regPass") || {}).value;
       if (!email || !pass) return alert("Enter email and password");
+      if (!validEmail(email)) return alert("Please enter a valid email address.");
 
       // Save user fields (demo) and auto-login
       localStorage.setItem("tmUserEmail", email);
-      localStorage.setItem("tmNickname", email.split("@")[0]); // default nickname
-      localStorage.setItem("tmMembership", "S0");              // default level
+      localStorage.setItem("tmNickname", (email.split("@")[0] || "User")); // default nickname
+      // default level T1
+      localStorage.setItem("tmMembership", localStorage.getItem("tmMembership") || "T1");
       if (!localStorage.getItem("tmRegTime")) {
         localStorage.setItem("tmRegTime", Date.now().toString());
       }
