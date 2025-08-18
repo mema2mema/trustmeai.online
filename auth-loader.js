@@ -38,6 +38,7 @@
             <a href="strategy.html" ${current==="strategy.html"?"class='active'":""}>Strategy Plans</a>
             <a href="deposit.html" ${current==="deposit.html"?"class='active'":""}>Deposit</a>
             <a href="withdraw.html" ${current==="withdraw.html"?"class='active'":""}>Withdraw</a>
+            <a href="settings.html" ${current==="settings.html"?"class='active'":""}>Settings</a>
             <button id="copyReferral">Copy Referral Link</button>
             <button id="tmLogoutBtn">Log Out</button>
           </div>
