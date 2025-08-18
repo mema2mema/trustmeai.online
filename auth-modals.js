@@ -69,22 +69,37 @@
       e.preventDefault(); closeModal("registerModal"); openModal("loginModal");
     });
 
-    // Demo submit handlers (replace with real backend later)
+    // ====== SUBMIT HANDLERS (with timestamps) ======
+
+    // LOGIN submit
     document.getElementById("btnLoginSubmit")?.addEventListener("click", function () {
       const email = (document.getElementById("loginEmail") || {}).value?.trim();
       const pass  = (document.getElementById("loginPass") || {}).value;
       if (!email || !pass) return alert("Enter email and password");
+
       localStorage.setItem("tmUserEmail", email);
+      // update last login time
+      localStorage.setItem("tmLastLogin", Date.now().toString());
+
       document.dispatchEvent(new CustomEvent("tm-auth-changed"));
       closeModal("loginModal");
     });
 
+    // REGISTER submit
     document.getElementById("btnRegisterSubmit")?.addEventListener("click", function () {
       const email = (document.getElementById("regEmail") || {}).value?.trim();
       const pass  = (document.getElementById("regPass") || {}).value;
       if (!email || !pass) return alert("Enter email and password");
-      // Create account (demo) and auto-login
+
+      // Save user fields (demo) and auto-login
       localStorage.setItem("tmUserEmail", email);
+      localStorage.setItem("tmNickname", email.split("@")[0]); // default nickname
+      localStorage.setItem("tmMembership", "S0");              // default level
+      if (!localStorage.getItem("tmRegTime")) {
+        localStorage.setItem("tmRegTime", Date.now().toString());
+      }
+      localStorage.setItem("tmLastLogin", Date.now().toString());
+
       document.dispatchEvent(new CustomEvent("tm-auth-changed"));
       closeModal("registerModal");
     });

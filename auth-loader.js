@@ -29,7 +29,7 @@
         <div class="user-menu">
           <button class="user-toggle" id="userToggle">Hi, ${email} ▾</button>
           <div class="user-dropdown" id="userMenu">
-            <a href="assets.html">My Profile</a>
+            <a href="profile.html">My Profile</a>
             <a href="strategy.html">Strategy Plans</a>
             <a href="deposit.html">Deposit</a>
             <a href="withdraw.html">Withdraw</a>
