@@ -1,0 +1,144 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Account Center — TrustMe AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Account Center micro-styles (keeps your theme) */
+  .ac-wrap{max-width:900px;margin:0 auto}
+  .ac-top{background:linear-gradient(135deg,#1ad488,#0bb879);border-radius:18px;padding:16px;color:#0b1020}
+  .ac-id{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
+  .ac-id .chip{background:rgba(255,255,255,.85);padding:6px 10px;border-radius:10px;font-weight:600;display:flex;align-items:center;gap:6px}
+  .ac-head{display:flex;align-items:center;justify-content:space-between}
+  .ac-head .name{font:700 1.15rem/1 Poppins,Inter,sans-serif;color:#0b1020}
+  .ac-level{display:flex;align-items:center;gap:10px;margin-top:12px}
+  .ac-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-top:12px}
+  .ac-tile{background:var(--soft);border-radius:14px;padding:14px;text-align:center}
+  .ac-icon{font-size:24px;opacity:.9}
+  .ac-title{margin-top:6px;font-weight:700}
+  .ac-card{margin-top:1rem}
+  .ac-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem}
+  .ac-item{background:var(--soft);border-radius:14px;padding:14px;text-align:center;cursor:pointer}
+  .ac-item:hover{filter:brightness(1.06)}
+  .ac-logout{margin-top:1rem;padding:16px;border-radius:14px;background:var(--soft);display:flex;justify-content:center}
+  .ac-tabs{position:sticky;bottom:0;background:rgba(13,18,36,.8);backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,.08);margin-top:1rem}
+  .ac-tabs .bar{display:grid;grid-template-columns:repeat(5,1fr);padding:10px 6px}
+  .ac-tab{display:flex;flex-direction:column;align-items:center;gap:4px;color:#a7c1ff;text-decoration:none}
+  .ac-tab.active{color:#44ffba}
+  .chip-btn{border:0;background:rgba(255,255,255,.9);color:#0b1020;font-weight:700;border-radius:999px;padding:8px 12px;cursor:pointer}
+  .copy-btn{cursor:pointer}
+  @media (max-width:720px){ .ac-grid{grid-template-columns:repeat(2,1fr)} .ac-quick{grid-template-columns:repeat(4,1fr)} }
+</style>
+</head><body>
+
+<header>
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
+    <div class="brand"><div class="brand-badge"></div> <div style="letter-spacing:.4px">TrustMe AI</div></div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="strategy.html">Strategy</a>
+      <a href="assets.html">Assets</a>
+      <a href="deposit.html">Deposit</a>
+      <a href="withdraw.html">Withdraw</a>
+    </nav>
+    <div id="authArea"></div>
+  </div>
+</header>
+<script src="auth-loader.js" defer></script>
+<script src="auth-modals.js" defer></script>
+
+<main class="container section ac-wrap">
+
+  <!-- TOP CARD -->
+  <section class="ac-top card" style="color:#0b1020">
+    <div class="ac-head">
+      <div class="name" id="acName">—</div>
+      <button class="chip-btn" id="acUpgradeBtn">Upgrade level</button>
+    </div>
+
+    <div class="ac-id">
+      <div class="chip">UID:&nbsp;<span id="acUID">—</span>
+        <span class="copy-btn" id="copyUID" title="Copy">📋</span>
+      </div>
+      <div class="chip">Invitation Code:&nbsp;<span id="acInvite">—</span>
+        <span class="copy-btn" id="copyInvite" title="Copy">📋</span>
+      </div>
+    </div>
+
+    <div class="ac-level">
+      <div class="chip">Current Level:&nbsp;<b id="acLevel">T1</b></div>
+      <div class="chip">Agent&nbsp;<b id="acAgent">0</b></div>
+    </div>
+
+    <!-- QUICK ROW -->
+    <div class="ac-quick">
+      <a class="ac-tile" href="#" id="acInviteFriends"><div class="ac-icon">🤝</div><div class="ac-title">Invite Friends</div></a>
+      <a class="ac-tile" href="#" id="acAgentLevel"><div class="ac-icon">🎖️</div><div class="ac-title">Agent Level</div></a>
+      <a class="ac-tile" href="assets.html"><div class="ac-icon">💰</div><div class="ac-title">My Profits</div></a>
+      <a class="ac-tile" href="assets.html#history"><div class="ac-icon">📄</div><div class="ac-title">Order Record</div></a>
+    </div>
+  </section>
+
+  <!-- COMMON FUNCTIONS -->
+  <section class="ac-card">
+    <div class="stripe"></div>
+    <h3 style="font-family:Poppins,Inter,sans-serif;font-weight:700">Common Functions</h3>
+    <div class="ac-grid" style="margin-top:.6rem">
+      <a class="ac-item" href="rules.html">Operational Rules</a>
+      <a class="ac-item" href="safety.html">Safety Center</a>
+      <a class="ac-item" href="feedback.html">Feedback</a>
+      <a class="ac-item" href="help.html">Help Center</a>
+    </div>
+  </section>
+
+  <!-- OTHER FEATURES -->
+  <section class="ac-card">
+    <div class="stripe" style="opacity:.5"></div>
+    <h3 style="font-family:Poppins,Inter,sans-serif;font-weight:700">Other Features</h3>
+    <div class="ac-grid" style="margin-top:.6rem">
+      <a class="ac-item" href="profile.html">Personal Information</a>
+      <a class="ac-item" href="about.html">About</a>
+      <a class="ac-item" href="#" id="acLanguage">Language</a>
+      <a class="ac-item" href="#" id="acSupport">Online Customer Service</a>
+      <a class="ac-item" href="#" id="acSocial">Social Media</a>
+      <button class="ac-item" id="acClearCache" type="button">Clear Cache</button>
+    </div>
+  </section>
+
+  <div class="ac-logout">
+    <button class="btn" id="acLogout">Log Out</button>
+  </div>
+</main>
+
+<!-- Bottom tabs -->
+<nav class="ac-tabs">
+  <div class="bar container">
+    <a class="ac-tab" href="index.html">🏠<span class="small">Front Page</span></a>
+    <a class="ac-tab" href="assets.html">📦<span class="small">Assets</span></a>
+    <a class="ac-tab" href="strategy.html">📈<span class="small">Strategy</span></a>
+    <a class="ac-tab" href="#" id="acTeam">👥<span class="small">Team</span></a>
+    <a class="ac-tab active" href="account.html">👤<span class="small">Mine</span></a>
+  </div>
+</nav>
+
+<footer class="footer">
+  <div class="container" style="text-align:center">
+    <div class="brand" style="justify-content:center"><div class="brand-badge"></div> <div>TrustMe AI</div></div>
+    <div class="nav" style="justify-content:center;margin-top:8px">
+      <a href="index.html">Home</a>
+      <a href="strategy.html">Strategy</a>
+      <a href="assets.html">Assets</a>
+      <a href="deposit.html">Deposit</a>
+      <a href="withdraw.html">Withdraw</a>
+    </div>
+    <div class="small" style="margin-top:10px">
+      Support: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a>
+      &nbsp;•&nbsp;
+      Telegram: <a href="#" target="_blank" rel="noopener">TrustMe AI Channel</a>
+    </div>
+    <div class="small" style="margin-top:10px">© TrustMe AI 2025</div>
+  </div>
+</footer>
+
+<script src="account.js"></script>
+</body></html>
