@@ -35,6 +35,7 @@
           <div class="user-dropdown" id="userMenu">
             <a href="account.html" ${current==="account.html"?"class='active'":""}>Account Center</a>
             <a href="profile.html" ${current==="profile.html"?"class='active'":""}>My Profile</a>
+            <a href="team.html" ${current==="team.html"?"class='active'":""}>My Team</a>
             <a href="strategy.html" ${current==="strategy.html"?"class='active'":""}>Strategy Plans</a>
             <a href="deposit.html" ${current==="deposit.html"?"class='active'":""}>Deposit</a>
             <a href="withdraw.html" ${current==="withdraw.html"?"class='active'":""}>Withdraw</a>
