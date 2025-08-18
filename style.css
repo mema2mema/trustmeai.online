@@ -131,4 +131,4 @@ hr.sep{border:0;border-top:1px solid var(--soft);margin:1rem 0;opacity:.8}
 .tm-modal.open { display: flex; }
 .tm-modal__overlay { position: absolute; inset: 0; background: rgba(0,0,0,.5); }
 .tm-modal__dialog { position: relative; width: min(92vw, 420px); padding: 1rem; }
-.tm-modal-open { overflow: hidden; } /* lock page scroll when modal open */
+.tm-modal-open { overflow: hidden; }

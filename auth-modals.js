@@ -1,6 +1,6 @@
-// Minimal modal system using your theme classes
+// auth-modals.js
 (function () {
-  function modalHtml(id, title, bodyHtml, primaryId, primaryText) {
+  function modalHtml(id, title, bodyHtml, primaryId, primaryText, switchHtml) {
     return `
 <div id="${id}" class="tm-modal" aria-hidden="true">
   <div class="tm-modal__overlay" data-close="${id}"></div>
@@ -8,6 +8,7 @@
     <div class="stripe"></div>
     <h2 id="${id}-title" style="font-family:Poppins,Inter,sans-serif;font-weight:700">${title}</h2>
     <div class="tm-modal__body">${bodyHtml}</div>
+    <div class="small" style="margin-top:.5rem">${switchHtml}</div>
     <div style="display:flex;gap:.5rem;margin-top:.8rem;justify-content:flex-end">
       <button class="btn" id="${primaryId}">${primaryText}</button>
       <button class="btn-ghost" data-close="${id}">Cancel</button>
@@ -17,15 +18,12 @@
   }
 
   function injectModals() {
-    // Login form
     const loginBody = `
 <label class="small">Email</label>
 <input id="loginEmail" class="input" type="email" placeholder="you@example.com" autocomplete="username">
 <label class="small" style="margin-top:.5rem">Password</label>
 <input id="loginPass" class="input" type="password" placeholder="••••••••" autocomplete="current-password">
-<div class="small" style="margin-top:.5rem"><a href="#" class="link">Forgot password?</a></div>
 `;
-    // Register form
     const registerBody = `
 <label class="small">Full Name</label>
 <input id="regName" class="input" type="text" placeholder="Your name">
@@ -39,46 +37,60 @@
 
     const root = document.createElement("div");
     root.innerHTML =
-      modalHtml("loginModal", "Log In", loginBody, "btnLoginSubmit", "Log In") +
-      modalHtml("registerModal", "Create Account", registerBody, "btnRegisterSubmit", "Register");
+      modalHtml(
+        "loginModal",
+        "Log In",
+        loginBody,
+        "btnLoginSubmit",
+        "Log In",
+        `Don't have an account? <a href="#" id="linkToRegister" class="link">Register</a>`
+      ) +
+      modalHtml(
+        "registerModal",
+        "Create Account",
+        registerBody,
+        "btnRegisterSubmit",
+        "Register",
+        `Already have an account? <a href="#" id="linkToLogin" class="link">Log In</a>`
+      );
     document.body.appendChild(root);
 
-    // Close handlers (overlay & cancel buttons)
+    // Close handlers
     document.body.addEventListener("click", function (e) {
-      const target = e.target;
-      const closeId = target.getAttribute && target.getAttribute("data-close");
+      const closeId = e.target.getAttribute && e.target.getAttribute("data-close");
       if (closeId) closeModal(closeId);
     });
 
-    // ESC to close
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") {
-        closeModal("loginModal");
-        closeModal("registerModal");
-      }
+    // Switch links
+    document.getElementById("linkToRegister")?.addEventListener("click", function (e) {
+      e.preventDefault(); closeModal("loginModal"); openModal("registerModal");
+    });
+    document.getElementById("linkToLogin")?.addEventListener("click", function (e) {
+      e.preventDefault(); closeModal("registerModal"); openModal("loginModal");
     });
 
-    // Demo submit handlers (replace with real auth later)
+    // Demo submit handlers (replace with real backend later)
     document.getElementById("btnLoginSubmit")?.addEventListener("click", function () {
-      const email = (document.getElementById("loginEmail") || {}).value || "";
-      const pass = (document.getElementById("loginPass") || {}).value || "";
+      const email = (document.getElementById("loginEmail") || {}).value?.trim();
+      const pass  = (document.getElementById("loginPass") || {}).value;
       if (!email || !pass) return alert("Enter email and password");
-      // TODO: integrate TMAuth here
-      alert("Logged in (demo).");
+      localStorage.setItem("tmUserEmail", email);
+      document.dispatchEvent(new CustomEvent("tm-auth-changed"));
       closeModal("loginModal");
     });
 
     document.getElementById("btnRegisterSubmit")?.addEventListener("click", function () {
-      const email = (document.getElementById("regEmail") || {}).value || "";
-      const pass = (document.getElementById("regPass") || {}).value || "";
+      const email = (document.getElementById("regEmail") || {}).value?.trim();
+      const pass  = (document.getElementById("regPass") || {}).value;
       if (!email || !pass) return alert("Enter email and password");
-      // TODO: integrate TMAuth register here
-      alert("Account created (demo).");
+      // Create account (demo), auto-login:
+      localStorage.setItem("tmUserEmail", email);
+      document.dispatchEvent(new CustomEvent("tm-auth-changed"));
       closeModal("registerModal");
     });
   }
 
-  // Public helpers used by auth-loader.js
+  // Public helpers
   window.openModal = function (id) {
     const el = document.getElementById(id);
     if (!el) return;
@@ -93,7 +105,10 @@
       document.documentElement.classList.remove("tm-modal-open");
     }
   };
+  window.tmLogout = function () {
+    localStorage.removeItem("tmUserEmail");
+    document.dispatchEvent(new CustomEvent("tm-auth-changed"));
+  };
 
-  // Build modals after DOM ready
   document.addEventListener("DOMContentLoaded", injectModals);
 })();
