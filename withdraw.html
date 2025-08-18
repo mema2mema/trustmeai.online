@@ -1,16 +1,66 @@
-<header class="site-header">
-  <div class="container">
-    <div class="logo"><a href="index.html">TrustMe AI</a></div>
-    <nav class="main-nav">
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="strategy.html">Strategy</a></li>
-        <li><a href="assets.html">Assets</a></li>
-        <li><a href="deposit.html">Deposit</a></li>
-        <li class="active"><a href="withdraw.html">Withdraw</a></li>
-      </ul>
+<!DOCTYPE html><html><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Withdraw — TrustMe AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head><body>
+
+<header>
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
+    <div class="brand"><div class="brand-badge"></div> <div style="letter-spacing:.4px">TrustMe AI</div></div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="strategy.html">Strategy</a>
+      <a href="assets.html">Assets</a>
+      <a href="deposit.html">Deposit</a>
+      <a href="withdraw.html">Withdraw</a>
     </nav>
-    <div id="authArea"></div>
+    <div class="nav"><a class="btn-ghost" href="#">Log In</a><a class="btn" href="#">Register</a></div>
   </div>
 </header>
-<script src="js/tm-auth-navbar-cleaner.js" defer></script>
+
+<main class="container section">
+  <h1 style="font-family:Poppins,Inter,sans-serif;font-weight:700">Withdraw</h1>
+  <div class="grid grid-2" style="margin-top:1rem">
+    <section class="card">
+      <div class="stripe"></div>
+      <label class="small">To Address</label>
+      <input id="wdAddr" class="input" placeholder="T... / 0x...">
+      <label class="small" style="margin-top:.5rem">Amount (USDT)</label>
+      <input id="wdAmt" type="number" class="input" placeholder="10">
+      <button id="btnWithdraw" class="btn" style="margin-top:.6rem">Submit</button>
+      <p class="small" style="margin-top:.5rem">Network fee preview: <span id="feePreview">~1 USDT (TRC20)</span>. Large withdrawals may require manual approval.</p>
+    </section>
+    <section class="card">
+      <div class="stripe" style="opacity:.5"></div>
+      <h2 style="font-family:Poppins,Inter,sans-serif;font-weight:700">History</h2>
+      <table id="historyTable" class="table"><thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead><tbody></tbody></table>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container" style="text-align:center">
+    <div class="brand" style="justify-content:center"><div class="brand-badge"></div> <div>TrustMe AI</div></div>
+    <div class="nav" style="justify-content:center;margin-top:8px">
+      <a href="index.html">Home</a>
+      <a href="strategy.html">Strategy</a>
+      <a href="assets.html">Assets</a>
+      <a href="deposit.html">Deposit</a>
+      <a href="withdraw.html">Withdraw</a>
+    </div>
+    <div class="small" style="margin-top:10px">© TrustMe AI 2025</div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+bindFees();
+document.getElementById('btnWithdraw').addEventListener('click', function(){
+  var amt = Number(document.getElementById('wdAmt').value||0);
+  if(!amt||amt<=0) return alert('Enter amount');
+  var tbody=document.querySelector('#historyTable tbody'); var tr=document.createElement('tr');
+  tr.innerHTML='<td>'+new Date().toLocaleString()+'</td><td>withdraw</td><td>'+amt.toFixed(2)+'</td><td>0.00</td><td>submitted</td>'; tbody.prepend(tr);
+  alert('Withdrawal submitted (demo).');
+});
+</script>
+</body></html>
