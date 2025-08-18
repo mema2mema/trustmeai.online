@@ -10,6 +10,7 @@
 .user-dropdown.show{display:block;}
 .user-dropdown a, .user-dropdown button{display:block;width:100%;text-align:left;padding:10px 12px;color:#EAF2FF;text-decoration:none;background:transparent;border:0;cursor:pointer;font:inherit}
 .user-dropdown a:hover, .user-dropdown button:hover{background:rgba(255,255,255,.06);}
+.user-dropdown a.active{font-weight:700;color:#4da6ff;}
     `;
     const style = document.createElement("style");
     style.id = "authDropdownStyles";
@@ -25,15 +26,18 @@
 
     const email = localStorage.getItem("tmUserEmail");
     if (email) {
+      // detect current page
+      const current = location.pathname.split("/").pop();
+
       authArea.innerHTML = `
         <div class="user-menu">
           <button class="user-toggle" id="userToggle">Hi, ${email} ▾</button>
           <div class="user-dropdown" id="userMenu">
-            <a href="account.html">Account Center</a>
-            <a href="profile.html">My Profile</a>
-            <a href="strategy.html">Strategy Plans</a>
-            <a href="deposit.html">Deposit</a>
-            <a href="withdraw.html">Withdraw</a>
+            <a href="account.html" ${current==="account.html"?"class='active'":""}>Account Center</a>
+            <a href="profile.html" ${current==="profile.html"?"class='active'":""}>My Profile</a>
+            <a href="strategy.html" ${current==="strategy.html"?"class='active'":""}>Strategy Plans</a>
+            <a href="deposit.html" ${current==="deposit.html"?"class='active'":""}>Deposit</a>
+            <a href="withdraw.html" ${current==="withdraw.html"?"class='active'":""}>Withdraw</a>
             <button id="copyReferral">Copy Referral Link</button>
             <button id="tmLogoutBtn">Log Out</button>
           </div>
