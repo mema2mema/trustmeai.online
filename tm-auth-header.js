@@ -16,12 +16,6 @@
       out.textContent='Logout';
       out.onclick=function(){ TMAuth.logout(); };
       mount.appendChild(span); mount.appendChild(out);
-    }else{
-      var login=document.createElement('a');
-      login.href='/login.html'; login.className='btn-ghost'; login.textContent='Log In';
-      var reg=document.createElement('a');
-      reg.href='/register.html'; reg.className='btn'; reg.style.marginLeft='8px'; reg.textContent='Register';
-      mount.appendChild(login); mount.appendChild(reg);
     }
   }
   window.TMAuthHeaderRender = render; document.addEventListener('DOMContentLoaded', render);
