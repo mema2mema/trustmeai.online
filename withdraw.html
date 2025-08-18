@@ -1,26 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Withdraw - TrustMe AI</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div id="header"></div>
-  <script>
-    fetch("header.html")
-      .then(res => res.text())
-      .then(html => document.getElementById("header").innerHTML = html);
-  </script>
-
-  <main class="content">
-    <h1>Withdraw Page</h1>
-    <p>This is a placeholder for Withdraw content.</p>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 TrustMe AI. All rights reserved.</p>
-  </footer>
-</body>
-</html>
+<header class="site-header">
+  <div class="container">
+    <div class="logo"><a href="index.html">TrustMe AI</a></div>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="strategy.html">Strategy</a></li>
+        <li><a href="assets.html">Assets</a></li>
+        <li><a href="deposit.html">Deposit</a></li>
+        <li class="active"><a href="withdraw.html">Withdraw</a></li>
+      </ul>
+    </nav>
+    <div id="authArea"></div>
+  </div>
+</header>
+<script src="js/tm-auth-navbar-cleaner.js" defer></script>
