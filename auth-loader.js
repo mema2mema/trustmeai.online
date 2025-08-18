@@ -1,14 +1,19 @@
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", function () {
   const authArea = document.getElementById("authArea");
   if (!authArea) return;
 
-  // Load login.html
-  fetch("login.html")
-    .then(res => res.text())
-    .then(html => authArea.insertAdjacentHTML("beforeend", html));
+  // Inject the two buttons
+  Promise.all([
+    fetch("login.html").then(r => r.text()).catch(() => ""),
+    fetch("register.html").then(r => r.text()).catch(() => "")
+  ]).then(([loginBtnHtml, registerBtnHtml]) => {
+    authArea.insertAdjacentHTML("beforeend", loginBtnHtml || "");
+    authArea.insertAdjacentHTML("beforeend", registerBtnHtml || "");
 
-  // Load register.html
-  fetch("register.html")
-    .then(res => res.text())
-    .then(html => authArea.insertAdjacentHTML("beforeend", html));
+    // Wire open handlers (modals are created by auth-modals.js)
+    const openLoginBtn = document.getElementById("openLogin");
+    const openRegisterBtn = document.getElementById("openRegister");
+    if (openLoginBtn) openLoginBtn.addEventListener("click", () => openModal("loginModal"));
+    if (openRegisterBtn) openRegisterBtn.addEventListener("click", () => openModal("registerModal"));
+  });
 });
