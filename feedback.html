@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Rules — TrustMe AI</title>
+  <title>Feedback — TrustMe AI</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -26,14 +26,13 @@
 <script src="auth-modals.js" defer></script>
 
 <main class="container section">
-  <h1 style="font-family:Poppins,Inter,sans-serif;font-weight:700">Rules & Guidelines</h1>
+  <h1 style="font-family:Poppins,Inter,sans-serif;font-weight:700">Feedback</h1>
   <div class="card" style="margin-top:1rem;padding:1rem">
-    <ul>
-      <li>Be respectful to other members.</li>
-      <li>No spamming or fraudulent activity.</li>
-      <li>Follow the TrustMe AI Terms & Conditions.</li>
-      <li>Violation of rules may lead to account suspension.</li>
-    </ul>
+    <p>We’d love to hear your thoughts! Please share your feedback or suggestions below:</p>
+    <form id="feedbackForm" style="margin-top:1rem">
+      <textarea id="feedbackText" class="input" rows="5" placeholder="Your feedback..." style="width:100%;"></textarea>
+      <button type="submit" class="btn" style="margin-top:.8rem">Submit Feedback</button>
+    </form>
   </div>
 </main>
 
@@ -50,6 +49,16 @@
     <div class="small" style="margin-top:10px">© TrustMe AI 2025</div>
   </div>
 </footer>
+
+<script>
+document.getElementById("feedbackForm")?.addEventListener("submit", function(e){
+  e.preventDefault();
+  const txt = document.getElementById("feedbackText").value.trim();
+  if(!txt) return alert("Please enter some feedback first!");
+  alert("Thank you for your feedback!");
+  document.getElementById("feedbackText").value = "";
+});
+</script>
 
 </body>
 </html>
