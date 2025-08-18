@@ -4,30 +4,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-  /* Account Center micro-styles (keeps your theme) */
   .ac-wrap{max-width:900px;margin:0 auto}
   .ac-top{background:linear-gradient(135deg,#1ad488,#0bb879);border-radius:18px;padding:16px;color:#0b1020}
   .ac-id{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
-  .ac-id .chip{background:rgba(255,255,255,.85);padding:6px 10px;border-radius:10px;font-weight:600;display:flex;align-items:center;gap:6px}
+  .ac-id .chip{background:rgba(255,255,255,.88);padding:6px 10px;border-radius:10px;font-weight:600;display:flex;align-items:center;gap:6px}
   .ac-head{display:flex;align-items:center;justify-content:space-between}
-  .ac-head .name{font:700 1.15rem/1 Poppins,Inter,sans-serif;color:#0b1020}
+  .ac-head .name{font:700 1.15rem/1 Poppins,Inter,sans-serif}
+  .chip-btn{border:0;background:rgba(255,255,255,.9);color:#0b1020;font-weight:700;border-radius:999px;padding:8px 12px;cursor:pointer}
   .ac-level{display:flex;align-items:center;gap:10px;margin-top:12px}
   .ac-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-top:12px}
-  .ac-tile{background:var(--soft);border-radius:14px;padding:14px;text-align:center}
-  .ac-icon{font-size:24px;opacity:.9}
+  .ac-tile{background:var(--soft);border-radius:14px;padding:14px;text-align:center;text-decoration:none;color:inherit}
+  .ac-icon{font-size:24px;opacity:.95}
   .ac-title{margin-top:6px;font-weight:700}
   .ac-card{margin-top:1rem}
   .ac-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem}
-  .ac-item{background:var(--soft);border-radius:14px;padding:14px;text-align:center;cursor:pointer}
+  .ac-item{background:var(--soft);border-radius:14px;padding:14px;text-align:center;text-decoration:none;color:inherit;cursor:pointer}
   .ac-item:hover{filter:brightness(1.06)}
   .ac-logout{margin-top:1rem;padding:16px;border-radius:14px;background:var(--soft);display:flex;justify-content:center}
   .ac-tabs{position:sticky;bottom:0;background:rgba(13,18,36,.8);backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,.08);margin-top:1rem}
   .ac-tabs .bar{display:grid;grid-template-columns:repeat(5,1fr);padding:10px 6px}
   .ac-tab{display:flex;flex-direction:column;align-items:center;gap:4px;color:#a7c1ff;text-decoration:none}
   .ac-tab.active{color:#44ffba}
-  .chip-btn{border:0;background:rgba(255,255,255,.9);color:#0b1020;font-weight:700;border-radius:999px;padding:8px 12px;cursor:pointer}
-  .copy-btn{cursor:pointer}
-  @media (max-width:720px){ .ac-grid{grid-template-columns:repeat(2,1fr)} .ac-quick{grid-template-columns:repeat(4,1fr)} }
+  @media (max-width:720px){ .ac-grid{grid-template-columns:repeat(2,1fr)} }
 </style>
 </head><body>
 

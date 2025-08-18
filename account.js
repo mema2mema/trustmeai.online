@@ -12,8 +12,7 @@
       localStorage.setItem("tmAgentLevel","0");
     }
     if (!localStorage.getItem("tmUID")){
-      // simple 6-digit uid
-      const uid = (Math.floor(Math.random()*900000)+100000).toString();
+      const uid = (Math.floor(Math.random()*900000)+100000).toString(); // 6-digit
       localStorage.setItem("tmUID", uid);
     }
     if (!localStorage.getItem("tmInviteCode")){
@@ -26,7 +25,6 @@
   }
 
   function $id(id){ return document.getElementById(id); }
-
   function copyText(t){ return navigator.clipboard.writeText(t).catch(()=>Promise.resolve(alert(t))); }
 
   document.addEventListener("DOMContentLoaded", function(){
