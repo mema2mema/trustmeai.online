@@ -55,7 +55,7 @@
       );
     document.body.appendChild(root);
 
-    // Close handlers
+    // Close handlers (overlay/cancel)
     document.body.addEventListener("click", function (e) {
       const closeId = e.target.getAttribute && e.target.getAttribute("data-close");
       if (closeId) closeModal(closeId);
@@ -83,14 +83,14 @@
       const email = (document.getElementById("regEmail") || {}).value?.trim();
       const pass  = (document.getElementById("regPass") || {}).value;
       if (!email || !pass) return alert("Enter email and password");
-      // Create account (demo), auto-login:
+      // Create account (demo) and auto-login
       localStorage.setItem("tmUserEmail", email);
       document.dispatchEvent(new CustomEvent("tm-auth-changed"));
       closeModal("registerModal");
     });
   }
 
-  // Public helpers
+  // Public helpers for loader
   window.openModal = function (id) {
     const el = document.getElementById(id);
     if (!el) return;
@@ -110,5 +110,6 @@
     document.dispatchEvent(new CustomEvent("tm-auth-changed"));
   };
 
+  // Build modals after DOM ready
   document.addEventListener("DOMContentLoaded", injectModals);
 })();
