@@ -10,7 +10,7 @@
     .tmv2-head{padding:16px 18px 8px}
     .tmv2-title{font-family:Poppins,Inter,sans-serif;font-weight:800;font-size:26px;margin:0}
     .tmv2-bar{height:6px;background:linear-gradient(90deg,#22c55e,#0ea5e9);border-radius:999px;margin:8px 0 12px;opacity:.9}
-    .tmv2-body{display:grid;grid-template-columns:1.4fr .6fr;gap:14px;padding:12px 18px 18px}
+    .tmv2-body{display:grid;grid-template-columns:1fr;gap:14px;padding:12px 18px 18px}
     .tmv2-left .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0}
     .tmv2-input{flex:1;min-width:260px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;padding:.75rem .9rem;border-radius:10px}
     .tmv2-btn{background:#1f2937;border:1px solid rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:.6rem .85rem;cursor:pointer}
@@ -65,6 +65,7 @@
         <h2 class="tmv2-title">My Team & Referrals</h2>
         <div class="tmv2-bar"></div>
       </div>
+      
       <div class="tmv2-body">
         <div class="tmv2-left">
           <div class="row"><div style="font-weight:700;opacity:.9">My Invite Code:</div><input id="tmv2_code" class="tmv2-input" readonly><button id="tmv2_copy_code" class="tmv2-btn">Copy Code</button></div>
@@ -74,6 +75,7 @@
             <button class="tmv2-btn" id="tmv2_tg">Share Telegram</button>
             <button class="tmv2-btn" id="tmv2_tw">Share X</button>
             <button class="tmv2-btn" id="tmv2_fb">Share Facebook</button>
+            <span style="margin-left:auto;display:flex;align-items:center;gap:10px"><span class="lab" style="opacity:.85">QR</span><span id="tmv2_qr"></span></span>
           </div>
           <div class="tmv2-kpis">
             <div class="tmv2-kpi"><div class="lab">Level 1</div><div id="tmv2_l1" class="val">0</div></div>
@@ -81,6 +83,14 @@
             <div class="tmv2-kpi"><div class="lab">Team Total</div><div id="tmv2_total" class="val">0</div></div>
             <div class="tmv2-kpi"><div class="lab">Commissions</div><div id="tmv2_comm" class="val">0.00 USDT</div></div>
           </div>
+          <div class="tmv2-badges" id="tmv2_badges"></div>
+          <div class="tmv2-foot"><div style="font-weight:700;opacity:.9">Recent Team Earnings</div><button id="tmv2_export" class="tmv2-btn">Export CSV</button></div>
+          <table class="tmv2-table"><thead><tr><th>Time</th><th>Level</th><th>Deposit</th><th>Commission</th></tr></thead><tbody id="tmv2_tbody"><tr><td colspan="4" style="opacity:.7">No records yet</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+
           <div class="tmv2-badges" id="tmv2_badges"></div>
           <div class="tmv2-foot"><div style="font-weight:700;opacity:.9">Recent Team Earnings</div><button id="tmv2_export" class="tmv2-btn">Export CSV</button></div>
           <table class="tmv2-table"><thead><tr><th>Time</th><th>Level</th><th>Deposit</th><th>Commission</th></tr></thead><tbody id="tmv2_tbody"><tr><td colspan="4" style="opacity:.7">No records yet</td></tr></tbody></table>
