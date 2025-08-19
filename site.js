@@ -1,5 +1,6 @@
 
 // Utilities
+const COMM = { L1: 0.10, L2: 0.05 }; // demo commission rates
 const $ = (sel,ctx=document)=>ctx.querySelector(sel);
 const $$ = (sel,ctx=document)=>Array.from(ctx.querySelectorAll(sel));
 const fmt = n => Number(n).toLocaleString(undefined,{minimumFractionDigits:2, maximumFractionDigits:2});

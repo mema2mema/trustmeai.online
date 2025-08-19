@@ -93,11 +93,17 @@
     });
 
     // Demo stats (can hook to backend later)
-    document.getElementById("lvl1").textContent = localStorage.getItem("tmRefL1") || "0";
-    document.getElementById("lvl2").textContent = localStorage.getItem("tmRefL2") || "0";
-    const total = (parseInt(localStorage.getItem("tmRefL1")||0) + parseInt(localStorage.getItem("tmRefL2")||0));
+    var myCode = localStorage.getItem("tmInviteCode");
+    var l1c = myCode ? (localStorage.getItem("countL1_"+myCode) || localStorage.getItem("tmRefL1") || "0") : (localStorage.getItem("tmRefL1") || "0");
+    document.getElementById("lvl1").textContent = l1c;
+    var myCode2 = localStorage.getItem("tmInviteCode");
+    var l2c = myCode2 ? (localStorage.getItem("countL2_"+myCode2) || localStorage.getItem("tmRefL2") || "0") : (localStorage.getItem("tmRefL2") || "0");
+    document.getElementById("lvl2").textContent = l2c;
+    const total = (parseInt(document.getElementById("lvl1").textContent||"0",10) + parseInt(document.getElementById("lvl2").textContent||"0",10));
     document.getElementById("totalTeam").textContent = total;
-    document.getElementById("comm").textContent = (total*5).toFixed(2) + " USDT"; // demo formula
+    var myCode = localStorage.getItem('tmInviteCode');
+    var earned = myCode ? parseFloat(localStorage.getItem('comm_'+myCode)||'0') : 0;
+    document.getElementById('comm').textContent = earned.toFixed(2) + ' USDT';
   });
 </script>
 </body>
