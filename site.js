@@ -145,3 +145,30 @@ function drawPseudoQR(canvas, text){
   loadHist();
 })();
 
+
+
+// --- Auto language (EN/DA) for common labels ---
+(function(){
+  try {
+    var lang = (navigator.language || '').toLowerCase();
+    var isDA = lang.startsWith('da');
+    // Map of [selectorText, en, da]
+    var L = [
+      ['a[href="deposit.html"]', 'Deposit', 'Indbetal'],
+      ['a[href="withdraw.html"]', 'Withdraw', 'Hæv'],
+      ['a[href="strategy.html"]', 'Strategy', 'Strategi'],
+      ['a[href="assets.html"]', 'Assets', 'Aktiver'],
+      ['a[href="index.html"]', 'Home', 'Start'],
+      ['h1', 'Deposit (USDT)', 'Indbetal (USDT)'],
+      ['h1', 'Withdraw (USDT)', 'Hæv (USDT)'],
+    ];
+    if (isDA) {
+      L.forEach(function(row){
+        var sel = row[0], en = row[1], da = row[2];
+        document.querySelectorAll(sel).forEach(function(el){
+          if ((el.textContent||'').trim() === en) el.textContent = da;
+        });
+      });
+    }
+  } catch(e) {}
+})();
