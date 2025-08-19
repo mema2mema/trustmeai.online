@@ -1,55 +1,108 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Deposit — TrustMe AI</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link href="style.css" rel="stylesheet">
-  <style>
-    body{background:#0a0f1a;color:#e6f1ff;font-family:sans-serif}
-    .container{max-width:600px;margin:40px auto;padding:0 16px;text-align:center}
-    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:20px}
-    .btn{padding:.6rem .9rem;border-radius:12px;border:1px solid rgba(255,255,255,.2);
-      background:#1a2b22;color:#d7ffe6;cursor:pointer}
-    code{user-select:all}
-    img.qr{width:200px;height:200px;margin:20px auto;display:block}
-  </style>
-</head>
-<body>
-<main class="container">
-  <h1>Deposit (USDT-TRC20)</h1>
-  <div class="card">
-    <button id="btnGet" class="btn">Get Deposit Address</button>
-    <div id="wrap" style="display:none">
-      <img id="qr" class="qr" alt="QR">
-      <p>Address:</p>
-      <code id="addr"></code>
-    </div>
-    <div style="margin-top:20px">
-      <input id="amt" type="number" min="10" placeholder="Amount" />
-      <button id="btnTop" class="btn">Demo Top-up</button>
-    </div>
-    <p id="msg"></p>
+<!DOCTYPE html><html><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deposit — TrustMe AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head><body>
+
+<header>
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
+    <div class="brand"><div class="brand-badge"></div> <div style="letter-spacing:.4px">TrustMe AI</div></div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="strategy.html">Strategy</a>
+      <a href="assets.html">Assets</a>
+      <a href="deposit.html" class="active">Deposit</a>
+      <a href="withdraw.html">Withdraw</a>
+    </nav>
+    <div id="authArea"></div>
+  </div>
+</header>
+
+<script src="auth-loader.js" defer></script>
+<script src="auth-modals.js" defer></script>
+<script src="nav-active.js"></script>
+
+
+<main class="container section">
+  <h1 style="font-family:Poppins,Inter,sans-serif;font-weight:700">Deposit (USDT)</h1>
+  <div class="grid grid-2" style="margin-top:1rem">
+    <section class="card">
+      <div class="stripe"></div>
+      <label class="small">Network</label>
+      <select id="walletNetwork" class="input" style="margin-top:.25rem">
+        <option value="TRC20">TRC20</option>
+        <option value="BEP20">BEP20</option>
+        <option value="ERC20">ERC20</option>
+      </select>
+      <div style="margin-top:.6rem;display:flex;gap:.5rem">
+        <button id="btnGenerateDeposit" class="btn">Generate Deposit</button>
+        <button id="btnCheckDeposit" class="btn-ghost">Check</button>
+      </div>
+      <div class="card" style="background:var(--soft);margin-top:.8rem">
+        <div style="font-weight:800;color:#EAF2FF;margin-bottom:.25rem">Demo Controls</div>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap">
+          <label class="small">Amount
+            <select id="demoAmount" class="input" style="width:120px;margin-top:.25rem">
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100" selected>100</option>
+            </select>
+          </label>
+          <label class="small">Delay
+            <select id="demoDelay" class="input" style="width:120px;margin-top:.25rem">
+              <option value="5" selected>5s</option>
+              <option value="60">60s</option>
+              <option value="120">120s</option>
+            </select>
+          </label>
+        </div>
+        <div id="demoStatus" class="small" style="margin-top:.25rem">No demo deposit scheduled.</div>
+      </div>
+      <div style="margin-top:.8rem">
+        <div class="small">Your address</div>
+        <div style="display:flex;gap:.5rem;margin-top:.25rem">
+          <input id="walletAddress" class="input" placeholder="—" readonly>
+          <button id="walletCopyBtn" class="btn-ghost">Copy</button>
+        </div>
+        <div style="margin-top:.5rem"><div class="small" style="margin-bottom:.25rem">QR Code</div>
+          <div id="walletQr" class="card" style="display:inline-block;padding:.6rem"></div>
+        </div>
+      </div>
+    </section>
+    <section class="card">
+      <div class="stripe" style="opacity:.5"></div>
+      <h2 style="font-family:Poppins,Inter,sans-serif;font-weight:700">History</h2>
+      <table id="historyTable" class="table"><thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead><tbody></tbody></table>
+    </section>
   </div>
 </main>
 
-<script>
-const API="http://localhost:8080";
-async function getAddr(){
-  const r=await fetch(API+"/wallet/deposit-address",{credentials:'include'}).then(r=>r.json());
-  document.getElementById('addr').textContent=r.address;
-  document.getElementById('qr').src=r.qr;
-  document.getElementById('wrap').style.display="block";
-}
-async function topup(){
-  const amt=Number(document.getElementById('amt').value||0);
-  if(amt<=0)return alert("Enter valid amount");
-  const r=await fetch(API+"/wallet/mock-credit",{method:"POST",credentials:'include',
-    headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:amt})}).then(r=>r.json());
-  document.getElementById('msg').textContent="Balance updated. New available: "+r.balance_available;
-}
-document.getElementById('btnGet').onclick=getAddr;
-document.getElementById('btnTop').onclick=topup;
-</script>
-</body>
-</html>
+<footer class="footer">
+  <div class="container" style="text-align:center">
+    <div class="brand" style="justify-content:center">
+      <div class="brand-badge"></div> <div>TrustMe AI</div>
+    </div>
+    <div class="nav" style="justify-content:center;margin-top:8px">
+      <a href="index.html">Home</a>
+      <a href="strategy.html">Strategy</a>
+      <a href="assets.html">Assets</a>
+      <a href="deposit.html">Deposit</a>
+      <a href="withdraw.html">Withdraw</a>
+    </div>
+
+    <!-- 👇 Add this -->
+    <div class="small" style="margin-top:10px">
+      Support: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a>
+      &nbsp;•&nbsp;
+      Telegram: <a href="#" target="_blank" rel="noopener">TrustMe AI Channel</a>
+    </div>
+
+    <div class="small" style="margin-top:10px">© TrustMe AI 2025</div>
+  </div>
+</footer>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="script.js"></script>
+<script>bindWalletDemo();</script>
+</body></html>
