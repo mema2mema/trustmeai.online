@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Feedback — TrustMe AI</title>
+  <title>Rules — TrustMe AI</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <style>
+    .page-wrap { max-width: 800px; margin: 0 auto; padding: 1rem; }
+    h1 { font-family: Poppins, Inter, sans-serif; font-weight: 700; margin-bottom: .8rem; }
+    p { margin: .6rem 0; line-height: 1.6; }
+  </style>
 </head>
 <body>
 
@@ -18,6 +23,9 @@
       <a href="assets.html">Assets</a>
       <a href="deposit.html">Deposit</a>
       <a href="withdraw.html">Withdraw</a>
+      <a href="help.html">Help</a>
+      <a href="rules.html">Rules</a>
+      <a href="feedback.html">Feedback</a>
     </nav>
     <div id="authArea"></div>
   </div>
@@ -26,15 +34,20 @@
 <script src="auth-modals.js" defer></script>
 <script src="nav-active.js"></script>
 
-<main class="container section">
-  <h1 style="font-family:Poppins,Inter,sans-serif;font-weight:700">Feedback</h1>
-  <div class="card" style="margin-top:1rem;padding:1rem">
-    <p>We’d love to hear your thoughts! Please share your feedback or suggestions below:</p>
-    <form id="feedbackForm" style="margin-top:1rem">
-      <textarea id="feedbackText" class="input" rows="5" placeholder="Your feedback..." style="width:100%;"></textarea>
-      <button type="submit" class="btn" style="margin-top:.8rem">Submit Feedback</button>
-    </form>
-  </div>
+
+<main class="container section page-wrap">
+  <h1>Platform Rules</h1>
+  <p>Welcome to <strong>TrustMe AI</strong>. Please read the following rules carefully to ensure smooth usage of the platform:</p>
+
+  <ul>
+    <li>Respect all users and maintain professionalism at all times.</li>
+    <li>Do not attempt to exploit system vulnerabilities.</li>
+    <li>Use only genuine referral codes — abuse may lead to suspension.</li>
+    <li>Withdrawals and deposits must follow the stated guidelines.</li>
+    <li>Any fraudulent activity will result in account termination.</li>
+  </ul>
+
+  <p>These rules are subject to updates. Always check this page for the latest version.</p>
 </main>
 
 <footer class="footer">
@@ -46,20 +59,19 @@
       <a href="assets.html">Assets</a>
       <a href="deposit.html">Deposit</a>
       <a href="withdraw.html">Withdraw</a>
+      <a href="help.html">Help</a>
+      <a href="rules.html">Rules</a>
+      <a href="feedback.html">Feedback</a>
+    </div>
+    <div class="small" style="margin-top:10px">
+      Support: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a>
+      &nbsp;•&nbsp;
+      Telegram: <a href="#" target="_blank" rel="noopener">TrustMe AI Channel</a>
     </div>
     <div class="small" style="margin-top:10px">© TrustMe AI 2025</div>
   </div>
 </footer>
 
-<script>
-document.getElementById("feedbackForm")?.addEventListener("submit", function(e){
-  e.preventDefault();
-  const txt = document.getElementById("feedbackText").value.trim();
-  if(!txt) return alert("Please enter some feedback first!");
-  alert("Thank you for your feedback!");
-  document.getElementById("feedbackText").value = "";
-});
-</script>
-
+<script src="nav-active.js"></script>
 </body>
 </html>
