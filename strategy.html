@@ -1,92 +1,89 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Strategy — TrustMe AI</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link href="style.css" rel="stylesheet">
-  <style>
-    body{background:#0a0f1a;color:#e6f1ff;font-family:sans-serif}
-    .container{max-width:900px;margin:40px auto;padding:0 16px}
-    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
-      border-radius:18px;padding:20px;margin-bottom:20px}
-    .btn{padding:.6rem .9rem;border-radius:12px;border:1px solid rgba(255,255,255,.2);
-      background:#1a2b22;color:#d7ffe6;cursor:pointer}
-    input,select{background:transparent;border:1px solid rgba(255,255,255,.2);color:#e6f1ff;
-      border-radius:10px;padding:.55rem .7rem}
-    table{width:100%;border-collapse:collapse}
-    th,td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.15);text-align:left}
-    header.nav{position:sticky;top:0;background:rgba(6,10,20,.7);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.12)}
-    header.nav .wrap{max-width:900px;margin:0 auto;padding:10px 16px;display:flex;align-items:center}
-    .brand{color:#fff;font-weight:700;text-decoration:none;margin-right:auto}
-  </style>
-</head>
-<body>
-<header class="nav">
-  <div class="wrap">
-    <a class="brand" href="index.html">TrustMe AI</a>
-    <a href="account.html" class="btn" style="margin-left:auto">Account</a>
+<!DOCTYPE html><html><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strategy — TrustMe AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head><body>
+
+<header>
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
+    <div class="brand"><div class="brand-badge"></div> <div style="letter-spacing:.4px">TrustMe AI</div></div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="strategy.html" class="active">Strategy</a>
+      <a href="assets.html">Assets</a>
+      <a href="deposit.html">Deposit</a>
+      <a href="withdraw.html">Withdraw</a>
+    </nav>
+    <div id="authArea"></div>
   </div>
 </header>
 
-<main class="container">
-  <h1>Activate Strategy</h1>
+<script src="auth-loader.js" defer></script>
+<script src="auth-modals.js" defer></script>
+<script src="nav-active.js"></script>
 
-  <div class="card">
-    <label>Tier:
-      <select id="tier">
-        <option value="Basic">Basic</option>
-        <option value="Pro">Pro</option>
-        <option value="RedHawk">RedHawk</option>
-      </select>
-    </label>
-    <label>Amount:
-      <input id="amt" type="number" min="10" step="1" />
-    </label>
-    <label>Days:
-      <input id="days" type="number" min="1" max="365" value="30" />
-    </label>
-    <button id="btnActivate" class="btn">Activate</button>
-    <p id="msg"></p>
-  </div>
 
-  <div class="card">
-    <h3>Active Plans</h3>
-    <table>
-      <thead><tr><th>Tier</th><th>Amount</th><th>Daily %</th><th>Days</th><th>Started</th></tr></thead>
-      <tbody id="plansBody"><tr><td colspan="5">Loading…</td></tr></tbody>
-    </table>
+<main class="container section">
+  <h1 style="font-family:Poppins,Inter,sans-serif;font-weight:700">Strategy Plans (T1–T4)</h1>
+  <div class="card" style="margin-top:.6rem"><div class="stripe"></div><div class="kpi"><div class="label">Available Balance</div><div class="val" id="walletAvailable">0.00</div></div></div>
+  <div class="grid grid-3" style="margin-top:1rem">
+    <div class="card">
+      <div class="stripe"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><div class="text-xl" style="font-weight:800">T1</div><span class="badge">0.5%–1.0% / day</span></div>
+      <div class="small" style="margin-top:.25rem">$50–$999 USDT</div>
+      <button class="btn" style="width:100%;margin-top:.8rem" data-tier="T1" data-min="50" data-max="999">Activate Plan</button>
+    </div>
+    <div class="card">
+      <div class="stripe"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><div class="text-xl" style="font-weight:800">T2</div><span class="badge">1.0%–1.5% / day</span></div>
+      <div class="small" style="margin-top:.25rem">$1,000–$9,999 USDT</div>
+      <button class="btn" style="width:100%;margin-top:.8rem" data-tier="T2" data-min="1000" data-max="9999">Activate Plan</button>
+    </div>
+    <div class="card">
+      <div class="stripe"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><div class="text-xl" style="font-weight:800">T3</div><span class="badge">1.5%–2.0% / day</span></div>
+      <div class="small" style="margin-top:.25rem">$10,000–$19,999 USDT</div>
+      <button class="btn" style="width:100%;margin-top:.8rem" data-tier="T3" data-min="10000" data-max="19999">Activate Plan</button>
+    </div>
+    <div class="card" style="grid-column:1 / -1">
+      <div class="stripe"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><div class="text-xl" style="font-weight:800">T4</div><span class="badge">2.0%–3.0% / day</span></div>
+      <div class="small" style="margin-top:.25rem">$20,000–$100,000 USDT</div>
+      <button class="btn" style="width:100%;margin-top:.8rem" data-tier="T4" data-min="20000" data-max="100000">Activate Plan</button>
+    </div>
   </div>
+  <section class="card" style="margin-top:1rem">
+    <div class="stripe" style="opacity:.5"></div>
+    <h2 style="font-family:Poppins,Inter,sans-serif;font-weight:700">History</h2>
+    <table id="historyTable" class="table"><thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead><tbody></tbody></table>
+  </section>
 </main>
 
-<script>
-const API="http://localhost:8080";
+<footer class="footer">
+  <div class="container" style="text-align:center">
+    <div class="brand" style="justify-content:center">
+      <div class="brand-badge"></div> <div>TrustMe AI</div>
+    </div>
+    <div class="nav" style="justify-content:center;margin-top:8px">
+      <a href="index.html">Home</a>
+      <a href="strategy.html">Strategy</a>
+      <a href="assets.html">Assets</a>
+      <a href="deposit.html">Deposit</a>
+      <a href="withdraw.html">Withdraw</a>
+    </div>
 
-async function activate(){
-  const tier=document.getElementById('tier').value;
-  const amount=Number(document.getElementById('amt').value||0);
-  const days=Number(document.getElementById('days').value||0);
-  if(amount<=0)return alert("Enter valid amount");
-  const res=await fetch(API+"/plans/activate",{
-    method:"POST",headers:{'Content-Type':'application/json'},credentials:'include',
-    body:JSON.stringify({tier,amount,days})
-  }).then(r=>r.json());
-  document.getElementById('msg').textContent="Plan activated!";
-  loadPlans();
-}
+    <!-- 👇 Add this -->
+    <div class="small" style="margin-top:10px">
+      Support: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a>
+      &nbsp;•&nbsp;
+      Telegram: <a href="#" target="_blank" rel="noopener">TrustMe AI Channel</a>
+    </div>
 
-async function loadPlans(){
-  const data=await fetch(API+"/plans/positions",{credentials:'include'}).then(r=>r.json());
-  const body=document.getElementById('plansBody'); body.innerHTML="";
-  if(!data.positions||data.positions.length===0){body.innerHTML="<tr><td colspan=5>No active plans.</td></tr>";return;}
-  for(const p of data.positions){
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${p.tier}</td><td>${p.amount}</td><td>${(p.rate_daily*100).toFixed(2)}%</td><td>${p.days}</td><td>${new Date(p.created_at).toLocaleDateString()}</td>`;
-    body.appendChild(tr);
-  }
-}
-document.getElementById('btnActivate').onclick=activate;
-loadPlans();
-</script>
-</body>
-</html>
+    <div class="small" style="margin-top:10px">© TrustMe AI 2025</div>
+  </div>
+</footer>
+
+
+<script src="script.js"></script>
+<script>bindActivatePlan();</script>
+</body></html>
