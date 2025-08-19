@@ -43,6 +43,24 @@
 }
 </style>
 
+
+<style>
+.team-tools{display:flex;gap:.5rem;flex-wrap:wrap;margin:.5rem 0}
+.btn-mini{background:var(--soft,#24354a);border:0;color:#fff;padding:.4rem .6rem;border-radius:6px;cursor:pointer;font-size:.85rem}
+.btn-mini:active{transform:translateY(1px)}
+.share-wrap{display:flex;gap:.5rem;flex-wrap:wrap;margin:.5rem 0}
+.qr-box{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.badges{display:flex;gap:.5rem;flex-wrap:wrap;margin:.5rem 0}
+.badge{padding:.25rem .6rem;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);font-size:.8rem}
+.table-compact{width:100%;border-collapse:collapse;margin-top:.5rem}
+.table-compact th,.table-compact td{border-bottom:1px solid rgba(255,255,255,.08);padding:.4rem .5rem;text-align:left;font-size:.9rem}
+.table-compact th{opacity:.85}
+.counter{font-weight:700}
+@media(max-width:640px){ .qr-box{flex-direction:column;align-items:flex-start} }
+#toast {visibility:hidden;min-width: 220px;margin-left:-110px;background:#111;color:#fff;text-align:center;border-radius:10px;padding:10px 12px;position:fixed;z-index:9999;left:50%;bottom:28px;font-size:14px;opacity:0;transition:opacity .35s,bottom .35s,visibility .35s}
+#toast.show{visibility:visible;opacity:1;bottom:46px}
+</style>
+
 </head>
 <body>
 
@@ -175,5 +193,136 @@ function copyInviteLink(){
 
 </script>
 <div id="toast">Invite link copied!</div>
+<script src="qrcode.min.js"></script>
+
+<script>
+function toast(msg){
+  var t = document.getElementById("toast");
+  t.textContent = msg || "Copied!";
+  t.className = "show";
+  setTimeout(function(){ t.className = t.className.replace("show",""); }, 1800);
+}
+function copyInviteLink(){
+  var inp = document.getElementById('inviteLink');
+  inp.select(); inp.setSelectionRange(0, 99999);
+  document.execCommand('copy');
+  toast('Invite link copied');
+}
+function copyInviteCode(){
+  var inp = document.getElementById('inviteCode');
+  inp.select(); inp.setSelectionRange(0, 99999);
+  document.execCommand('copy');
+  toast('Invite code copied');
+}
+function shareText(){
+  var link = (document.getElementById('inviteLink').value||'').trim();
+  return 'Join me on TrustMe AI 🚀 Earn profits with me 👉 ' + link;
+}
+function shareWhatsApp(){ window.open('https://wa.me/?text=' + encodeURIComponent(shareText()), '_blank'); }
+function shareTelegram(){ window.open('https://t.me/share/url?url=' + encodeURIComponent(document.getElementById('inviteLink').value) + '&text=' + encodeURIComponent(shareText()), '_blank'); }
+function shareTwitter(){ window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText()), '_blank'); }
+function shareFacebook(){ window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(document.getElementById('inviteLink').value), '_blank'); }
+
+function countUp(el, target, ms){
+  var t0 = 0, steps = Math.max(20, Math.min(80, Math.floor(ms/20)));
+  var step = target/steps;
+  var i = 0;
+  var timer = setInterval(function(){
+    i++; t0 += step;
+    if(i>=steps){ t0 = target; clearInterval(timer); }
+    el.textContent = String(Math.floor(t0));
+  }, 20);
+}
+
+function badgeFor(l1, l2, comm){
+  var total = l1 + l2;
+  if (comm >= 1000 || total >= 200) return ['Master', '🔥'];
+  if (comm >= 200  || total >= 50)  return ['Pro', '🚀'];
+  if (comm >= 50   || total >= 10)  return ['Rookie', '🎯'];
+  return ['New', '✨'];
+}
+
+function ensureInviteData(){
+  var me = localStorage.getItem('tmInviteCode');
+  if(!me){
+    me = "TM" + Math.random().toString(36).slice(2,8).toUpperCase();
+    localStorage.setItem('tmInviteCode', me);
+  }
+  var link = location.origin + location.pathname.replace(/\/[^\/]*$/, "/index.html") + "?ref=" + encodeURIComponent(me);
+  if (localStorage.getItem("tmRefBy")) link += "&u2=" + encodeURIComponent(localStorage.getItem("tmRefBy"));
+  var codeEl = document.getElementById("inviteCode");
+  var linkEl = document.getElementById("inviteLink");
+  if (codeEl) codeEl.value = me;
+  if (linkEl) linkEl.value = link;
+  return {me, link};
+}
+
+function renderQR(text){
+  try{
+    var el = document.getElementById("inviteQr");
+    if (!el) return;
+    el.innerHTML = "";
+    new QRCode(el, {text: text, width: 120, height: 120, correctLevel: QRCode.CorrectLevel.H});
+  }catch(e){}
+}
+
+// Earnings table: read from localStorage ref logs OR infer minimal demo from counters
+function loadEarnings(myCode){
+  var key = 'refLogs_' + myCode;
+  var rows = [];
+  try { rows = JSON.parse(localStorage.getItem(key)||'[]') } catch(e){ rows = [] }
+  var tbody = document.querySelector('#earnTbl tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  rows.slice(-10).reverse().forEach(function(r){
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td>'+ (r.time||'') +'</td><td>'+ (r.level||'') +'</td><td>'+ Number(r.amount||0).toFixed(2) +'</td><td>'+ Number(r.commission||0).toFixed(2) +'</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function exportTeamCSV(){
+  try {
+    var me = localStorage.getItem('tmInviteCode')||'ME';
+    var key = 'refLogs_' + me;
+    var rows = [];
+    try { rows = JSON.parse(localStorage.getItem(key)||'[]') } catch(e){ rows = [] }
+    var csv = 'Time,Level,Deposit,Commission\n';
+    rows.forEach(function(r){
+      csv += [r.time, r.level, r.amount, r.commission].join(',') + '\n';
+    });
+    var blob = new Blob([csv], {type:'text/csv'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'team_earnings.csv';
+    a.click();
+  } catch(e){ console.error(e); }
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  var data = ensureInviteData();
+  renderQR(data.link);
+
+  // Counters + badge
+  var l1 = parseInt(localStorage.getItem('countL1_'+data.me) || localStorage.getItem('tmRefL1') || '0', 10);
+  var l2 = parseInt(localStorage.getItem('countL2_'+data.me) || localStorage.getItem('tmRefL2') || '0', 10);
+  var comm = parseFloat(localStorage.getItem('comm_'+data.me) || '0');
+  var lvl1El = document.getElementById('lvl1'), lvl2El = document.getElementById('lvl2'), totalEl = document.getElementById('totalTeam'), commEl = document.getElementById('comm');
+  if (lvl1El) countUp(lvl1El, l1, 600);
+  if (lvl2El) countUp(lvl2El, l2, 600);
+  if (totalEl) countUp(totalEl, l1+l2, 700);
+  if (commEl) commEl.textContent = comm.toFixed(2) + ' USDT';
+
+  var bd = badgeFor(l1,l2,comm);
+  var bWrap = document.getElementById('badgeWrap');
+  if (bWrap) {
+    bWrap.innerHTML = '<span class="badge">'+bd[1]+' '+bd[0]+'</span>';
+  }
+
+  // Load earnings table
+  loadEarnings(data.me);
+});
+</script>
+
 </body>
 </html>
