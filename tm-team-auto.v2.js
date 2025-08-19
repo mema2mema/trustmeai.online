@@ -5,21 +5,21 @@
     if (document.getElementById('tm_team_v2_css')) return;
     var s=document.createElement('style'); s.id='tm_team_v2_css';
     s.textContent = `
-    .tmv2-wrap{max-width:1100px;margin:28px auto;padding:0 16px}
+    .tmv2-wrap{clear:both;max-width:1200px;margin:36px auto;padding:0 16px}
     .tmv2-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.25);overflow:hidden}
     .tmv2-head{padding:16px 18px 8px}
     .tmv2-title{font-family:Poppins,Inter,sans-serif;font-weight:800;font-size:26px;margin:0}
     .tmv2-bar{height:6px;background:linear-gradient(90deg,#22c55e,#0ea5e9);border-radius:999px;margin:8px 0 12px;opacity:.9}
-    .tmv2-body{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;padding:12px 18px 18px}
+    .tmv2-body{display:grid;grid-template-columns:1.4fr .6fr;gap:14px;padding:12px 18px 18px}
     .tmv2-left .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0}
-    .tmv2-input{flex:1;min-width:260px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;padding:.65rem .75rem;border-radius:10px}
-    .tmv2-btn{background:#1f2937;border:1px solid rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:.55rem .75rem;cursor:pointer}
+    .tmv2-input{flex:1;min-width:260px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;padding:.75rem .9rem;border-radius:10px}
+    .tmv2-btn{background:#1f2937;border:1px solid rgba(255,255,255,.12);color:#fff;border-radius:10px;padding:.6rem .85rem;cursor:pointer}
     .tmv2-btn:active{transform:translateY(1px)}
     .tmv2-share{display:flex;gap:8px;flex-wrap:wrap}
     .tmv2-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:8px 0}
     .tmv2-kpi{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);padding:.75rem .9rem;border-radius:12px}
     .tmv2-kpi .lab{font-size:.8rem;opacity:.8}
-    .tmv2-kpi .val{font-size:1.25rem;font-weight:800}
+    .tmv2-kpi .val{font-size:1.35rem;font-weight:800}
     .tmv2-badges{margin:6px 0 4px}
     .tmv2-badge{padding:.3rem .7rem;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);font-size:.9rem}
     .tmv2-right{display:flex;align-items:center;justify-content:center}
@@ -56,7 +56,7 @@
   function injectScript(src, cb){ var s=document.createElement('script'); s.src=src; s.onload=cb||function(){}; document.head.appendChild(s); }
   function build(){
     injectCSS();
-    var anchor = document.querySelector('main, .container, .section, section') || document.body;
+    var anchor = document.querySelector('main') || document.body;
     var wrap = document.createElement('div'); wrap.className='tmv2-wrap';
     var card = document.createElement('div'); card.className='tmv2-card'; wrap.appendChild(card);
     anchor.insertBefore(wrap, anchor.firstChild);
