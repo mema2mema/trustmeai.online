@@ -1,27 +1,4 @@
 
-
-// ---- Referral commission helpers (demo, localStorage-simulated) ----
-function tm_awardCommission(amount){
-  try {
-    var l1 = localStorage.getItem('tmRefBy');
-    var l2 = localStorage.getItem('tmRefBy2'); // optional
-
-    if (l1) {
-      var k1 = 'comm_' + l1;
-      var v1 = parseFloat(localStorage.getItem(k1)||'0') + (amount * (window.COMM ? COMM.L1 : 0.10));
-      localStorage.setItem(k1, String(v1));
-    }
-    if (l2) {
-      var k2 = 'comm_' + l2;
-      var v2 = parseFloat(localStorage.getItem(k2)||'0') + (amount * (window.COMM ? COMM.L2 : 0.05));
-      localStorage.setItem(k2, String(v2));
-      // increment L2 count on upline
-      var c2k = 'countL2_' + l2;
-      var c2v = parseInt(localStorage.getItem(c2k)||'0',10) + 1;
-      localStorage.setItem(c2k, String(c2v));
-    }
-  } catch(e){}
-}
 // ---- Wallet helpers (localStorage-based) ----
 function tm_getTxs(){ try{return JSON.parse(localStorage.getItem('tm_tx')||'[]')}catch(e){return[]} }
 function tm_setTxs(arr){ try{localStorage.setItem('tm_tx', JSON.stringify(arr||[]))}catch(e){} }
@@ -156,7 +133,6 @@ function bindActivatePlan(){
         if(tbody){
           const tr1 = document.createElement('tr');
           tr1.innerHTML = `<td>${tm_now()}</td><td>deposit</td><td>${amt.toFixed(2)}</td><td>0.00</td><td>confirmed</td>`;
-          try{ tm_awardCommission(amt); }catch(e){}
           tbody.prepend(tr1);
           const tr2 = document.createElement('tr');
           tr2.innerHTML = `<td>${tm_now()}</td><td>plan-${tier}</td><td>${amt.toFixed(2)}</td><td>0.00</td><td>active</td>`;
@@ -169,7 +145,3 @@ function bindActivatePlan(){
   });
 }
 
-
-
-// Wrapper to record deposit and award commission
-function tm_recordDeposit(amount){ try{ tm_awardCommission(amount); }catch(e){} }

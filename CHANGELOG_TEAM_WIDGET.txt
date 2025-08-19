@@ -1,4 +1,0 @@
-Changelog — Team Widget
-- Adds self-contained referral block (copy code/link, share buttons, QR, counters, commission, earnings table, export CSV, badge)
-- Works even if your current team page layout is different.
-- Uses the same localStorage keys as previous upgrades (tmInviteCode, tmRefBy, comm_<code>, countL1_/countL2_)
