@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,14 +9,13 @@
   <link rel="stylesheet" href="style.css">
   <style>
     .team-wrap{max-width:900px;margin:2rem auto}
-    .team-card{padding:1.5rem}
+    .team-card{padding:1rem}
     .invite-box{background:rgba(255,255,255,.04);padding:1rem;border-radius:8px;margin:.8rem 0}
     .copy-btn{cursor:pointer;border:0;background:var(--soft);color:#fff;padding:.35rem .75rem;border-radius:6px;font-size:.85rem}
-    #inviteQr{margin-top:1rem;text-align:center}
+    .qr-box{margin-top:1rem;text-align:center}
   </style>
 </head>
 <body>
-
 <header>
   <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
     <div class="brand"><div class="brand-badge"></div> <div style="letter-spacing:.4px">TrustMe AI</div></div>
@@ -41,9 +41,6 @@
         <input id="inviteLink" class="input" style="width:100%" readonly>
       </div>
       <button class="copy-btn" id="copyInvite" style="margin-top:.5rem">Copy Invite Link</button>
-
-      <!-- QR Placeholder -->
-      <div id="inviteQr"></div>
     </div>
 
     <h2 class="pi-section-title">Referral Stats</h2>
@@ -51,6 +48,10 @@
     <div class="team-row"><div>Level 2 Referrals</div><div id="lvl2">0</div></div>
     <div class="team-row"><div>Total Team Size</div><div id="totalTeam">0</div></div>
     <div class="team-row"><div>Total Commissions</div><div id="comm">0 USDT</div></div>
+
+    <div class="qr-box">
+      <div id="inviteQr"></div>
+    </div>
   </section>
 </main>
 
@@ -74,7 +75,37 @@
 </footer>
 
 <script src="qrcode.min.js"></script>
-<script src="tm-team-auto.v2.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const email = localStorage.getItem("tmUserEmail") || "";
+  const invite = localStorage.getItem("tmInviteCode") || email.split("@")[0] || "TM" + Math.random().toString(36).slice(2,8).toUpperCase();
+  localStorage.setItem("tmInviteCode", invite);
+  document.getElementById("inviteCode").textContent = invite;
+  const link = location.origin + "/index.html?ref=" + encodeURIComponent(invite);
+  document.getElementById("inviteLink").value = link;
 
+  document.getElementById("copyInvite").addEventListener("click", async () => {
+    await navigator.clipboard.writeText(link);
+    alert("Invite link copied!");
+  });
+
+  // Stats demo
+  var l1 = parseInt(localStorage.getItem("tmRefL1")||"0",10);
+  var l2 = parseInt(localStorage.getItem("tmRefL2")||"0",10);
+  document.getElementById("lvl1").textContent = l1;
+  document.getElementById("lvl2").textContent = l2;
+  document.getElementById("totalTeam").textContent = l1+l2;
+  var comm = parseFloat(localStorage.getItem("comm_"+invite)||"0");
+  document.getElementById("comm").textContent = comm.toFixed(2) + " USDT";
+
+  // QR render
+  new QRCode(document.getElementById("inviteQr"), {
+    text: link,
+    width: 120,
+    height: 120,
+    correctLevel: QRCode.CorrectLevel.H
+  });
+});
+</script>
 </body>
 </html>
