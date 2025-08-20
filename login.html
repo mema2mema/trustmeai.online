@@ -1,2 +1,25 @@
-<!-- login.html -->
-<button class="btn-ghost" id="openLogin" type="button">Log In</button>
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Login — TrustMe AI</title>
+<link rel="stylesheet" href="style.css"/><style>.auth-wrap{max-width:520px;margin:40px auto}</style>
+</head><body>
+<header><div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
+<div class="brand"><div class="brand-badge"></div><div style="letter-spacing:.4px">TrustMe AI</div></div>
+<nav class="nav"><a href="index.html">Home</a><a href="strategy.html">Strategy</a><a href="assets.html">Assets</a><a href="deposit.html">Deposit</a><a href="withdraw.html">Withdraw</a></nav>
+<div id="authArea" class="auth-area"></div></div></header>
+<main class="container auth-wrap"><div class="card"><div class="stripe"></div>
+<h1>Login</h1><label class="small">Email</label><input id="loginEmail" class="input" type="email" placeholder="you@example.com">
+<label class="small" style="margin-top:.6rem">Password</label><input id="loginPass" class="input" type="password" placeholder="••••••••">
+<button id="loginBtn" class="btn" style="width:100%;margin-top:.9rem">Sign in</button>
+<div class="small" style="margin-top:.6rem">No account? <a href="register.html">Register</a></div></div></main>
+<script src="script.js"></script><script>
+document.addEventListener('DOMContentLoaded', ()=>{
+ document.getElementById('loginBtn').addEventListener('click', async ()=>{
+  const email=(document.getElementById('loginEmail').value||'').trim().toLowerCase();
+  const pass=document.getElementById('loginPass').value||'';
+  const ok=await tm_login(email,pass);
+  if(!ok){ alert('Invalid email or password.'); return; }
+  const next=new URLSearchParams(location.search).get('next')||'index.html'; location.href=next;
+ });
+});
+</script></body></html>
