@@ -1,0 +1,15 @@
+
+/* general purpose modal (deposit/withdraw/plan/asset) */
+.tm2-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:900}
+.tm2-overlay.show{display:flex;animation:fade .12s ease-out}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.tm2-modal{width:min(560px,92vw);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:18px;color:#e6f1ff;box-shadow:0 10px 50px rgba(0,0,0,.5);overflow:hidden}
+.tm2-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.12)}
+.tm2-close{background:transparent;border:none;color:#e6f1ff;font-size:20px;cursor:pointer;opacity:.85}
+.tm2-body{padding:16px}
+.tm2-grid{display:grid;gap:12px}
+.tm2-input,.tm2-select{width:100%;padding:.6rem .75rem;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:transparent;color:#e6f1ff}
+.tm2-btn{padding:.6rem .9rem;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:#1b2b22;color:#d8ffe7;cursor:pointer}
+.tm2-btn.primary{background:#1f8a52;border-color:#1f8a52}
+.tm2-note{opacity:.8}
+.tm2-qr{width:170px;height:170px;border:1px solid rgba(255,255,255,.16);border-radius:12px;object-fit:contain}

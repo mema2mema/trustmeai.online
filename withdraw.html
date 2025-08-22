@@ -1,81 +1,96 @@
-<!DOCTYPE html><html><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Withdraw — TrustMe AI</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css"></head><body>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/auth-modal.css">
+<link rel="stylesheet" href="css/modal.css">
+<script>const API="http://localhost:8080";</script>
+</head><body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="index.html">TrustMe AI</a>
+  <nav class="menu row">
+    <a href="index.html" >Home</a>
+    <a href="strategy.html" >Strategy</a>
+    <a href="assets.html" >Assets</a>
+    <a href="deposit.html" >Deposit</a>
+    <a href="withdraw.html" class="active">Withdraw</a>
+  </nav>
+  <div class="spacer"></div>
+  <div id="authArea"></div>
+</div></header>
+<main class="container">
 
-<header>
-  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
-    <div class="brand"><div class="brand-badge"></div> <div style="letter-spacing:.4px">TrustMe AI</div></div>
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="strategy.html">Strategy</a>
-      <a href="assets.html">Assets</a>
-      <a href="deposit.html">Deposit</a>
-      <a href="withdraw.html" class="active">Withdraw</a>
-    </nav>
-    <div id="authArea"></div>
+<h1>Withdraw</h1>
+<section class="grid g-2">
+  <div class="card">
+    <div class="row"><button class="btn primary" onclick="tmOpenWithdraw()">Request Withdrawal</button></div>
+    <p class="muted">Opens a modal to enter TRC20 address and amount.</p>
   </div>
-</header>
-
-<script src="auth-loader.js" defer></script>
-<script src="auth-modals.js" defer></script>
-
-
-<main class="container section">
-  <h1 style="font-family:Poppins,Inter,sans-serif;font-weight:700">Withdraw</h1>
-  <div class="grid grid-2" style="margin-top:1rem">
-    <section class="card">
-      <div class="stripe"></div>
-      <label class="small">To Address</label>
-      <input id="wdAddr" class="input" placeholder="T... / 0x...">
-      <label class="small" style="margin-top:.5rem">Amount (USDT)</label>
-      <input id="wdAmt" type="number" class="input" placeholder="10">
-      <button id="btnWithdraw" class="btn" style="margin-top:.6rem">Submit</button>
-      <p class="small" style="margin-top:.5rem">Network fee preview: <span id="feePreview">~1 USDT (TRC20)</span>. Large withdrawals may require manual approval.</p>
-    </section>
-    <section class="card">
-      <div class="stripe" style="opacity:.5"></div>
-      <h2 style="font-family:Poppins,Inter,sans-serif;font-weight:700">History</h2>
-      <table id="historyTable" class="table"><thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead><tbody></tbody></table>
-    </section>
+  <div class="card">
+    <h3>Helpful</h3>
+    <p class="muted">Network fee preview ~1 USDT (TRC20). Large withdrawals may require manual approval.</p>
   </div>
+</section>
+
 </main>
 
-<footer class="footer">
-  <div class="container" style="text-align:center">
-    <div class="brand" style="justify-content:center">
-      <div class="brand-badge"></div> <div>TrustMe AI</div>
-    </div>
-    <div class="nav" style="justify-content:center;margin-top:8px">
-      <a href="index.html">Home</a>
-      <a href="strategy.html">Strategy</a>
-      <a href="assets.html">Assets</a>
-      <a href="deposit.html">Deposit</a>
-      <a href="withdraw.html">Withdraw</a>
-    </div>
+<!-- Auth modal host (created by JS) -->
+<div id="tmAuthOverlay" class="tm-overlay"></div>
 
-    <!-- 👇 Add this -->
-    <div class="small" style="margin-top:10px">
-      Support: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a>
-      &nbsp;•&nbsp;
-      Telegram: <a href="#" target="_blank" rel="noopener">TrustMe AI Channel</a>
+<!-- Deposit Modal -->
+<div id="mDeposit" class="tm2-overlay" onclick="event.target===this&&TM.modal.close('mDeposit')">
+  <div class="tm2-modal">
+    <div class="tm2-header"><div>Deposit (USDT — TRC20)</div><button class="tm2-close" onclick="TM.modal.close('mDeposit')">×</button></div>
+    <div class="tm2-body tm2-grid">
+      <div class="row"><input id="tmTopupAmt" class="tm2-input" type="number" min="10" placeholder="Amount (demo)" /><button class="tm2-btn" onclick="tmTopupDemo()">Demo Top-up</button></div>
+      <div id="tmDepositInfo" class="tm2-note">Click “Get Address” where available.</div>
+      <div id="tmDepositMsg" class="tm2-note"></div>
     </div>
-
-    <div class="small" style="margin-top:10px">© TrustMe AI 2025</div>
   </div>
-</footer>
+</div>
 
+<!-- Withdraw Modal -->
+<div id="mWithdraw" class="tm2-overlay" onclick="event.target===this&&TM.modal.close('mWithdraw')">
+  <div class="tm2-modal">
+    <div class="tm2-header"><div>Withdraw</div><button class="tm2-close" onclick="TM.modal.close('mWithdraw')">×</button></div>
+    <div class="tm2-body tm2-grid">
+      <div class="tm2-note">Available: <b id="tmBal">—</b></div>
+      <input id="tmWAddr" class="tm2-input" placeholder="USDT-TRC20 address" />
+      <input id="tmWAmt" class="tm2-input" type="number" min="10" placeholder="Amount" />
+      <div class="row"><button class="tm2-btn primary" onclick="tmSubmitWithdraw()">Submit</button><button class="tm2-btn" onclick="TM.modal.close('mWithdraw')">Cancel</button></div>
+      <div id="tmWMsg" class="tm2-note"></div>
+    </div>
+  </div>
+</div>
 
-<script src="script.js"></script>
-<script>
-bindFees();
-document.getElementById('btnWithdraw').addEventListener('click', function(){
-  var amt = Number(document.getElementById('wdAmt').value||0);
-  if(!amt||amt<=0) return alert('Enter amount');
-  var tbody=document.querySelector('#historyTable tbody'); var tr=document.createElement('tr');
-  tr.innerHTML='<td>'+new Date().toLocaleString()+'</td><td>withdraw</td><td>'+amt.toFixed(2)+'</td><td>0.00</td><td>submitted</td>'; tbody.prepend(tr);
-  alert('Withdrawal submitted (demo).');
-});
-</script>
+<!-- Activate Plan Modal -->
+<div id="mPlan" class="tm2-overlay" onclick="event.target===this&&TM.modal.close('mPlan')">
+  <div class="tm2-modal">
+    <div class="tm2-header"><div>Activate Plan</div><button class="tm2-close" onclick="TM.modal.close('mPlan')">×</button></div>
+    <div class="tm2-body tm2-grid">
+      <select id="tmTier" class="tm2-select">
+        <option value="T1">T1 (0.5%–1.0%/day)</option>
+        <option value="T2">T2 (1.0%–1.5%/day)</option>
+        <option value="T3">T3 (1.5%–2.0%/day)</option>
+        <option value="T4">T4 (2.0%–3.0%/day)</option>
+      </select>
+      <input id="tmPAmt" class="tm2-input" type="number" min="50" placeholder="Amount (USDT)" />
+      <input id="tmDays" class="tm2-input" type="number" min="1" max="365" value="30" placeholder="Days" />
+      <div class="row"><button class="tm2-btn primary" onclick="tmActivatePlan()">Activate</button><button class="tm2-btn" onclick="TM.modal.close('mPlan')">Cancel</button></div>
+      <div id="tmPlanMsg" class="tm2-note"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Asset Detail Modal -->
+<div id="mAsset" class="tm2-overlay" onclick="event.target===this&&TM.modal.close('mAsset')">
+  <div class="tm2-modal">
+    <div class="tm2-header"><div>Asset</div><button class="tm2-close" onclick="TM.modal.close('mAsset')">×</button></div>
+    <div class="tm2-body"><div id="tmAssetBox"></div></div>
+  </div>
+</div>
+
+<script src="js/auth-modal.js"></script>
+<script src="js/modal.js"></script>
 </body></html>

@@ -1,56 +1,109 @@
-<!DOCTYPE html><html><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Assets — TrustMe AI</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css"></head><body>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/auth-modal.css">
+<link rel="stylesheet" href="css/modal.css">
+<script>const API="http://localhost:8080";</script>
+</head><body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="index.html">TrustMe AI</a>
+  <nav class="menu row">
+    <a href="index.html" >Home</a>
+    <a href="strategy.html" >Strategy</a>
+    <a href="assets.html" class="active">Assets</a>
+    <a href="deposit.html" >Deposit</a>
+    <a href="withdraw.html" >Withdraw</a>
+  </nav>
+  <div class="spacer"></div>
+  <div id="authArea"></div>
+</div></header>
+<main class="container">
 
-<header>
-  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
-    <div class="brand"><div class="brand-badge"></div> <div style="letter-spacing:.4px">TrustMe AI</div></div>
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="strategy.html">Strategy</a>
-      <a href="assets.html">Assets</a>
-      <a href="deposit.html">Deposit</a>
-      <a href="withdraw.html">Withdraw</a>
-    </nav>
-    <div id="authArea"></div>
+<h1>Assets</h1>
+<section class="grid g-2">
+  <div class="card">
+    <h3>Portfolio</h3>
+    <table><thead><tr><th>Symbol</th><th>Type</th><th>Value</th><th></th></tr></thead><tbody id="astBody"><tr><td colspan="4" class="muted">Loading…</td></tr></tbody></table>
   </div>
-</header>
-
-<!-- add these two lines right after the header -->
-<script src="auth-loader.js" defer></script>
-<script src="auth-modals.js" defer></script>
-
-
-
-<main class="container section">
-  <h1 style="font-family:Poppins,Inter,sans-serif;font-weight:700">Assets</h1>
-  <div class="grid grid-3" style="margin-top:1rem">
-    <div class="card"><div class="small">Available (USDT)</div><div id="walletAvailable" style="font-size:2rem;font-weight:800">0.00</div></div>
-    <div class="card"><div class="small">Locked (USDT)</div><div id="walletLocked" style="font-size:2rem;font-weight:800">0.00</div></div>
-    <div class="card"><div class="small">Today’s Earnings</div><div id="todayEarnings" style="font-size:2rem;font-weight:800">0.00</div></div>
+  <div class="card">
+    <h3>Tips</h3>
+    <p class="muted">Click “Details” on any asset to view more info in a modal.</p>
   </div>
-  <section class="card" style="margin-top:1rem">
-    <div class="stripe" style="opacity:.5"></div>
-    <h2 style="font-family:Poppins,Inter,sans-serif;font-weight:700">History</h2>
-    <table id="historyTable" class="table"><thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead><tbody></tbody></table>
-  </section>
+</section>
+<script>
+async function loadAssets(){
+  const data=await fetch(API+'/wallet/assets',{credentials:'include'}).then(r=>r.json()).catch(()=>({assets:[]}));
+  const body=document.getElementById('astBody'); body.innerHTML='';
+  if(!data.assets||data.assets.length===0){ body.innerHTML='<tr><td colspan="4" class="muted">No assets yet.</td></tr>'; return; }
+  for(const a of data.assets){
+    const tr=document.createElement('tr');
+    tr.innerHTML = `<td>${a.symbol}</td><td>${a.type}</td><td>${Number(a.value||0).toFixed(2)}</td><td><button class="btn" onclick="tmOpenAsset('${a.symbol}')">Details</button></td>`;
+    body.appendChild(tr);
+  }
+}
+loadAssets();
+</script>
+
 </main>
 
-<footer class="footer">
-  <div class="container" style="text-align:center">
-    <div class="brand" style="justify-content:center"><div class="brand-badge"></div> <div>TrustMe AI</div></div>
-    <div class="nav" style="justify-content:center;margin-top:8px">
-      <a href="index.html">Home</a>
-      <a href="strategy.html">Strategy</a>
-      <a href="assets.html">Assets</a>
-      <a href="deposit.html">Deposit</a>
-      <a href="withdraw.html">Withdraw</a>
-    </div>
-    <div class="small" style="margin-top:10px">© TrustMe AI 2025</div>
-  </div>
-</footer>
+<!-- Auth modal host (created by JS) -->
+<div id="tmAuthOverlay" class="tm-overlay"></div>
 
-<script src="script.js"></script>
+<!-- Deposit Modal -->
+<div id="mDeposit" class="tm2-overlay" onclick="event.target===this&&TM.modal.close('mDeposit')">
+  <div class="tm2-modal">
+    <div class="tm2-header"><div>Deposit (USDT — TRC20)</div><button class="tm2-close" onclick="TM.modal.close('mDeposit')">×</button></div>
+    <div class="tm2-body tm2-grid">
+      <div class="row"><input id="tmTopupAmt" class="tm2-input" type="number" min="10" placeholder="Amount (demo)" /><button class="tm2-btn" onclick="tmTopupDemo()">Demo Top-up</button></div>
+      <div id="tmDepositInfo" class="tm2-note">Click “Get Address” where available.</div>
+      <div id="tmDepositMsg" class="tm2-note"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Withdraw Modal -->
+<div id="mWithdraw" class="tm2-overlay" onclick="event.target===this&&TM.modal.close('mWithdraw')">
+  <div class="tm2-modal">
+    <div class="tm2-header"><div>Withdraw</div><button class="tm2-close" onclick="TM.modal.close('mWithdraw')">×</button></div>
+    <div class="tm2-body tm2-grid">
+      <div class="tm2-note">Available: <b id="tmBal">—</b></div>
+      <input id="tmWAddr" class="tm2-input" placeholder="USDT-TRC20 address" />
+      <input id="tmWAmt" class="tm2-input" type="number" min="10" placeholder="Amount" />
+      <div class="row"><button class="tm2-btn primary" onclick="tmSubmitWithdraw()">Submit</button><button class="tm2-btn" onclick="TM.modal.close('mWithdraw')">Cancel</button></div>
+      <div id="tmWMsg" class="tm2-note"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Activate Plan Modal -->
+<div id="mPlan" class="tm2-overlay" onclick="event.target===this&&TM.modal.close('mPlan')">
+  <div class="tm2-modal">
+    <div class="tm2-header"><div>Activate Plan</div><button class="tm2-close" onclick="TM.modal.close('mPlan')">×</button></div>
+    <div class="tm2-body tm2-grid">
+      <select id="tmTier" class="tm2-select">
+        <option value="T1">T1 (0.5%–1.0%/day)</option>
+        <option value="T2">T2 (1.0%–1.5%/day)</option>
+        <option value="T3">T3 (1.5%–2.0%/day)</option>
+        <option value="T4">T4 (2.0%–3.0%/day)</option>
+      </select>
+      <input id="tmPAmt" class="tm2-input" type="number" min="50" placeholder="Amount (USDT)" />
+      <input id="tmDays" class="tm2-input" type="number" min="1" max="365" value="30" placeholder="Days" />
+      <div class="row"><button class="tm2-btn primary" onclick="tmActivatePlan()">Activate</button><button class="tm2-btn" onclick="TM.modal.close('mPlan')">Cancel</button></div>
+      <div id="tmPlanMsg" class="tm2-note"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Asset Detail Modal -->
+<div id="mAsset" class="tm2-overlay" onclick="event.target===this&&TM.modal.close('mAsset')">
+  <div class="tm2-modal">
+    <div class="tm2-header"><div>Asset</div><button class="tm2-close" onclick="TM.modal.close('mAsset')">×</button></div>
+    <div class="tm2-body"><div id="tmAssetBox"></div></div>
+  </div>
+</div>
+
+<script src="js/auth-modal.js"></script>
+<script src="js/modal.js"></script>
 </body></html>

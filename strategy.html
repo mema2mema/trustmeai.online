@@ -1,88 +1,109 @@
-<!DOCTYPE html><html><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Strategy — TrustMe AI</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css"></head><body>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/auth-modal.css">
+<link rel="stylesheet" href="css/modal.css">
+<script>const API="http://localhost:8080";</script>
+</head><body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="index.html">TrustMe AI</a>
+  <nav class="menu row">
+    <a href="index.html" >Home</a>
+    <a href="strategy.html" class="active">Strategy</a>
+    <a href="assets.html" >Assets</a>
+    <a href="deposit.html" >Deposit</a>
+    <a href="withdraw.html" >Withdraw</a>
+  </nav>
+  <div class="spacer"></div>
+  <div id="authArea"></div>
+</div></header>
+<main class="container">
 
-<header>
-  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;">
-    <div class="brand"><div class="brand-badge"></div> <div style="letter-spacing:.4px">TrustMe AI</div></div>
-    <nav class="nav">
-      <a href="index.html">Home</a>
-      <a href="strategy.html" class="active">Strategy</a>
-      <a href="assets.html">Assets</a>
-      <a href="deposit.html">Deposit</a>
-      <a href="withdraw.html">Withdraw</a>
-    </nav>
-    <div id="authArea"></div>
+<h1>Strategy Plans (T1–T4)</h1>
+<section class="grid g-2">
+  <div class="card">
+    <h3>Activate new</h3>
+    <div class="row"><button class="btn primary" onclick="tmOpenPlan()">Activate Plan</button></div>
   </div>
-</header>
-
-<script src="auth-loader.js" defer></script>
-<script src="auth-modals.js" defer></script>
-
-
-<main class="container section">
-  <h1 style="font-family:Poppins,Inter,sans-serif;font-weight:700">Strategy Plans (T1–T4)</h1>
-  <div class="card" style="margin-top:.6rem"><div class="stripe"></div><div class="kpi"><div class="label">Available Balance</div><div class="val" id="walletAvailable">0.00</div></div></div>
-  <div class="grid grid-3" style="margin-top:1rem">
-    <div class="card">
-      <div class="stripe"></div>
-      <div style="display:flex;align-items:center;justify-content:space-between"><div class="text-xl" style="font-weight:800">T1</div><span class="badge">0.5%–1.0% / day</span></div>
-      <div class="small" style="margin-top:.25rem">$50–$999 USDT</div>
-      <button class="btn" style="width:100%;margin-top:.8rem" data-tier="T1" data-min="50" data-max="999">Activate Plan</button>
-    </div>
-    <div class="card">
-      <div class="stripe"></div>
-      <div style="display:flex;align-items:center;justify-content:space-between"><div class="text-xl" style="font-weight:800">T2</div><span class="badge">1.0%–1.5% / day</span></div>
-      <div class="small" style="margin-top:.25rem">$1,000–$9,999 USDT</div>
-      <button class="btn" style="width:100%;margin-top:.8rem" data-tier="T2" data-min="1000" data-max="9999">Activate Plan</button>
-    </div>
-    <div class="card">
-      <div class="stripe"></div>
-      <div style="display:flex;align-items:center;justify-content:space-between"><div class="text-xl" style="font-weight:800">T3</div><span class="badge">1.5%–2.0% / day</span></div>
-      <div class="small" style="margin-top:.25rem">$10,000–$19,999 USDT</div>
-      <button class="btn" style="width:100%;margin-top:.8rem" data-tier="T3" data-min="10000" data-max="19999">Activate Plan</button>
-    </div>
-    <div class="card" style="grid-column:1 / -1">
-      <div class="stripe"></div>
-      <div style="display:flex;align-items:center;justify-content:space-between"><div class="text-xl" style="font-weight:800">T4</div><span class="badge">2.0%–3.0% / day</span></div>
-      <div class="small" style="margin-top:.25rem">$20,000–$100,000 USDT</div>
-      <button class="btn" style="width:100%;margin-top:.8rem" data-tier="T4" data-min="20000" data-max="100000">Activate Plan</button>
-    </div>
+  <div class="card">
+    <h3>Positions</h3>
+    <table><thead><tr><th>Tier</th><th>Amount</th><th>Daily %</th><th>Days</th><th>Opened</th></tr></thead><tbody id="posBody"><tr><td colspan="5" class="muted">Loading…</td></tr></tbody></table>
   </div>
-  <section class="card" style="margin-top:1rem">
-    <div class="stripe" style="opacity:.5"></div>
-    <h2 style="font-family:Poppins,Inter,sans-serif;font-weight:700">History</h2>
-    <table id="historyTable" class="table"><thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Fee</th><th>Status</th></tr></thead><tbody></tbody></table>
-  </section>
+</section>
+<script>
+async function loadPositions(){
+  const data=await fetch(API+'/plans/positions',{credentials:'include'}).then(r=>r.json());
+  const body=document.getElementById('posBody'); body.innerHTML='';
+  if(!data.positions||data.positions.length===0){ body.innerHTML='<tr><td colspan="5" class="muted">No positions yet.</td></tr>'; return; }
+  for(const p of data.positions){
+    const tr=document.createElement('tr');
+    tr.innerHTML = `<td>${p.tier}</td><td>${Number(p.amount).toFixed(2)}</td><td>${(Number(p.rate_daily)*100).toFixed(2)}%</td><td>${p.days||'-'}</td><td>${new Date(p.created_at).toLocaleDateString()}</td>`;
+    body.appendChild(tr);
+  }
+}
+loadPositions();
+</script>
+
 </main>
 
-<footer class="footer">
-  <div class="container" style="text-align:center">
-    <div class="brand" style="justify-content:center">
-      <div class="brand-badge"></div> <div>TrustMe AI</div>
-    </div>
-    <div class="nav" style="justify-content:center;margin-top:8px">
-      <a href="index.html">Home</a>
-      <a href="strategy.html">Strategy</a>
-      <a href="assets.html">Assets</a>
-      <a href="deposit.html">Deposit</a>
-      <a href="withdraw.html">Withdraw</a>
-    </div>
+<!-- Auth modal host (created by JS) -->
+<div id="tmAuthOverlay" class="tm-overlay"></div>
 
-    <!-- 👇 Add this -->
-    <div class="small" style="margin-top:10px">
-      Support: <a href="mailto:support@trustmeai.online">support@trustmeai.online</a>
-      &nbsp;•&nbsp;
-      Telegram: <a href="#" target="_blank" rel="noopener">TrustMe AI Channel</a>
+<!-- Deposit Modal -->
+<div id="mDeposit" class="tm2-overlay" onclick="event.target===this&&TM.modal.close('mDeposit')">
+  <div class="tm2-modal">
+    <div class="tm2-header"><div>Deposit (USDT — TRC20)</div><button class="tm2-close" onclick="TM.modal.close('mDeposit')">×</button></div>
+    <div class="tm2-body tm2-grid">
+      <div class="row"><input id="tmTopupAmt" class="tm2-input" type="number" min="10" placeholder="Amount (demo)" /><button class="tm2-btn" onclick="tmTopupDemo()">Demo Top-up</button></div>
+      <div id="tmDepositInfo" class="tm2-note">Click “Get Address” where available.</div>
+      <div id="tmDepositMsg" class="tm2-note"></div>
     </div>
-
-    <div class="small" style="margin-top:10px">© TrustMe AI 2025</div>
   </div>
-</footer>
+</div>
 
+<!-- Withdraw Modal -->
+<div id="mWithdraw" class="tm2-overlay" onclick="event.target===this&&TM.modal.close('mWithdraw')">
+  <div class="tm2-modal">
+    <div class="tm2-header"><div>Withdraw</div><button class="tm2-close" onclick="TM.modal.close('mWithdraw')">×</button></div>
+    <div class="tm2-body tm2-grid">
+      <div class="tm2-note">Available: <b id="tmBal">—</b></div>
+      <input id="tmWAddr" class="tm2-input" placeholder="USDT-TRC20 address" />
+      <input id="tmWAmt" class="tm2-input" type="number" min="10" placeholder="Amount" />
+      <div class="row"><button class="tm2-btn primary" onclick="tmSubmitWithdraw()">Submit</button><button class="tm2-btn" onclick="TM.modal.close('mWithdraw')">Cancel</button></div>
+      <div id="tmWMsg" class="tm2-note"></div>
+    </div>
+  </div>
+</div>
 
-<script src="script.js"></script>
-<script>bindActivatePlan();</script>
+<!-- Activate Plan Modal -->
+<div id="mPlan" class="tm2-overlay" onclick="event.target===this&&TM.modal.close('mPlan')">
+  <div class="tm2-modal">
+    <div class="tm2-header"><div>Activate Plan</div><button class="tm2-close" onclick="TM.modal.close('mPlan')">×</button></div>
+    <div class="tm2-body tm2-grid">
+      <select id="tmTier" class="tm2-select">
+        <option value="T1">T1 (0.5%–1.0%/day)</option>
+        <option value="T2">T2 (1.0%–1.5%/day)</option>
+        <option value="T3">T3 (1.5%–2.0%/day)</option>
+        <option value="T4">T4 (2.0%–3.0%/day)</option>
+      </select>
+      <input id="tmPAmt" class="tm2-input" type="number" min="50" placeholder="Amount (USDT)" />
+      <input id="tmDays" class="tm2-input" type="number" min="1" max="365" value="30" placeholder="Days" />
+      <div class="row"><button class="tm2-btn primary" onclick="tmActivatePlan()">Activate</button><button class="tm2-btn" onclick="TM.modal.close('mPlan')">Cancel</button></div>
+      <div id="tmPlanMsg" class="tm2-note"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Asset Detail Modal -->
+<div id="mAsset" class="tm2-overlay" onclick="event.target===this&&TM.modal.close('mAsset')">
+  <div class="tm2-modal">
+    <div class="tm2-header"><div>Asset</div><button class="tm2-close" onclick="TM.modal.close('mAsset')">×</button></div>
+    <div class="tm2-body"><div id="tmAssetBox"></div></div>
+  </div>
+</div>
+
+<script src="js/auth-modal.js"></script>
+<script src="js/modal.js"></script>
 </body></html>
