@@ -1,0 +1,20 @@
+/* Classic pills for header */
+#authArea{display:flex;gap:.5rem;align-items:center}
+.auth-pill{padding:.45rem .9rem;border-radius:999px;border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);color:#e6f1ff;cursor:pointer}
+.auth-pill.primary{background:#1d7a42;border-color:#1d7a42;color:#d7ffe6}
+.auth-pill:hover{filter:brightness(1.08)}
+/* Modal (glass) */
+.auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:1000}
+.auth-overlay.show{display:flex}
+.auth-card{width:min(480px,92vw);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:16px;color:#e6f1ff;overflow:hidden}
+.auth-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.12)}
+.auth-tabs{display:flex}
+.auth-tab{flex:1;padding:.6rem 0;text-align:center;cursor:pointer}
+.auth-tab.active{background:rgba(255,255,255,.06);font-weight:700}
+.auth-body{padding:14px}
+.auth-input{width:100%;padding:.6rem .75rem;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:transparent;color:#e6f1ff;margin:.35rem 0}
+.auth-btn{padding:.6rem .9rem;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:#1b2b22;color:#d7ffe6;cursor:pointer}
+.auth-btn.primary{background:#1f8a52;border-color:#1f8a52}
+.auth-note{opacity:.85;font-size:.9rem;margin-top:.35rem}
+.auth-close{background:transparent;border:none;color:#e6f1ff;font-size:20px;cursor:pointer;opacity:.85}
