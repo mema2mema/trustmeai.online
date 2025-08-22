@@ -1,2 +1,44 @@
-<!-- login.html -->
-<button class="btn-ghost" id="openLogin" type="button">Log In</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - TrustMe AI</title>
+  <script src="tm-auth-header.js" defer></script>
+  <script src="api.js" defer></script>
+</head>
+<body>
+  <tm-auth-header></tm-auth-header>
+
+  <h2>Login</h2>
+  <form id="loginForm">
+    <label>Email:</label><br>
+    <input type="email" id="email" required><br>
+    <label>Password:</label><br>
+    <input type="password" id="password" required><br><br>
+    <button type="submit">Login</button>
+  </form>
+
+  <p id="msg"></p>
+
+  <script>
+    const form = document.getElementById("loginForm");
+    const msg = document.getElementById("msg");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const res = await api.post("/auth/login", { email, password });
+        localStorage.setItem("token", res.token);
+        msg.textContent = "✅ Login successful!";
+        window.location.href = "account.html";
+      } catch (err) {
+        msg.textContent = "❌ " + (err.message || "Login failed");
+      }
+    });
+  </script>
+</body>
+</html>
