@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>TrustMe AI — Homepage</title>
+<title>TrustMe AI — Home + Assets</title>
 <meta name="description" content="TrustMe AI — Smarter trading. Transparent performance.">
 <style>
   :root{ --bg:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --emerald:#10b981; --rose:#ef4444; }
-  *{ box-sizing: border-box; }
+  *{ box-sizing:border-box; }
   html,body{ margin:0; padding:0; background:var(--bg); color:var(--ink); font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
   .container{ max-width:1100px; margin:0 auto; padding:0 16px; }
   .row{ display:grid; gap:16px; }
@@ -26,18 +26,28 @@
   .badge.em{ background:#ecfdf5; color:#065f46;}
   .badge.m{ background:#f1f5f9; color:#475569;}
   label{ font-size:14px; }
-  input[type=number]{ width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:14px; outline:none; }
+  input[type=number], select{ width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:14px; outline:none; }
   .kpi{ text-align:center; }
   .kpi .cap{ font-size:12px; color:var(--muted); }
   .kpi .val{ font-size:22px; font-weight:800; }
   .muted{ color:var(--muted); }
   .bottom{ position:fixed; left:0; right:0; bottom:0; border-top:1px solid var(--line); background:#fff; }
   .tabs{ display:grid; grid-template-columns:repeat(5,1fr); text-align:center; font-size:12px; }
-  .tab{ padding:10px 0; }
+  .tab{ padding:10px 0; cursor:pointer; }
+  .active{ color: var(--emerald); font-weight:700; }
   .g{ color: var(--emerald); font-weight:700;}
   .r{ color: var(--rose); font-weight:700;}
   canvas{ width:100%; height:240px; display:block; }
-  .sr{ position:absolute; clip:rect(0 0 0 0); clip-path: inset(50%); width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; border:0; white-space:nowrap; }
+  .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(15,23,42,.35); }
+  .modal.open{ display:flex; }
+  .modal .panel{ width:min(520px, 92vw); background:#fff; border:1px solid var(--line); border-radius:16px; }
+  .modal .panel .hd{ display:flex; align-items:center; justify-content:space-between; padding:14px; border-bottom:1px solid var(--line); font-weight:700; }
+  .modal .panel .bd{ padding:14px; }
+  .modal .actions{ display:flex; justify-content:flex-end; gap:8px; padding:14px; border-top:1px solid var(--line) }
+  .table{ width:100%; border-collapse: collapse; }
+  .table th, .table td{ padding:8px 10px; border-bottom:1px solid #f1f5f9; text-align:left; font-size:14px; }
+  .chip{ display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; border:1px solid var(--line); background:#fff; }
+  .navlink{ color:inherit; text-decoration:none; }
 </style>
 </head>
 <body>
@@ -48,117 +58,266 @@
   </div>
 </header>
 
-<main>
-  <!-- Quick shortcuts -->
-  <section class="container" style="padding:16px 0">
-    <div class="row row-4">
-      <a class="card bd" style="text-align:center; text-decoration:none; color:inherit" href="#"><div class="g" style="font-size:22px">💳</div><div style="font-weight:700; margin-top:6px">Top‑Up</div></a>
-      <a class="card bd" style="text-align:center; text-decoration:none; color:inherit" href="#"><div class="g" style="font-size:22px">💸</div><div style="font-weight:700; margin-top:6px">Withdraw</div></a>
-      <a class="card bd" style="text-align:center; text-decoration:none; color:inherit" href="#"><div class="g" style="font-size:22px">❓</div><div style="font-weight:700; margin-top:6px">Help Center</div></a>
-      <a class="card bd" style="text-align:center; text-decoration:none; color:inherit" href="#"><div class="g" style="font-size:22px">📚</div><div style="font-weight:700; margin-top:6px">Platform Intro</div></a>
-    </div>
-  </section>
-
-  <!-- Hero + Calculator -->
-  <section class="container" style="padding:20px 0">
-    <div class="row row-2" style="align-items:center;">
-      <div>
-        <h1 style="font-size:40px; font-weight:900; letter-spacing:-.02em">TrustMe AI: <span class="muted">Smarter trading. Transparent performance.</span></h1>
-        <p class="muted" style="max-width:60ch;margin-top:10px">Real-time performance dashboards, alerts, and a clean admin panel. See profits, withdrawals, and compounding with our live calculator.</p>
-        <div style="display:flex; gap:10px; margin-top:14px">
-          <button class="btn primary">Launch App</button>
-          <button class="btn outline">🌐 Auto Language</button>
-        </div>
-        <div class="row row-3" style="margin-top:16px">
-          <div class="card bd"><div style="font-weight:700">🛡️ Transparency First</div><div class="muted" style="font-size:14px; margin-top:6px">Live logs & profit history.</div></div>
-          <div class="card bd"><div style="font-weight:700">📈 Smart Adjustments</div><div class="muted" style="font-size:14px; margin-top:6px">AI realism & risk controls.</div></div>
-          <div class="card bd"><div style="font-weight:700">🚀 Auto‑Reinvest</div><div class="muted" style="font-size:14px; margin-top:6px">Compound with caps.</div></div>
-        </div>
+<main style="padding-bottom:84px">
+  <!-- HOME -->
+  <section id="page-home">
+    <section class="container" style="padding:16px 0">
+      <div class="row row-4">
+        <a class="card bd navlink" data-nav="assets"><div style="text-align:center"><div class="g" style="font-size:22px">💳</div><div style="font-weight:700; margin-top:6px">Top‑Up</div></div></a>
+        <a class="card bd navlink" data-nav="assets"><div style="text-align:center"><div class="g" style="font-size:22px">💸</div><div style="font-weight:700; margin-top:6px">Withdraw</div></div></a>
+        <a class="card bd" style="text-align:center;"><div class="g" style="font-size:22px">❓</div><div style="font-weight:700; margin-top:6px">Help Center</div></a>
+        <a class="card bd" style="text-align:center;"><div class="g" style="font-size:22px">📚</div><div style="font-weight:700; margin-top:6px">Platform Intro</div></a>
       </div>
+    </section>
 
-      <div id="calculator" class="card">
-        <div class="hd">📟 Live Profit & Withdrawal Calculator</div>
-        <div class="bd">
-          <div class="row row-2">
-            <div>
-              <div class="row" style="grid-template-columns: 1fr 1fr; gap:12px; align-items:center">
-                <label for="amount">Investment (USDT)</label><input id="amount" type="number" value="1000" min="0"/>
-                <label for="dailyPct">Daily Profit %</label><input id="dailyPct" type="number" step="0.01" min="0" max="1000" value="1.2"/>
-                <label for="days">Days (1–365)</label><input id="days" type="number" min="1" max="365" value="120"/>
-                <label for="reinvest" style="display:flex; align-items:center; gap:8px"><input id="reinvest" type="checkbox" checked/> Auto‑Reinvest</label>
+    <section class="container" style="padding:20px 0">
+      <div class="row row-2" style="align-items:center;">
+        <div>
+          <h1 style="font-size:40px; font-weight:900; letter-spacing:-.02em">TrustMe AI: <span class="muted">Smarter trading. Transparent performance.</span></h1>
+          <p class="muted" style="max-width:60ch;margin-top:10px">Real-time performance dashboards and a clean admin panel. See profits, withdrawals, and compounding with our live calculator.</p>
+          <div style="display:flex; gap:10px; margin-top:14px">
+            <button class="btn primary">Launch App</button>
+            <button class="btn outline">🌐 Auto Language</button>
+          </div>
+        </div>
+
+        <div id="calculator" class="card">
+          <div class="hd">📟 Live Profit & Withdrawal Calculator</div>
+          <div class="bd">
+            <div class="row row-2">
+              <div>
                 <div class="row" style="grid-template-columns: 1fr 1fr; gap:12px; align-items:center">
-                  <label for="cap">Reinvest Cap</label><input id="cap" type="number" min="0" value="10000"/>
+                  <label for="amount">Investment (USDT)</label><input id="amount" type="number" value="1000" min="0"/>
+                  <label for="dailyPct">Daily Profit %</label><input id="dailyPct" type="number" step="0.01" min="0" max="1000" value="1.2"/>
+                  <label for="days">Days (1–365)</label><input id="days" type="number" min="1" max="365" value="120"/>
+                  <label for="reinvest" style="display:flex; align-items:center; gap:8px"><input id="reinvest" type="checkbox" checked/> Auto‑Reinvest</label>
+                  <div class="row" style="grid-template-columns: 1fr 1fr; gap:12px; align-items:center">
+                    <label for="cap">Reinvest Cap</label><input id="cap" type="number" min="0" value="10000"/>
+                  </div>
+                  <label for="withdrawEvery">Withdraw Every (days, 0 = off)</label><input id="withdrawEvery" type="number" min="0" max="365" value="0"/>
                 </div>
-                <label for="withdrawEvery">Withdraw Every (days, 0 = off)</label><input id="withdrawEvery" type="number" min="0" max="365" value="0"/>
+                <div style="margin-top:10px"><button id="resetBtn" class="btn outline">Reset</button></div>
               </div>
-              <div style="margin-top:10px"><button id="resetBtn" class="btn outline">Reset</button></div>
-              <div class="muted" style="font-size:12px; margin-top:6px">Simulation for education only. Not financial advice.</div>
-            </div>
 
-            <div>
-              <div class="row row-2">
-                <div class="card bd kpi"><div class="cap">Final Balance</div><div id="finalBalance" class="val">$0</div></div>
-                <div class="card bd kpi"><div class="cap">Total Profit</div><div id="totalProfit" class="val">$0</div></div>
-                <div class="card bd kpi"><div class="cap">Total Withdrawn</div><div id="totalWithdrawn" class="val">$0</div></div>
-                <div class="card bd kpi"><div class="cap">Initial Investment</div><div id="initialInvestment" class="val">$0</div></div>
-              </div>
-              <div class="card bd" style="margin-top:10px">
-                <canvas id="chart" width="600" height="240" aria-label="Projection chart" role="img"></canvas>
+              <div>
+                <div class="row row-2">
+                  <div class="card bd kpi"><div class="cap">Final Balance</div><div id="finalBalance" class="val">$0</div></div>
+                  <div class="card bd kpi"><div class="cap">Total Profit</div><div id="totalProfit" class="val">$0</div></div>
+                  <div class="card bd kpi"><div class="cap">Total Withdrawn</div><div id="totalWithdrawn" class="val">$0</div></div>
+                  <div class="card bd kpi"><div class="cap">Initial Investment</div><div id="initialInvestment" class="val">$0</div></div>
+                </div>
+                <div class="card bd" style="margin-top:10px">
+                  <canvas id="chart" width="600" height="240"></canvas>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <section id="hot" class="container" style="padding:10px 0 20px 0">
+      <div class="card bd">
+        <div style="font-weight:700">🔥 Hot List</div>
+        <div id="hotList"></div>
+      </div>
+      <div class="card bd" style="margin-top:12px">
+        <div style="font-weight:700">🏆 Top Gainers</div>
+        <div id="topGainers"></div>
+      </div>
+    </section>
   </section>
 
-  <!-- Strategy Card -->
-  <section class="container" style="padding:10px 0">
-    <div style="display:flex; align-items:center; justify-content:space-between;">
-      <div>
-        <div class="g" style="font-size:12px">TOP3 Of The Strategies</div>
-        <div style="font-weight:700">Experience Gold Strategy</div>
+  <!-- ASSETS -->
+  <section id="page-assets" style="display:none">
+    <section class="container" style="padding:12px 0">
+      <div class="card">
+        <div class="hd" style="display:flex; align-items:center; justify-content:space-between">
+          <div>Total Assets(USDT)</div>
+          <button id="toggleEye" class="btn outline" style="padding:6px 10px">👁️</button>
+        </div>
+        <div class="bd">
+          <div style="font-size:40px; font-weight:900" id="totalAssets">0</div>
+          <div class="row row-4" style="margin-top:6px">
+            <div>Experience Money <b class="right" id="expMoney">0</b></div>
+            <div>Available Assets <b class="right" id="availAssets">0</b></div>
+            <div>Total Lock <b class="right" id="totalLock">0</b></div>
+            <div>Waiting For Release <b class="right" id="waitRel">0</b></div>
+          </div>
+          <div style="display:flex; gap:10px; margin-top:12px">
+            <button id="btnTopup" class="btn outline">Top Up</button>
+            <button id="btnWithdraw" class="btn outline">Withdrawal</button>
+            <button id="btnBill" class="btn outline">Bill</button>
+          </div>
+        </div>
       </div>
-      <a href="#" class="btn outline">Learn More</a>
-    </div>
-    <div class="card bd" style="margin-top:10px">
-      <div style="display:flex; gap:8px; font-size:14px"><div class="badge em">USDT</div><div class="badge m">ETH</div></div>
-      <div class="row row-3" style="text-align:center; margin-top:8px">
-        <div><div class="g" style="font-weight:800">1% ~ 2%</div><div class="muted" style="font-size:12px">Daily Yield</div></div>
-        <div><div style="font-weight:800">4.3738M</div><div class="muted" style="font-size:12px">Participate Assets</div></div>
-        <div><div style="font-weight:800">12914</div><div class="muted" style="font-size:12px">Users</div></div>
+    </section>
+
+    <section class="container" style="padding:12px 0">
+      <div class="card">
+        <div class="hd" style="display:flex; align-items:center; justify-content:space-between">
+          <div>My Profits</div>
+          <a class="btn outline" id="viewEarnings">View The Earnings</a>
+        </div>
+        <div class="bd">
+          <div class="row row-2">
+            <div>
+              <div style="display:grid; grid-template-columns: 1fr auto; gap:8px; align-items:center">
+                <div>Cumulative Income(USDT)</div><div id="p_cum">0</div>
+                <div>Today's Earnings(USDT)</div><div id="p_today">0</div>
+                <div>Cumulative Transaction Income(USDT)</div><div id="p_tx">0</div>
+              </div>
+            </div>
+            <div>
+              <div style="display:grid; grid-template-columns: 1fr auto; gap:8px; align-items:center">
+                <div>Today's Trading Income(USDT)</div><div id="p_trd_today">0</div>
+                <div>Cumulative Team Revenue(USDT)</div><div id="p_team">0</div>
+                <div>Team Revenue Today(USDT)</div><div id="p_team_today">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <section class="container" style="padding:12px 0 24px 0">
+      <div class="card">
+        <div class="hd">Asset List</div>
+        <div class="bd">
+          <div class="card bd" style="display:flex; align-items:center; justify-content:space-between">
+            <div style="display:flex; align-items:center; gap:12px">
+              <div style="width:36px; height:36px; border-radius:50%; background:#f1f5f9; display:grid; place-items:center">₮</div>
+              <div>
+                <div style="font-weight:700">USDT</div>
+                <div class="muted" style="font-size:12px">Available <span id="usdtAvail">0</span> • Asset Lock <span id="usdtLock">0</span> • Waiting <span id="usdtWait">0</span></div>
+              </div>
+            </div>
+            <div style="display:flex; gap:8px">
+              <button class="btn outline" id="rowTopup">Top Up</button>
+              <button class="btn outline" id="rowWithdraw">Withdrawal</button>
+              <button class="btn outline" id="rowBill">Bill</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="earningsView" class="container" style="display:none; padding:12px 0 24px 0">
+      <div class="card">
+        <div class="hd" style="display:flex; align-items:center; gap:8px">
+          <button class="btn outline" id="backAssets">← Back</button>
+          <div>My Profits</div>
+        </div>
+        <div class="bd">
+          <div style="display:flex; gap:8px; flex-wrap:wrap">
+            <button class="chip" data-tab="income">Income Record</button>
+            <button class="chip" data-tab="waiting">Waiting For Release</button>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:10px">
+            <div style="flex:1"><label class="muted" style="font-size:12px">Revenue Distribution</label><select id="filterType"><option value="all">All</option><option value="profit">Profit</option><option value="topup">Top Up</option><option value="withdraw">Withdraw</option><option value="release">Released</option></select></div>
+            <div style="width:200px"><label class="muted" style="font-size:12px">Month</label><select id="filterMonth"></select></div>
+          </div>
+          <div id="tab-income" style="margin-top:10px">
+            <table class="table" id="incomeTable">
+              <thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Note</th></tr></thead>
+              <tbody></tbody>
+            </table>
+            <div id="incomeEmpty" class="muted" style="text-align:center; padding:20px">No Records Yet</div>
+          </div>
+          <div id="tab-waiting" style="margin-top:10px; display:none">
+            <div class="card bd">
+              <div style="display:grid; grid-template-columns: 1fr auto; gap:8px; align-items:center">
+                <div>Waiting For Release(USDT)</div><div id="waitAmt">0</div>
+                <div>Released(USDT)</div><div id="releasedAmt">0</div>
+              </div>
+              <div style="margin-top:8px"><button id="btnRelease" class="btn primary">Release All</button></div>
+            </div>
+            <div class="muted" style="text-align:center; padding:20px">Records To Be Released</div>
+          </div>
+        </div>
+      </div>
+    </section>
   </section>
 
-  <!-- Hot List / Top Gainers -->
-  <section id="hot" class="container" style="padding:10px 0 80px 0">
-    <div class="card bd">
-      <div style="font-weight:700">🔥 Hot List</div>
-      <div id="hotList"></div>
-    </div>
-    <div class="card bd" style="margin-top:12px">
-      <div style="font-weight:700">🏆 Top Gainers</div>
-      <div id="topGainers"></div>
-    </div>
+  <!-- PLACEHOLDERS -->
+  <section id="page-strategy" class="container" style="display:none; padding:16px 0 24px 0">
+    <div class="card bd">Strategy screen placeholder</div>
+  </section>
+  <section id="page-team" class="container" style="display:none; padding:16px 0 24px 0">
+    <div class="card bd">Team screen placeholder</div>
+  </section>
+  <section id="page-mine" class="container" style="display:none; padding:16px 0 24px 0">
+    <div class="card bd">Profile screen placeholder</div>
   </section>
 </main>
 
-<!-- Bottom Nav -->
 <footer class="bottom">
   <div class="container tabs">
-    <div class="tab g">🏠<div>Front Page</div></div>
-    <div class="tab">💼<div>Assets</div></div>
-    <div class="tab">📊<div>Strategy</div></div>
-    <div class="tab">👥<div>Team</div></div>
-    <div class="tab">👤<div>Mine</div></div>
+    <div class="tab active" data-nav="home">🏠<div>Front Page</div></div>
+    <div class="tab" data-nav="assets">💼<div>Assets</div></div>
+    <div class="tab" data-nav="strategy">📊<div>Strategy</div></div>
+    <div class="tab" data-nav="team">👥<div>Team</div></div>
+    <div class="tab" data-nav="mine">👤<div>Mine</div></div>
   </div>
 </footer>
 
+<div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="panel">
+    <div class="hd"><span id="modalTitle">Modal</span><button id="modalClose" class="btn outline">✕</button></div>
+    <div class="bd" id="modalBody"></div>
+    <div class="actions" id="modalActions"></div>
+  </div>
+</div>
+
 <script>
 (function(){
-  // ------- Utilities -------
-  function fmt(n){ return Number(n||0).toLocaleString(undefined,{maximumFractionDigits:2}); }
+  const state = {
+    hide: false,
+    expMoney: 200,
+    balances: { USDT: { available: 3, lock: 0, waiting: 0 } },
+    released: 0,
+    profit: {
+      cumulativeIncome: 0,
+      todayEarnings: 0,
+      cumulativeTxIncome: 0,
+      todayTradingIncome: 0,
+      cumulativeTeamRevenue: 0,
+      teamRevenueToday: 0
+    },
+    ledger: []
+  };
+
+  const fmt = (n)=> Number(n||0).toLocaleString(undefined,{maximumFractionDigits:2});
+  const mask = (n)=> state.hide ? '•••' : fmt(n);
+  const $ = (q)=> document.querySelector(q);
+  const $$ = (q)=> Array.from(document.querySelectorAll(q));
+  function openModal(title, bodyNode, actions){
+    $('#modalTitle').textContent = title;
+    const body = $('#modalBody'); body.innerHTML=''; body.appendChild(bodyNode);
+    const act = $('#modalActions'); act.innerHTML=''; actions.forEach(a=>act.appendChild(a));
+    const m = $('#modal'); m.classList.add('open'); m.setAttribute('aria-hidden','false');
+  }
+  function closeModal(){ const m=$('#modal'); m.classList.remove('open'); m.setAttribute('aria-hidden','true'); }
+  $('#modalClose').addEventListener('click', closeModal);
+  $('#modal').addEventListener('click', (e)=>{ if(e.target.id==='modal') closeModal() });
+
+  function pushLedger(type, amount, note=''){ state.ledger.unshift({ ts: Date.now(), type, amount: Number(amount), note }) }
+  function monthOptions(){
+    const s = $('#filterMonth'); if(!s) return; s.innerHTML='';
+    const now = new Date(); for(let i=0;i<12;i++){ const d=new Date(now.getFullYear(), now.getMonth()-i, 1);
+      const v = d.toISOString().slice(0,7); const opt=document.createElement('option'); opt.value=v; opt.textContent=v; s.appendChild(opt) }
+  }
+
+  function showPage(key){
+    const map = { home:'#page-home', assets:'#page-assets', strategy:'#page-strategy', team:'#page-team', mine:'#page-mine' };
+    Object.values(map).forEach(sel=>{ const el=$(sel); if(el) el.style.display='none' });
+    $(map[key]).style.display='block';
+    $$('.tab').forEach(t=>t.classList.toggle('active', t.getAttribute('data-nav')===key));
+    if(key==='assets'){ renderAssets(); }
+  }
+  $$('.tab').forEach(t=> t.addEventListener('click', ()=> showPage(t.getAttribute('data-nav')) ));
+  $$('.navlink').forEach(a => a.addEventListener('click', (e)=>{ e.preventDefault(); showPage(a.getAttribute('data-nav')); }));
+
   function clamp(n,min,max){ n=Number(n||0); if(isNaN(n))n=min; return Math.min(Math.max(n,min),max); }
   function project({principal,dailyPct,days,reinvest,withdrawEvery,reinvestCap}){
     principal=Number(principal||0); dailyPct=Number(dailyPct||0); days=Math.max(1,Math.min(365,Number(days||1)));
@@ -168,13 +327,10 @@
       const profit = balance * (dailyPct/100); let withdrawn = 0;
       if(!reinvest){ withdrawn = profit; totalWithdrawn += withdrawn; }
       else{ if(reinvestCap>0 && balance>=reinvestCap){ withdrawn = profit; totalWithdrawn += withdrawn; } else { balance += profit; } }
-      if(withdrawEvery>0 && d%withdrawEvery===0){ /* hook for partial withdraw */ }
       data.push({day:d, balance:+balance.toFixed(2), withdrawn:+totalWithdrawn.toFixed(2)});
     }
     return {data, finalBalance:balance, totalWithdrawn};
   }
-
-  // ------- Simple Canvas Chart (no deps) -------
   function drawChart(canvas, A, B){
     const ctx = canvas.getContext('2d'); const DPR = window.devicePixelRatio||1;
     const rectW = canvas.getBoundingClientRect().width||600, styleH = 240;
@@ -189,19 +345,39 @@
       ctx.beginPath(); ctx.moveTo(P.l,yy); ctx.lineTo(P.l+w,yy); ctx.strokeStyle='#f1f5f9'; ctx.stroke();
       ctx.fillText('$'+fmt(val), 6*DPR, yy+4*DPR);
     }
-    // A (balance) green
-    ctx.beginPath(); ctx.moveTo(P.l, y(A[0]||0));
-    for(let i=1;i<A.length;i++){ ctx.lineTo(P.l+i*stepX, y(A[i])); }
-    ctx.strokeStyle='#10b981'; ctx.lineWidth=2*DPR; ctx.stroke();
-    ctx.lineTo(P.l+(A.length-1)*stepX,P.t+h); ctx.lineTo(P.l,P.t+h); ctx.closePath(); ctx.fillStyle='rgba(16,185,129,0.15)'; ctx.fill();
-    // B (withdrawn) blue
-    ctx.beginPath(); ctx.moveTo(P.l, y(B[0]||0));
-    for(let i=1;i<B.length;i++){ ctx.lineTo(P.l+i*stepX, y(B[i])); }
-    ctx.strokeStyle='#60a5fa'; ctx.lineWidth=2*DPR; ctx.stroke();
-    ctx.lineTo(P.l+(B.length-1)*stepX,P.t+h); ctx.lineTo(P.l,P.t+h); ctx.closePath(); ctx.fillStyle='rgba(96,165,250,0.15)'; ctx.fill();
+    ctx.beginPath(); ctx.moveTo(P.l, y(A[0]||0)); for(let i=1;i<A.length;i++){ ctx.lineTo(P.l+i*stepX, y(A[i])); }
+    ctx.strokeStyle='#10b981'; ctx.lineWidth=2*DPR; ctx.stroke(); ctx.lineTo(P.l+(A.length-1)*stepX,P.t+h); ctx.lineTo(P.l,P.t+h); ctx.closePath(); ctx.fillStyle='rgba(16,185,129,0.15)'; ctx.fill();
+    ctx.beginPath(); ctx.moveTo(P.l, y(B[0]||0)); for(let i=1;i<B.length;i++){ ctx.lineTo(P.l+i*stepX, y(B[i])); }
+    ctx.strokeStyle='#60a5fa'; ctx.lineWidth=2*DPR; ctx.stroke(); ctx.lineTo(P.l+(B.length-1)*stepX,P.t+h); ctx.lineTo(P.l,P.t+h); ctx.closePath(); ctx.fillStyle='rgba(96,165,250,0.15)'; ctx.fill();
+  }
+  let homeDataCache=[]; let canvas;
+  function updateCalc(){
+    const amount = clamp($('#amount').value,0,1_000_000_000);
+    const dailyPct = clamp($('#dailyPct').value,0,1000);
+    const days = clamp($('#days').value,1,365);
+    const reinvest = $('#reinvest').checked;
+    const cap = clamp($('#cap').value,0,1_000_000_000);
+    const withdrawEvery = clamp($('#withdrawEvery').value,0,365);
+    const {data, finalBalance, totalWithdrawn} = project({principal:amount,dailyPct,days,reinvest,withdrawEvery,reinvestCap:cap});
+    homeDataCache=data;
+    const totalProfit = reinvest ? finalBalance - amount : totalWithdrawn;
+    $('#finalBalance').textContent = '$'+fmt(finalBalance);
+    $('#totalProfit').textContent = '$'+fmt(totalProfit);
+    $('#totalWithdrawn').textContent = '$'+fmt(totalWithdrawn);
+    $('#initialInvestment').textContent = '$'+fmt(amount);
+    drawChart(canvas, data.map(d=>d.balance), data.map(d=>d.withdrawn));
+  }
+  function wireHome(){
+    ['amount','dailyPct','days','reinvest','cap','withdrawEvery'].forEach(id=>{
+      $('#'+id).addEventListener('input', updateCalc);
+      $('#'+id).addEventListener('change', updateCalc);
+    });
+    $('#resetBtn')?.addEventListener('click', ()=>{
+      $('#amount').value=1000; $('#dailyPct').value=1.2; $('#days').value=120; $('#reinvest').checked=true; $('#cap').value=10000; $('#withdrawEvery').value=0; updateCalc();
+    });
+    canvas = $('#chart'); updateCalc(); window.addEventListener('resize', ()=> drawChart(canvas, homeDataCache.map(d=>d.balance), homeDataCache.map(d=>d.withdrawn)));
   }
 
-  // ------- Hotlist -------
   function renderHotList(){
     const coins=[
       {s:'ETH', p:4744.4, ch:-1.81433},
@@ -213,7 +389,7 @@
       {s:'LINK',p:26.12, ch:-2.53731},
       {s:'DOT', p:4.128, ch:-1.26763}
     ];
-    const hot=document.getElementById('hotList'); hot.innerHTML='';
+    const hot=$('#hotList'); hot.innerHTML='';
     coins.forEach(c=>{
       const row=document.createElement('div');
       row.style.cssText="display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f1f5f9";
@@ -226,7 +402,7 @@
       hot.appendChild(row);
     });
     const top=coins.slice().sort((a,b)=>b.ch-a.ch).slice(0,5);
-    const tgt=document.getElementById('topGainers'); tgt.innerHTML='';
+    const tgt=$('#topGainers'); tgt.innerHTML='';
     top.forEach(c=>{
       const row=document.createElement('div');
       row.style.cssText="display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f1f5f9";
@@ -240,44 +416,171 @@
     });
   }
 
-  // ------- Wire everything -------
-  function updateCalculator(){
-    try{
-      const amount = clamp(document.getElementById('amount').value,0,1_000_000_000);
-      const dailyPct = clamp(document.getElementById('dailyPct').value,0,1000);
-      const days = clamp(document.getElementById('days').value,1,365);
-      const reinvest = document.getElementById('reinvest').checked;
-      const cap = clamp(document.getElementById('cap').value,0,1_000_000_000);
-      const withdrawEvery = clamp(document.getElementById('withdrawEvery').value,0,365);
-      const {data, finalBalance, totalWithdrawn} = project({principal:amount,dailyPct,days,reinvest,withdrawEvery,reinvestCap:cap});
-      const totalProfit = reinvest ? finalBalance - amount : totalWithdrawn;
-      document.getElementById('finalBalance').textContent = '$'+fmt(finalBalance);
-      document.getElementById('totalProfit').textContent = '$'+fmt(totalProfit);
-      document.getElementById('totalWithdrawn').textContent = '$'+fmt(totalWithdrawn);
-      document.getElementById('initialInvestment').textContent = '$'+fmt(amount);
-      drawChart(document.getElementById('chart'), data.map(d=>d.balance), data.map(d=>d.withdrawn));
-    }catch(e){
-      console.error('calc error', e);
-    }
+  function renderAssets(){
+    const b = state.balances.USDT;
+    const total = b.available + b.lock + b.waiting;
+    $('#totalAssets').textContent = mask(total);
+    $('#expMoney').textContent = mask(state.expMoney);
+    $('#availAssets').textContent = mask(b.available);
+    $('#totalLock').textContent = mask(b.lock);
+    $('#waitRel').textContent = mask(b.waiting);
+    $('#usdtAvail').textContent = mask(b.available);
+    $('#usdtLock').textContent = mask(b.lock);
+    $('#usdtWait').textContent = mask(b.waiting);
+    $('#p_cum').textContent = mask(state.profit.cumulativeIncome);
+    $('#p_today').textContent = mask(state.profit.todayEarnings);
+    $('#p_tx').textContent = mask(state.profit.cumulativeTxIncome);
+    $('#p_trd_today').textContent = mask(state.profit.todayTradingIncome);
+    $('#p_team').textContent = mask(state.profit.cumulativeTeamRevenue);
+    $('#p_team_today').textContent = mask(state.profit.teamRevenueToday);
   }
-  function wire(){
-    ['amount','dailyPct','days','reinvest','cap','withdrawEvery'].forEach(id=>{
-      const el = document.getElementById(id); if(!el) return;
-      el.addEventListener('input', updateCalculator); el.addEventListener('change', updateCalculator);
+  function openTopup(){
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `<div class="row" style="grid-template-columns:1fr 1fr; gap:12px; align-items:center">
+      <label>Amount (USDT)</label><input id="inpTop" type="number" min="0" value="10"/>
+      <label>Note</label><input id="inpNote" type="text" placeholder="Optional" style="width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:14px"/>
+    </div>`;
+    const ok = document.createElement('button'); ok.className='btn primary'; ok.textContent='Confirm';
+    ok.addEventListener('click', ()=>{
+      const val = Math.max(0, Number(wrap.querySelector('#inpTop').value||0));
+      state.balances.USDT.available += val;
+      pushLedger('topup', val, wrap.querySelector('#inpNote').value||'');
+      closeModal(); renderAssets();
     });
-    const reset = document.getElementById('resetBtn');
-    if(reset){ reset.addEventListener('click', ()=>{ 
-      document.getElementById('amount').value=1000;
-      document.getElementById('dailyPct').value=1.2;
-      document.getElementById('days').value=120;
-      document.getElementById('reinvest').checked=true;
-      document.getElementById('cap').value=10000;
-      document.getElementById('withdrawEvery').value=0;
-      updateCalculator();
-    });}
+    const cancel = Object.assign(document.createElement('button'), {className:'btn outline', textContent:'Cancel'});
+    openModal('Top Up', wrap, [cancel, ok]);
   }
-  document.addEventListener('DOMContentLoaded', function(){ renderHotList(); wire(); updateCalculator(); });
-  window.addEventListener('resize', updateCalculator, {passive:true});
+  function openWithdraw(){
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `<div class="row" style="grid-template-columns:1fr 1fr; gap:12px; align-items:center">
+      <label>Amount (USDT)</label><input id="inpW" type="number" min="0" value="3"/>
+      <label>Note</label><input id="inpNote" type="text" placeholder="Optional" style="width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:14px"/>
+    </div>`;
+    const ok = document.createElement('button'); ok.className='btn primary'; ok.textContent='Confirm';
+    ok.addEventListener('click', ()=>{
+      const val = Math.max(0, Number(wrap.querySelector('#inpW').value||0));
+      if(val > state.balances.USDT.available){ alert('Insufficient balance'); return }
+      state.balances.USDT.available -= val;
+      pushLedger('withdraw', -val, wrap.querySelector('#inpNote').value||'');
+      closeModal(); renderAssets();
+    });
+    const cancel = Object.assign(document.createElement('button'), {className:'btn outline', textContent:'Cancel'});
+    openModal('Withdrawal', wrap, [cancel, ok]);
+  }
+  function openBill(){
+    const wrap = document.createElement('div');
+    const tbl = Object.assign(document.createElement('table'), {className:'table'});
+    tbl.innerHTML = '<thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Note</th></tr></thead><tbody></tbody>';
+    const tb = tbl.querySelector('tbody');
+    if(state.ledger.length===0){
+      const p = document.createElement('div'); p.className='muted'; p.style.textAlign='center'; p.style.padding='20px'; p.textContent='No Records Yet'; wrap.appendChild(p);
+    } else {
+      state.ledger.forEach(r=>{
+        const tr = document.createElement('tr');
+        const t = new Date(r.ts).toLocaleString();
+        tr.innerHTML = `<td>${t}</td><td>${r.type}</td><td>${fmt(r.amount)}</td><td>${r.note||''}</td>`;
+        tb.appendChild(tr);
+      });
+      wrap.appendChild(tbl);
+    }
+    const close = Object.assign(document.createElement('button'), {className:'btn primary', textContent:'Close'});
+    openModal('Bill', wrap, [close]);
+  }
+  function openEarnings(){
+    $('#earningsView').style.display='block';
+    monthOptions(); renderIncomeTable();
+    $('#waitAmt').textContent = fmt(state.balances.USDT.waiting);
+    $('#releasedAmt').textContent = fmt(state.released);
+  }
+  function renderIncomeTable(){
+    const fType = $('#filterType').value;
+    const fMonth = $('#filterMonth').value;
+    const rows = state.ledger.filter(r=>{
+      const m = new Date(r.ts).toISOString().slice(0,7);
+      const matchT = fType==='all' ? true : r.type===fType;
+      const matchM = !fMonth ? true : m===fMonth;
+      return matchT && matchM;
+    });
+    const tb = $('#incomeTable tbody'); tb.innerHTML='';
+    rows.forEach(r=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${new Date(r.ts).toLocaleString()}</td><td>${r.type}</td><td>${fmt(r.amount)}</td><td>${r.note||''}</td>`;
+      tb.appendChild(tr);
+    });
+    $('#incomeEmpty').style.display = rows.length ? 'none' : 'block';
+  }
+
+  function wireAssets(){
+    $('#toggleEye').addEventListener('click', ()=>{ state.hide = !state.hide; renderAssets() });
+    $('#btnTopup').addEventListener('click', openTopup);
+    $('#btnWithdraw').addEventListener('click', openWithdraw);
+    $('#btnBill').addEventListener('click', openBill);
+    $('#rowTopup').addEventListener('click', openTopup);
+    $('#rowWithdraw').addEventListener('click', openWithdraw);
+    $('#rowBill').addEventListener('click', openBill);
+    $('#viewEarnings').addEventListener('click', ()=>{ $('#earningsView').style.display='block'; openEarnings() });
+    $('#backAssets').addEventListener('click', ()=>{ $('#earningsView').style.display='none' });
+    $('#filterType').addEventListener('change', renderIncomeTable);
+    $('#filterMonth').addEventListener('change', renderIncomeTable);
+    $$('#earningsView .chip').forEach(ch=> ch.addEventListener('click', ()=>{
+      const id = ch.getAttribute('data-tab');
+      $('#tab-income').style.display = id==='income' ? 'block' : 'none';
+      $('#tab-waiting').style.display = id==='waiting' ? 'block' : 'none';
+    }));
+    $('#btnRelease').addEventListener('click', ()=>{
+      const w = state.balances.USDT.waiting;
+      if(w<=0){ alert('Nothing to release'); return }
+      state.balances.USDT.waiting = 0;
+      state.balances.USDT.available += w;
+      state.released += w;
+      pushLedger('release', w, 'Released to available');
+      renderAssets(); openEarnings(); renderIncomeTable();
+    });
+  }
+
+  function initHome(){
+    function renderHotList(){
+      const coins=[
+        {s:'ETH', p:4744.4, ch:-1.81433},
+        {s:'BTC', p:115963.63, ch:-0.83154},
+        {s:'SOL', p:204.86, ch: 2.07783},
+        {s:'XRP', p:3.0344, ch:-1.30427},
+        {s:'BNB', p:887.14, ch:-1.45078},
+        {s:'ADA', p:0.9135, ch:-1.93326},
+        {s:'LINK',p:26.12, ch:-2.53731},
+        {s:'DOT', p:4.128, ch:-1.26763}
+      ];
+      const hot=$('#hotList'); hot.innerHTML='';
+      coins.forEach(c=>{
+        const row=document.createElement('div');
+        row.style.cssText="display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f1f5f9";
+        row.innerHTML=`<div style="display:flex; align-items:center; gap:10px">
+            <div style="width:32px; height:32px; border-radius:50%; background:#f1f5f9; display:grid; place-items:center">${c.s[0]}</div>
+            <div style="font-weight:700">${c.s} <span class="muted" style="font-size:12px">USDT</span></div>
+          </div>
+          <div class="${c.ch>=0?'g':'r'}">${c.ch>=0?'+':''}${c.ch.toFixed(5)}%</div>
+          <div style="width:80px; text-align:right">${fmt(c.p)}</div>`;
+        hot.appendChild(row);
+      });
+      const top=coins.slice().sort((a,b)=>b.ch-a.ch).slice(0,5);
+      const tgt=$('#topGainers'); tgt.innerHTML='';
+      top.forEach(c=>{
+        const row=document.createElement('div');
+        row.style.cssText="display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f1f5f9";
+        row.innerHTML=`<div style="display:flex; align-items:center; gap:10px">
+            <div style="width:32px; height:32px; border-radius:50%; background:#f1f5f9; display:grid; place-items:center">${c.s[0]}</div>
+            <div style="font-weight:700">${c.s} <span class="muted" style="font-size:12px">USDT</span></div>
+          </div>
+          <div class="${c.ch>=0?'g':'r'}">${c.ch>=0?'+':''}${c.ch.toFixed(5)}%</div>
+          <div style="width:80px; text-align:right">${fmt(c.p)}</div>`;
+        tgt.appendChild(row);
+      });
+    }
+    renderHotList(); wireHome();
+  }
+
+  function init(){ initHome(); wireAssets(); renderAssets(); monthOptions(); }
+  document.addEventListener('DOMContentLoaded', init);
 })();
 </script>
 </body>
