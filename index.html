@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>TrustMe AI — Home + Assets</title>
+<title>TrustMe AI — App</title>
 <meta name="description" content="TrustMe AI — Smarter trading. Transparent performance.">
 <style>
-  :root{ --bg:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --emerald:#10b981; --rose:#ef4444; }
+  :root{ --bg:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --emerald:#10b981; --rose:#ef4444; --brand:#0f172a; }
   *{ box-sizing:border-box; }
   html,body{ margin:0; padding:0; background:var(--bg); color:var(--ink); font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
   .container{ max-width:1100px; margin:0 auto; padding:0 16px; }
@@ -15,10 +15,11 @@
   header{ position:sticky; top:0; z-index:10; backdrop-filter:blur(8px); background:rgba(255,255,255,.85); border-bottom:1px solid var(--line); }
   header .bar{ display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
   .brand{ display:flex; align-items:center; gap:8px; font-weight:700; }
-  .logo{ width:32px; height:32px; border-radius:12px; display:grid; place-items:center; background:#0f172a; color:#fff; font-weight:800; }
+  .logo{ width:32px; height:32px; border-radius:12px; display:grid; place-items:center; background:var(--brand); color:#fff; font-weight:800; }
   .btn{ padding:8px 16px; border-radius:14px; font-weight:700; font-size:14px; border:1px solid transparent; cursor:pointer; }
-  .btn.primary{ background:#0f172a; color:#fff; }
+  .btn.primary{ background:var(--brand); color:#fff; }
   .btn.outline{ background:#fff; color:var(--ink); border-color:var(--line); }
+  .btn.ghost{ background:transparent; border-color:transparent; color:var(--muted); }
   .card{ border:1px solid var(--line); border-radius:16px; background:#fff; }
   .card .hd{ padding:14px; border-bottom:1px solid var(--line); font-weight:700; }
   .card .bd{ padding:14px; }
@@ -26,7 +27,7 @@
   .badge.em{ background:#ecfdf5; color:#065f46;}
   .badge.m{ background:#f1f5f9; color:#475569;}
   label{ font-size:14px; }
-  input[type=number], select{ width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:14px; outline:none; }
+  input[type=number], input[type=text], select{ width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:14px; outline:none; }
   .kpi{ text-align:center; }
   .kpi .cap{ font-size:12px; color:var(--muted); }
   .kpi .val{ font-size:22px; font-weight:800; }
@@ -40,14 +41,31 @@
   canvas{ width:100%; height:240px; display:block; }
   .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(15,23,42,.35); }
   .modal.open{ display:flex; }
-  .modal .panel{ width:min(520px, 92vw); background:#fff; border:1px solid var(--line); border-radius:16px; }
+  .modal .panel{ width:min(560px, 96vw); background:#fff; border:1px solid var(--line); border-radius:16px; }
   .modal .panel .hd{ display:flex; align-items:center; justify-content:space-between; padding:14px; border-bottom:1px solid var(--line); font-weight:700; }
   .modal .panel .bd{ padding:14px; }
   .modal .actions{ display:flex; justify-content:flex-end; gap:8px; padding:14px; border-top:1px solid var(--line) }
   .table{ width:100%; border-collapse: collapse; }
   .table th, .table td{ padding:8px 10px; border-bottom:1px solid #f1f5f9; text-align:left; font-size:14px; }
-  .chip{ display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; border:1px solid var(--line); background:#fff; }
+  .chip{ display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; border:1px solid var(--line); background:#fff; cursor:pointer; }
   .navlink{ color:inherit; text-decoration:none; }
+  .kv{ display:grid; grid-template-columns: 1fr auto; gap:8px; align-items:center }
+  .list-item{ padding:10px 0; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between }
+  .switch{ width:44px; height:24px; background:#cbd5e1; border-radius:999px; padding:2px; display:flex; align-items:center; }
+  .switch div{ width:20px; height:20px; background:#fff; border-radius:50%; transform: translateX(0); transition:.2s; }
+  .switch.on{ background:#10b981; }
+  .switch.on div{ transform: translateX(20px); }
+
+  /* Top Up screen */
+  .screen{ max-width:800px; margin:0 auto; padding:0 16px; }
+  .screen .titlebar{ position:sticky; top:56px; background:#fff; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px; padding:12px 0; z-index:9 }
+  .pill{ display:flex; align-items:center; justify-content:space-between; padding:12px; border:1px solid var(--line); border-radius:12px; font-weight:700 }
+  .qrbox{ display:grid; place-items:center; border:1px solid var(--line); border-radius:12px; padding:12px; background:#fff }
+  .sheet{ position:fixed; left:0; right:0; bottom:-100%; background:#fff; border-top-left-radius:16px; border-top-right-radius:16px; box-shadow:0 -12px 24px rgba(0,0,0,.08); transition:.3s; z-index:50 }
+  .sheet.open{ bottom:0; }
+  .sheet .hd{ padding:14px; border-bottom:1px solid var(--line); font-weight:700; display:flex; align-items:center; justify-content:space-between }
+  .sheet .bd{ max-height:50vh; overflow:auto; }
+  .sheet .item{ padding:14px 16px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; cursor:pointer }
 </style>
 </head>
 <body>
@@ -162,14 +180,14 @@
         <div class="bd">
           <div class="row row-2">
             <div>
-              <div style="display:grid; grid-template-columns: 1fr auto; gap:8px; align-items:center">
+              <div class="kv">
                 <div>Cumulative Income(USDT)</div><div id="p_cum">0</div>
                 <div>Today's Earnings(USDT)</div><div id="p_today">0</div>
                 <div>Cumulative Transaction Income(USDT)</div><div id="p_tx">0</div>
               </div>
             </div>
             <div>
-              <div style="display:grid; grid-template-columns: 1fr auto; gap:8px; align-items:center">
+              <div class="kv">
                 <div>Today's Trading Income(USDT)</div><div id="p_trd_today">0</div>
                 <div>Cumulative Team Revenue(USDT)</div><div id="p_team">0</div>
                 <div>Team Revenue Today(USDT)</div><div id="p_team_today">0</div>
@@ -226,7 +244,7 @@
           </div>
           <div id="tab-waiting" style="margin-top:10px; display:none">
             <div class="card bd">
-              <div style="display:grid; grid-template-columns: 1fr auto; gap:8px; align-items:center">
+              <div class="kv">
                 <div>Waiting For Release(USDT)</div><div id="waitAmt">0</div>
                 <div>Released(USDT)</div><div id="releasedAmt">0</div>
               </div>
@@ -239,15 +257,160 @@
     </section>
   </section>
 
-  <!-- PLACEHOLDERS -->
+  <!-- STRATEGY -->
   <section id="page-strategy" class="container" style="display:none; padding:16px 0 24px 0">
-    <div class="card bd">Strategy screen placeholder</div>
+    <div class="card">
+      <div class="hd">My Strategies</div>
+      <div class="bd" id="myStrategies"></div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="card">
+      <div class="hd">Discover Strategies</div>
+      <div class="bd" id="strategyList"></div>
+    </div>
   </section>
+
+  <!-- TEAM -->
   <section id="page-team" class="container" style="display:none; padding:16px 0 24px 0">
-    <div class="card bd">Team screen placeholder</div>
+    <div class="card">
+      <div class="hd">Invite & Rewards</div>
+      <div class="bd">
+        <div class="row row-2">
+          <div>
+            <div class="muted">Referral Code</div>
+            <div id="refCode" style="font-size:28px; font-weight:900">TM000001</div>
+            <div class="muted" style="margin-top:6px">Your invite link</div>
+            <div id="refLink" class="card bd" style="word-break:break-all">https://trustmeai.online/register?ref=TM000001</div>
+            <div style="display:flex; gap:8px; margin-top:8px">
+              <button id="copyLink" class="btn outline">Copy Link</button>
+              <button id="addMockRef" class="btn outline">Add Test Invite</button>
+            </div>
+          </div>
+          <div>
+            <div class="row row-2">
+              <div class="card bd kpi"><div class="cap">Team Size</div><div id="teamSize" class="val">0</div></div>
+              <div class="card bd kpi"><div class="cap">Direct Invites</div><div id="teamDirect" class="val">0</div></div>
+              <div class="card bd kpi"><div class="cap">Cumulative Team Revenue</div><div id="teamRev" class="val">$0</div></div>
+              <div class="card bd kpi"><div class="cap">Team Revenue Today</div><div id="teamRevToday" class="val">$0</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="card">
+      <div class="hd">Team Members</div>
+      <div class="bd">
+        <div id="teamTableEmpty" class="muted">No Members Yet</div>
+        <table class="table" id="teamTable" style="display:none">
+          <thead><tr><th>User</th><th>Level</th><th>Joined</th><th>Volume (USDT)</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
   </section>
+
+  <!-- MINE -->
   <section id="page-mine" class="container" style="display:none; padding:16px 0 24px 0">
-    <div class="card bd">Profile screen placeholder</div>
+    <div class="card">
+      <div class="bd">
+        <div style="display:flex; align-items:center; gap:12px">
+          <div style="width:48px;height:48px;border-radius:14px;background:#f1f5f9;display:grid;place-items:center;font-weight:800">U</div>
+          <div>
+            <div style="font-weight:800">User #10001</div>
+            <div class="muted" style="font-size:12px">Joined: 2025-08-01</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="card">
+      <div class="hd">Preferences</div>
+      <div class="bd">
+        <div class="list-item"><div>Dark Mode</div><div id="toggleDark" class="switch"><div></div></div></div>
+        <div class="list-item"><div>Language</div><div>
+          <select id="langSel">
+            <option value="en">English</option>
+            <option value="te">తెలుగు</option>
+            <option value="da">Dansk</option>
+          </select>
+        </div></div>
+      </div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="card">
+      <div class="hd">Support</div>
+      <div class="bd">
+        <div class="list-item"><div>Help Center</div><button class="btn ghost">Open</button></div>
+        <div class="list-item"><div>About</div><button class="btn ghost">Open</button></div>
+        <div class="list-item"><div>Log out</div><button class="btn outline">Sign out</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOP UP SCREEN -->
+  <section id="page-topup" class="screen" style="display:none; padding:0 16px 120px 16px;">
+    <div class="titlebar">
+      <button id="backTopUp" class="btn outline">←</button>
+      <div style="font-weight:800">Top Up</div>
+    </div>
+    <div style="height:12px"></div>
+
+    <!-- Choose currency -->
+    <div class="card">
+      <div class="bd">
+        <div class="muted" style="font-size:12px">Choose A Currency</div>
+        <div id="curPicker" class="pill">
+          <div style="display:flex; align-items:center; gap:10px"><div style="width:28px;height:28px;border-radius:999px;background:#f1f5f9;display:grid;place-items:center">₮</div><b id="curName">USDT</b></div>
+          <div>▾</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <!-- Select network -->
+    <div class="card">
+      <div class="bd">
+        <div class="muted" style="font-size:12px">Select The Network</div>
+        <div id="netPicker" class="pill">
+          <div style="display:flex; align-items:center; gap:10px"><div style="width:28px;height:28px;border-radius:999px;background:#fee2e2;display:grid;place-items:center">🅣</div><b id="netName">TRON(TRC20)</b></div>
+          <div>▾</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <!-- QR + address -->
+    <div class="card">
+      <div class="bd">
+        <div class="muted" style="font-size:12px">Recharge Address</div>
+        <div class="muted" style="font-size:12px">This address only supports USDT deposits on the selected network.</div>
+        <div style="height:12px"></div>
+        <div class="qrbox">
+          <img id="qrImg" alt="deposit QR" width="240" height="240" style="border-radius:8px"/>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:8px">
+          <div id="addrText" style="font-family:monospace; white-space:nowrap; overflow:auto">—</div>
+          <button id="copyAddr" class="btn outline">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="card">
+      <div class="hd">Stars‑Ai Recharge Guide</div>
+      <div class="bd">
+        <ul style="margin:0 0 0 18px; padding:0; line-height:1.6">
+          <li>Use the **same chain** for withdrawal and deposit (e.g., USDT‑TRC20).</li>
+          <li>Minimum deposit amount: **5 USDT**.</li>
+          <li>Ensure your deposit is ≥ 5 USDT so funds are credited smoothly.</li>
+          <li>Network confirmations may take time; final credit depends on the chain.</li>
+        </ul>
+      </div>
+    </div>
   </section>
 </main>
 
@@ -261,6 +424,12 @@
   </div>
 </footer>
 
+<!-- Bottom sheet network selector -->
+<div id="netSheet" class="sheet" aria-hidden="true">
+  <div class="hd"><button id="sheetCancel" class="btn ghost">Cancel</button><div>Select The Network</div><button id="sheetConfirm" class="btn ghost">Confirm</button></div>
+  <div class="bd" id="netList"></div>
+</div>
+
 <div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
   <div class="panel">
     <div class="hd"><span id="modalTitle">Modal</span><button id="modalClose" class="btn outline">✕</button></div>
@@ -271,10 +440,11 @@
 
 <script>
 (function(){
+  // ---------- App State ----------
   const state = {
     hide: false,
     expMoney: 200,
-    balances: { USDT: { available: 3, lock: 0, waiting: 0 } },
+    balances: { USDT: { available: 300, lock: 0, waiting: 0 } },
     released: 0,
     profit: {
       cumulativeIncome: 0,
@@ -284,9 +454,26 @@
       cumulativeTeamRevenue: 0,
       teamRevenueToday: 0
     },
-    ledger: []
+    ledger: [],
+    strategies: [
+      { id:'exp-gold', name:'Experience Gold Strategy', pair:'ETH/USDT', range:[1,2], tvl:4.3738e6, users:12914, desc:'Balanced ETH grid strategy with capital protection controls.', points: genSeries(60, 4000, 120) },
+      { id:'sol-boost', name:'SOL Boost', pair:'SOL/USDT', range:[0.8,1.6], tvl:1.19e6, users:6842, desc:'Momentum scalper on SOL spot with auto risk-off.', points: genSeries(60, 200, 18) },
+      { id:'btc-stable', name:'BTC Stable', pair:'BTC/USDT', range:[0.3,0.9], tvl:6.02e6, users:21103, desc:'Low-volatility BTC swing with tight drawdown guard.', points: genSeries(60, 60000, 800) }
+    ],
+    positions: [],
+    referrals: { code: '', size: 0, direct: 0, members: [] },
+    topup: {
+      currency: 'USDT',
+      networks: [
+        { id:'TRC20', label:'TRON(TRC20)', address:'TQ1vYnESLMbt967YY34FTqmvmE32kNbrN' },
+        { id:'BEP20', label:'BNB SMART CHAIN(BEP20)', address:'0xbB3f7D6E7bF0c1A6bE620dD000000000BEP20' },
+        { id:'ERC20', label:'Ethereum(ERC20)', address:'0x9A6fA3cEe810E0d270000000000000000000ERC' }
+      ],
+      selected: 'TRC20'
+    }
   };
 
+  // ---------- Utils ----------
   const fmt = (n)=> Number(n||0).toLocaleString(undefined,{maximumFractionDigits:2});
   const mask = (n)=> state.hide ? '•••' : fmt(n);
   const $ = (q)=> document.querySelector(q);
@@ -300,24 +487,24 @@
   function closeModal(){ const m=$('#modal'); m.classList.remove('open'); m.setAttribute('aria-hidden','true'); }
   $('#modalClose').addEventListener('click', closeModal);
   $('#modal').addEventListener('click', (e)=>{ if(e.target.id==='modal') closeModal() });
-
   function pushLedger(type, amount, note=''){ state.ledger.unshift({ ts: Date.now(), type, amount: Number(amount), note }) }
-  function monthOptions(){
-    const s = $('#filterMonth'); if(!s) return; s.innerHTML='';
-    const now = new Date(); for(let i=0;i<12;i++){ const d=new Date(now.getFullYear(), now.getMonth()-i, 1);
-      const v = d.toISOString().slice(0,7); const opt=document.createElement('option'); opt.value=v; opt.textContent=v; s.appendChild(opt) }
-  }
+  function genSeries(n, base, spread){ const a=[]; let v=base; for(let i=0;i<n;i++){ v += (Math.random()-.48)*spread; a.push(Math.max(0, v)); } return a; }
 
+  // ---------- Router ----------
   function showPage(key){
-    const map = { home:'#page-home', assets:'#page-assets', strategy:'#page-strategy', team:'#page-team', mine:'#page-mine' };
+    const map = { home:'#page-home', assets:'#page-assets', strategy:'#page-strategy', team:'#page-team', mine:'#page-mine', topup:'#page-topup' };
     Object.values(map).forEach(sel=>{ const el=$(sel); if(el) el.style.display='none' });
     $(map[key]).style.display='block';
     $$('.tab').forEach(t=>t.classList.toggle('active', t.getAttribute('data-nav')===key));
-    if(key==='assets'){ renderAssets(); }
+    if(key==='assets') renderAssets();
+    if(key==='strategy') renderStrategy();
+    if(key==='team') renderTeam();
+    if(key==='topup') renderTopUp();
   }
   $$('.tab').forEach(t=> t.addEventListener('click', ()=> showPage(t.getAttribute('data-nav')) ));
   $$('.navlink').forEach(a => a.addEventListener('click', (e)=>{ e.preventDefault(); showPage(a.getAttribute('data-nav')); }));
 
+  // ---------- Calculator ----------
   function clamp(n,min,max){ n=Number(n||0); if(isNaN(n))n=min; return Math.min(Math.max(n,min),max); }
   function project({principal,dailyPct,days,reinvest,withdrawEvery,reinvestCap}){
     principal=Number(principal||0); dailyPct=Number(dailyPct||0); days=Math.max(1,Math.min(365,Number(days||1)));
@@ -416,6 +603,7 @@
     });
   }
 
+  // ---------- Assets ----------
   function renderAssets(){
     const b = state.balances.USDT;
     const total = b.available + b.lock + b.waiting;
@@ -434,22 +622,7 @@
     $('#p_team').textContent = mask(state.profit.cumulativeTeamRevenue);
     $('#p_team_today').textContent = mask(state.profit.teamRevenueToday);
   }
-  function openTopup(){
-    const wrap = document.createElement('div');
-    wrap.innerHTML = `<div class="row" style="grid-template-columns:1fr 1fr; gap:12px; align-items:center">
-      <label>Amount (USDT)</label><input id="inpTop" type="number" min="0" value="10"/>
-      <label>Note</label><input id="inpNote" type="text" placeholder="Optional" style="width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:14px"/>
-    </div>`;
-    const ok = document.createElement('button'); ok.className='btn primary'; ok.textContent='Confirm';
-    ok.addEventListener('click', ()=>{
-      const val = Math.max(0, Number(wrap.querySelector('#inpTop').value||0));
-      state.balances.USDT.available += val;
-      pushLedger('topup', val, wrap.querySelector('#inpNote').value||'');
-      closeModal(); renderAssets();
-    });
-    const cancel = Object.assign(document.createElement('button'), {className:'btn outline', textContent:'Cancel'});
-    openModal('Top Up', wrap, [cancel, ok]);
-  }
+  function openTopup(){ showPage('topup') } // navigate to the new Top Up screen
   function openWithdraw(){
     const wrap = document.createElement('div');
     wrap.innerHTML = `<div class="row" style="grid-template-columns:1fr 1fr; gap:12px; align-items:center">
@@ -462,7 +635,7 @@
       if(val > state.balances.USDT.available){ alert('Insufficient balance'); return }
       state.balances.USDT.available -= val;
       pushLedger('withdraw', -val, wrap.querySelector('#inpNote').value||'');
-      closeModal(); renderAssets();
+      closeModal(); renderAssets(); renderStrategy();
     });
     const cancel = Object.assign(document.createElement('button'), {className:'btn outline', textContent:'Cancel'});
     openModal('Withdrawal', wrap, [cancel, ok]);
@@ -492,6 +665,11 @@
     $('#waitAmt').textContent = fmt(state.balances.USDT.waiting);
     $('#releasedAmt').textContent = fmt(state.released);
   }
+  function monthOptions(){
+    const s = $('#filterMonth'); if(!s) return; s.innerHTML='';
+    const now = new Date(); for(let i=0;i<12;i++){ const d=new Date(now.getFullYear(), now.getMonth()-i, 1);
+      const v = d.toISOString().slice(0,7); const opt=document.createElement('option'); opt.value=v; opt.textContent=v; s.appendChild(opt) }
+  }
   function renderIncomeTable(){
     const fType = $('#filterType').value;
     const fMonth = $('#filterMonth').value;
@@ -509,14 +687,13 @@
     });
     $('#incomeEmpty').style.display = rows.length ? 'none' : 'block';
   }
-
   function wireAssets(){
     $('#toggleEye').addEventListener('click', ()=>{ state.hide = !state.hide; renderAssets() });
     $('#btnTopup').addEventListener('click', openTopup);
-    $('#btnWithdraw').addEventListener('click', openWithdraw);
-    $('#btnBill').addEventListener('click', openBill);
     $('#rowTopup').addEventListener('click', openTopup);
+    $('#btnWithdraw').addEventListener('click', openWithdraw);
     $('#rowWithdraw').addEventListener('click', openWithdraw);
+    $('#btnBill').addEventListener('click', openBill);
     $('#rowBill').addEventListener('click', openBill);
     $('#viewEarnings').addEventListener('click', ()=>{ $('#earningsView').style.display='block'; openEarnings() });
     $('#backAssets').addEventListener('click', ()=>{ $('#earningsView').style.display='none' });
@@ -538,49 +715,174 @@
     });
   }
 
-  function initHome(){
-    function renderHotList(){
-      const coins=[
-        {s:'ETH', p:4744.4, ch:-1.81433},
-        {s:'BTC', p:115963.63, ch:-0.83154},
-        {s:'SOL', p:204.86, ch: 2.07783},
-        {s:'XRP', p:3.0344, ch:-1.30427},
-        {s:'BNB', p:887.14, ch:-1.45078},
-        {s:'ADA', p:0.9135, ch:-1.93326},
-        {s:'LINK',p:26.12, ch:-2.53731},
-        {s:'DOT', p:4.128, ch:-1.26763}
-      ];
-      const hot=$('#hotList'); hot.innerHTML='';
-      coins.forEach(c=>{
-        const row=document.createElement('div');
-        row.style.cssText="display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f1f5f9";
-        row.innerHTML=`<div style="display:flex; align-items:center; gap:10px">
-            <div style="width:32px; height:32px; border-radius:50%; background:#f1f5f9; display:grid; place-items:center">${c.s[0]}</div>
-            <div style="font-weight:700">${c.s} <span class="muted" style="font-size:12px">USDT</span></div>
-          </div>
-          <div class="${c.ch>=0?'g':'r'}">${c.ch>=0?'+':''}${c.ch.toFixed(5)}%</div>
-          <div style="width:80px; text-align:right">${fmt(c.p)}</div>`;
-        hot.appendChild(row);
+  // ---------- Strategy ----------
+  function drawMiniChart(el, arr){
+    const DPR = window.devicePixelRatio||1; const w=220, h=56; const c=document.createElement('canvas'); c.width=w*DPR; c.height=h*DPR; c.style.width=w+'px'; c.style.height=h+'px';
+    const ctx=c.getContext('2d'); const P={l:6*DPR,r:6*DPR,t:6*DPR,b:6*DPR}; const W=c.width-P.l-P.r; const H=c.height-P.t-P.b;
+    const max=Math.max(...arr), min=Math.min(...arr), y=v=> P.t + H - ((v-min)/(max-min+1e-9))*H, step=W/Math.max(1,arr.length-1);
+    ctx.beginPath(); ctx.moveTo(P.l,y(arr[0])); for(let i=1;i<arr.length;i++){ ctx.lineTo(P.l+i*step,y(arr[i])); } ctx.strokeStyle='#10b981'; ctx.lineWidth=2*DPR; ctx.stroke();
+    el.appendChild(c);
+  }
+  function renderStrategy(){
+    const mine = $('#myStrategies'); mine.innerHTML = state.positions.length? '' : '<div class="muted">No active strategies</div>';
+    state.positions.forEach(pos=>{
+      const s = state.strategies.find(x=>x.id===pos.id);
+      const div = document.createElement('div'); div.className='list-item'; const pct = pos.pct;
+      const days = (Date.now()-pos.start)/(1000*60*60*24);
+      const est = pos.amount * ((pct/100)*days);
+      div.innerHTML = `<div><div style="font-weight:700">${s.name}</div><div class="muted" style="font-size:12px">${s.pair} • ${pct.toFixed(2)}%/day</div></div>
+                       <div style="text-align:right"><div>Amt: ${fmt(pos.amount)} USDT</div><div class="muted" style="font-size:12px">Est. Profit: ${fmt(est)}</div></div>`;
+      const actions = document.createElement('div'); actions.style.display='flex'; actions.style.gap='6px';
+      const claim = Object.assign(document.createElement('button'), {className:'btn outline', textContent:'Claim'});
+      const exitB = Object.assign(document.createElement('button'), {className:'btn outline', textContent:'Exit'});
+      actions.appendChild(claim); actions.appendChild(exitB);
+      const right = document.createElement('div'); right.style.display='flex'; right.style.gap='10px'; right.style.alignItems='center';
+      right.appendChild(actions); div.appendChild(right);
+      claim.addEventListener('click', ()=>{
+        const profit = Math.max(0, est);
+        if(profit>0){ state.balances.USDT.waiting += profit; state.profit.cumulativeIncome += profit; state.profit.todayEarnings += profit; pushLedger('profit', profit, s.name+' claim'); renderAssets(); showPage('assets'); }
       });
-      const top=coins.slice().sort((a,b)=>b.ch-a.ch).slice(0,5);
-      const tgt=$('#topGainers'); tgt.innerHTML='';
-      top.forEach(c=>{
-        const row=document.createElement('div');
-        row.style.cssText="display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f1f5f9";
-        row.innerHTML=`<div style="display:flex; align-items:center; gap:10px">
-            <div style="width:32px; height:32px; border-radius:50%; background:#f1f5f9; display:grid; place-items:center">${c.s[0]}</div>
-            <div style="font-weight:700">${c.s} <span class="muted" style="font-size:12px">USDT</span></div>
-          </div>
-          <div class="${c.ch>=0?'g':'r'}">${c.ch>=0?'+':''}${c.ch.toFixed(5)}%</div>
-          <div style="width:80px; text-align:right">${fmt(c.p)}</div>`;
-        tgt.appendChild(row);
+      exitB.addEventListener('click', ()=>{
+        state.balances.USDT.waiting += pos.amount; pushLedger('release', pos.amount, 'Exit '+s.name);
+        state.positions = state.positions.filter(p=>p!==pos); renderStrategy(); renderAssets();
       });
-    }
-    renderHotList(); wireHome();
+      mine.appendChild(div);
+    });
+
+    const list = $('#strategyList'); list.innerHTML='';
+    state.strategies.forEach(st=>{
+      const row = document.createElement('div'); row.className='list-item';
+      const left = document.createElement('div');
+      left.innerHTML = `<div style="font-weight:700">${st.name}</div><div class="muted" style="font-size:12px">${st.pair} • ${st.range[0]}% ~ ${st.range[1]}% daily • Users ${fmt(st.users)}</div>`;
+      const chartWrap = document.createElement('div'); drawMiniChart(chartWrap, st.points);
+      const participate = Object.assign(document.createElement('button'), {className:'btn primary', textContent:'Participate'});
+      participate.addEventListener('click', ()=> openParticipate(st));
+      const right = document.createElement('div'); right.style.display='flex'; right.style.gap='10px'; right.style.alignItems='center';
+      right.appendChild(chartWrap); right.appendChild(participate);
+      row.appendChild(left); row.appendChild(right);
+      list.appendChild(row);
+    });
+  }
+  function openParticipate(st){
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `<div class="row" style="grid-template-columns: 1fr 1fr; gap:12px; align-items:center">
+      <label>Strategy</label><div>${st.name}</div>
+      <label>Pair</label><div>${st.pair}</div>
+      <label>Daily %</label><input id="pct" type="number" min="${st.range[0]}" max="${st.range[1]}" value="${((st.range[0]+st.range[1])/2).toFixed(2)}"/>
+      <label>Amount (USDT)</label><input id="amt" type="number" min="1" value="50"/>
+      <div class="muted" style="grid-column:1/-1">Available: ${fmt(state.balances.USDT.available)} USDT</div>
+    </div>`;
+    const ok = document.createElement('button'); ok.className='btn primary'; ok.textContent='Confirm Join';
+    ok.addEventListener('click', ()=>{
+      const pct = Number(wrap.querySelector('#pct').value||0);
+      const amt = Number(wrap.querySelector('#amt').value||0);
+      if(amt<=0 || amt > state.balances.USDT.available){ alert('Invalid amount'); return }
+      state.balances.USDT.available -= amt; state.positions.push({ id: st.id, amount: amt, start: Date.now(), lastClaim: Date.now(), pct });
+      pushLedger('invest', -amt, 'Join '+st.name);
+      closeModal(); renderStrategy(); renderAssets();
+    });
+    const cancel = Object.assign(document.createElement('button'), {className:'btn outline', textContent:'Cancel'});
+    openModal('Participate', wrap, [cancel, ok]);
   }
 
-  function init(){ initHome(); wireAssets(); renderAssets(); monthOptions(); }
+  // ---------- Team ----------
+  function renderTeam(){
+    if(!state.referrals.code){
+      state.referrals.code = 'TM' + Math.random().toString(36).slice(2,8).toUpperCase();
+    }
+    $('#refCode').textContent = state.referrals.code;
+    $('#refLink').textContent = location.origin ? (location.origin+'/register?ref='+state.referrals.code) : ('https://trustmeai.online/register?ref='+state.referrals.code);
+    $('#teamSize').textContent = fmt(state.referrals.size);
+    $('#teamDirect').textContent = fmt(state.referrals.direct);
+    $('#teamRev').textContent = '$'+fmt(state.profit.cumulativeTeamRevenue);
+    $('#teamRevToday').textContent = '$'+fmt(state.profit.teamRevenueToday);
+
+    const table = $('#teamTable'); const empty = $('#teamTableEmpty'); const tb = table.querySelector('tbody');
+    tb.innerHTML=''; if(state.referrals.members.length){ table.style.display='table'; empty.style.display='none'; } else { table.style.display='none'; empty.style.display='block'; }
+    state.referrals.members.forEach(m=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${m.user}</td><td>${m.level}</td><td>${new Date(m.ts).toLocaleDateString()}</td><td>${fmt(m.volume)}</td>`;
+      tb.appendChild(tr);
+    });
+  }
+  $('#copyLink').addEventListener('click', async ()=>{
+    try{ await navigator.clipboard.writeText($('#refLink').textContent); alert('Copied!'); }catch{ alert('Copy failed'); }
+  });
+  $('#addMockRef').addEventListener('click', ()=>{
+    const u = 'user'+(1000+state.referrals.size+1);
+    state.referrals.size += 1; state.referrals.direct += 1;
+    const vol = Math.round(Math.random()*200+50);
+    state.referrals.members.unshift({ user: u, level: 'L1', ts: Date.now(), volume: vol });
+    const rev = vol * 0.02;
+    state.profit.cumulativeTeamRevenue += rev; state.profit.teamRevenueToday += rev; pushLedger('team', rev, 'Team bonus from '+u);
+    renderTeam(); renderAssets();
+  });
+
+  // ---------- Mine ----------
+  $('#toggleDark').addEventListener('click', (e)=>{
+    const el = e.currentTarget; el.classList.toggle('on');
+    const dark = el.classList.contains('on');
+    document.documentElement.style.setProperty('--bg', dark ? '#0b1220' : '#ffffff');
+    document.documentElement.style.setProperty('--ink', dark ? '#e5e7eb' : '#0f172a');
+    document.documentElement.style.setProperty('--line', dark ? '#1f2937' : '#e2e8f0');
+    document.documentElement.style.setProperty('--brand', dark ? '#10b981' : '#0f172a');
+  });
+
+  // ---------- Top Up Screen ----------
+  function renderTopUp(){
+    const cur = state.topup.currency;
+    $('#curName').textContent = cur;
+    const selected = state.topup.networks.find(n => n.id === state.topup.selected) || state.topup.networks[0];
+    $('#netName').textContent = selected.label;
+    $('#addrText').textContent = selected.address;
+
+    // Try external QR service; on fail, fallback to text canvas
+    const img = $('#qrImg');
+    img.onerror = ()=>{
+      const c = document.createElement('canvas'); c.width=240; c.height=240; const ctx=c.getContext('2d');
+      ctx.fillStyle='#fff'; ctx.fillRect(0,0,240,240); ctx.fillStyle='#111'; for(let y=0;y<240;y+=20){ for(let x=0;x<240;x+=20){ if((x*y)%3===0) ctx.fillRect(x+4,y+4,8,8) } }
+      ctx.fillStyle='#0f172a'; ctx.font='14px system-ui'; ctx.fillText('QR unavailable', 60, 120); img.replaceWith(c);
+    };
+    img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data='+encodeURIComponent(selected.address);
+  }
+  $('#copyAddr').addEventListener('click', async ()=>{
+    try{ await navigator.clipboard.writeText($('#addrText').textContent); alert('Address copied'); }catch{ alert('Copy failed'); }
+  });
+  $('#backTopUp').addEventListener('click', ()=> showPage('assets'));
+
+  // network bottom sheet
+  const sheet = $('#netSheet'); const list = $('#netList'); let pending = state.topup.selected;
+  function openSheet(){
+    list.innerHTML='';
+    state.topup.networks.forEach(n=>{
+      const row=document.createElement('div'); row.className='item'; row.setAttribute('data-id', n.id);
+      row.innerHTML = `<div>${n.label}</div><div>${pending===n.id?'✅':''}</div>`;
+      row.addEventListener('click', ()=>{ pending=n.id; $$('#netList .item').forEach(x=>x.lastChild.textContent=''); row.lastChild.textContent='✅'; });
+      list.appendChild(row);
+    });
+    sheet.classList.add('open'); sheet.setAttribute('aria-hidden','false');
+  }
+  function closeSheet(){ sheet.classList.remove('open'); sheet.setAttribute('aria-hidden','true'); }
+  $('#netPicker').addEventListener('click', openSheet);
+  $('#sheetCancel').addEventListener('click', closeSheet);
+  $('#sheetConfirm').addEventListener('click', ()=>{ state.topup.selected = pending; closeSheet(); renderTopUp(); });
+
+  // ---------- Init ----------
+  function initHome(){ renderHotList(); wireHome(); }
+  function initAssets(){ wireAssets(); renderAssets(); }
+  function init(){ initHome(); initAssets(); showPage('home'); }
   document.addEventListener('DOMContentLoaded', init);
+
+  // Expose navigation from assets top up
+  window.showTopUp = ()=> showPage('topup');
+  document.getElementById('btnTopup').onclick = openTopup;
+  document.getElementById('rowTopup').onclick = openTopup;
+
+  // Ensure render when entering topup
+  const observer = new MutationObserver(()=>{
+    if(document.getElementById('page-topup').style.display==='block'){ renderTopUp(); }
+  });
+  observer.observe(document.body, { attributes:true, subtree:true, attributeFilter:['style'] });
 })();
 </script>
 </body>
