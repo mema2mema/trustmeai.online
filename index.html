@@ -27,7 +27,7 @@
   .badge.em{ background:#ecfdf5; color:#065f46;}
   .badge.m{ background:#f1f5f9; color:#475569;}
   label{ font-size:14px; }
-  input[type=number], input[type=text], select{ width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:14px; outline:none; }
+  input[type=number], input[type=text], input[type=password], select{ width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:14px; outline:none; }
   .kpi{ text-align:center; }
   .kpi .cap{ font-size:12px; color:var(--muted); }
   .kpi .val{ font-size:22px; font-weight:800; }
@@ -56,9 +56,9 @@
   .switch.on{ background:#10b981; }
   .switch.on div{ transform: translateX(20px); }
 
-  /* Top Up screen */
+  /* Screens */
   .screen{ max-width:800px; margin:0 auto; padding:0 16px; }
-  .screen .titlebar{ position:sticky; top:56px; background:#fff; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px; padding:12px 0; z-index:9 }
+  .titlebar{ position:sticky; top:56px; background:#fff; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px; padding:12px 0; z-index:9 }
   .pill{ display:flex; align-items:center; justify-content:space-between; padding:12px; border:1px solid var(--line); border-radius:12px; font-weight:700 }
   .qrbox{ display:grid; place-items:center; border:1px solid var(--line); border-radius:12px; padding:12px; background:#fff }
   .sheet{ position:fixed; left:0; right:0; bottom:-100%; background:#fff; border-top-left-radius:16px; border-top-right-radius:16px; box-shadow:0 -12px 24px rgba(0,0,0,.08); transition:.3s; z-index:50 }
@@ -66,6 +66,12 @@
   .sheet .hd{ padding:14px; border-bottom:1px solid var(--line); font-weight:700; display:flex; align-items:center; justify-content:space-between }
   .sheet .bd{ max-height:50vh; overflow:auto; }
   .sheet .item{ padding:14px 16px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; cursor:pointer }
+  .danger{ color:#ef4444; }
+  .row2{ display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center }
+  .ghost-input{ color:#94a3b8 }
+  .note{ font-size:12px; color:#64748b }
+  .btn.block{ width:100%; text-align:center; }
+  .btn.disabled{ opacity:.5; pointer-events:none; }
 </style>
 </head>
 <body>
@@ -356,7 +362,6 @@
     </div>
     <div style="height:12px"></div>
 
-    <!-- Choose currency -->
     <div class="card">
       <div class="bd">
         <div class="muted" style="font-size:12px">Choose A Currency</div>
@@ -369,11 +374,10 @@
 
     <div style="height:12px"></div>
 
-    <!-- Select network -->
     <div class="card">
       <div class="bd">
         <div class="muted" style="font-size:12px">Select The Network</div>
-        <div id="netPicker" class="pill">
+        <div id="netPickerTopUp" class="pill">
           <div style="display:flex; align-items:center; gap:10px"><div style="width:28px;height:28px;border-radius:999px;background:#fee2e2;display:grid;place-items:center">🅣</div><b id="netName">TRON(TRC20)</b></div>
           <div>▾</div>
         </div>
@@ -382,7 +386,6 @@
 
     <div style="height:12px"></div>
 
-    <!-- QR + address -->
     <div class="card">
       <div class="bd">
         <div class="muted" style="font-size:12px">Recharge Address</div>
@@ -404,11 +407,147 @@
       <div class="hd">Stars‑Ai Recharge Guide</div>
       <div class="bd">
         <ul style="margin:0 0 0 18px; padding:0; line-height:1.6">
-          <li>Use the **same chain** for withdrawal and deposit (e.g., USDT‑TRC20).</li>
-          <li>Minimum deposit amount: **5 USDT**.</li>
+          <li>Use the <b>same chain</b> for withdrawal and deposit (e.g., USDT‑TRC20).</li>
+          <li>Minimum deposit amount: <b>5 USDT</b>.</li>
           <li>Ensure your deposit is ≥ 5 USDT so funds are credited smoothly.</li>
           <li>Network confirmations may take time; final credit depends on the chain.</li>
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- WITHDRAW SCREEN -->
+  <section id="page-withdraw" class="screen" style="display:none; padding:0 16px 160px 16px;">
+    <div class="titlebar">
+      <button id="backWithdraw" class="btn outline">←</button>
+      <div style="font-weight:800">Withdrawal</div>
+    </div>
+    <div style="height:12px"></div>
+
+    <div class="card">
+      <div class="bd">
+        <div class="muted" style="font-size:12px">Withdrawal Currency</div>
+        <div class="pill">
+          <div style="display:flex; align-items:center; gap:10px"><div style="width:28px;height:28px;border-radius:999px;background:#f1f5f9;display:grid;place-items:center">₮</div><b>USDT</b></div>
+          <div>▾</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="card">
+      <div class="bd">
+        <div class="muted" style="font-size:12px">Select The Network</div>
+        <div id="netPickerWithdraw" class="pill">
+          <div style="display:flex; align-items:center; gap:10px"><div style="width:28px;height:28px;border-radius:999px;background:#fee2e2;display:grid;place-items:center">🅣</div><b id="wdNetName">TRON(TRC20)</b></div>
+          <div>▾</div>
+        </div>
+        <div class="danger" style="margin-top:8px">Please confirm the wallet address supports TRC20 or BEP20 transfers. Using other networks may cause loss of funds.</div>
+      </div>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="card">
+      <div class="bd">
+        <div class="muted" style="font-size:12px">Withdrawal Address</div>
+        <button id="addAddress" class="btn outline block">Add An Address</button>
+        <div id="addrSaved" class="muted" style="display:none; margin-top:8px; font-family:monospace"></div>
+      </div>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="card">
+      <div class="bd">
+        <div class="row2">
+          <div class="muted" style="font-size:12px">Withdrawal Amount</div>
+          <div class="muted" style="font-size:12px">Available <b id="wdAvail">0</b> USDT</div>
+        </div>
+        <div class="row2" style="margin-top:8px">
+          <input id="wdAmount" type="number" placeholder="Enter the withdrawal amount"/>
+          <div style="display:flex; gap:8px"><div class="btn ghost">USDT</div><button id="wdAll" class="btn outline">All</button></div>
+        </div>
+        <div style="height:10px"></div>
+        <div class="kv"><div>Minimum Withdrawal Quantity</div><div>10 USDT</div></div>
+        <div class="kv"><div>Fixed Handling Fee</div><div>2 USDT</div></div>
+        <div class="kv"><div>Platform Commission Draw10%</div><div id="wdCommission">0 USDT</div></div>
+        <div class="kv"><div>Distance With No Handicap</div><div>21 day</div></div>
+        <div style="height:10px"></div>
+        <div class="row2"><div style="font-weight:800">Number Of Accounts</div><div id="wdReceive" class="g">0 USDT</div></div>
+        <div class="note" style="margin-top:6px">Actual Amount = Requested Withdrawal Amount − Platform Commission% − Gas Fee</div>
+      </div>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <button id="wdConfirm" class="btn primary block disabled">confirm</button>
+
+    <div style="height:12px"></div>
+
+    <div class="card">
+      <div class="hd">Withdrawal Prompt</div>
+      <div class="bd">
+        <ul style="margin:0 0 0 18px; padding:0; line-height:1.6">
+          <li>Transfers are processed on-chain. Ensure your address matches the selected network.</li>
+          <li>Once submitted, withdrawals cannot be cancelled.</li>
+          <li>Processing time varies by network congestion.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- WITHDRAW ADDRESS SCREEN -->
+  <section id="page-withdraw-address" class="screen" style="display:none; padding:0 16px 120px 16px;">
+    <div class="titlebar">
+      <button id="backWdAddr" class="btn outline">←</button>
+      <div style="font-weight:800">Withdrawal Address</div>
+    </div>
+    <div style="height:12px"></div>
+
+    <div class="card">
+      <div class="bd">
+        <div class="muted" style="font-size:12px">Choose A Currency</div>
+        <div class="pill">
+          <div style="display:flex; align-items:center; gap:10px"><div style="width:28px;height:28px;border-radius:999px;background:#f1f5f9;display:grid;place-items:center">₮</div><b>USDT</b></div>
+          <div>▾</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="card">
+      <div class="bd">
+        <div class="muted" style="font-size:12px">Select The Network</div>
+        <div id="netPickerWdAddr" class="pill">
+          <div style="display:flex; align-items:center; gap:10px"><div style="width:28px;height:28px;border-radius:999px;background:#fee2e2;display:grid;place-items:center">🅣</div><b id="wdAddrNet">TRON(TRC20)</b></div>
+          <div>▾</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:12px"></div>
+
+    <div class="card">
+      <div class="bd">
+        <label>Withdrawal Address</label>
+        <input id="inpWdAddress" type="text" placeholder="Enter the withdrawal address"/>
+        <div style="height:10px"></div>
+        <label>Mail</label>
+        <input id="inpEmail" type="text" value="user@example.com"/>
+        <div style="height:10px"></div>
+        <label>Verification Code</label>
+        <div class="row2">
+          <input id="inpCode" type="text" placeholder="enter confirmation code"/>
+          <button id="btnSendCode" class="btn outline">Send</button>
+        </div>
+        <div style="height:10px"></div>
+        <label>Transaction Password</label>
+        <input id="inpTxPass" type="password" placeholder="Enter the transaction password"/>
+        <div style="height:12px"></div>
+        <button id="btnSaveAddress" class="btn primary block disabled">confirm</button>
       </div>
     </div>
   </section>
@@ -424,7 +563,7 @@
   </div>
 </footer>
 
-<!-- Bottom sheet network selector -->
+<!-- Bottom sheet selector (re-used by topup and withdraw) -->
 <div id="netSheet" class="sheet" aria-hidden="true">
   <div class="hd"><button id="sheetCancel" class="btn ghost">Cancel</button><div>Select The Network</div><button id="sheetConfirm" class="btn ghost">Confirm</button></div>
   <div class="bd" id="netList"></div>
@@ -470,6 +609,12 @@
         { id:'ERC20', label:'Ethereum(ERC20)', address:'0x9A6fA3cEe810E0d270000000000000000000ERC' }
       ],
       selected: 'TRC20'
+    },
+    withdraw: {
+      selected: 'TRC20',
+      addresses: { TRC20: '', BEP20: '', ERC20: '' },
+      email: 'user@example.com',
+      sentCode: ''
     }
   };
 
@@ -492,7 +637,10 @@
 
   // ---------- Router ----------
   function showPage(key){
-    const map = { home:'#page-home', assets:'#page-assets', strategy:'#page-strategy', team:'#page-team', mine:'#page-mine', topup:'#page-topup' };
+    const map = {
+      home:'#page-home', assets:'#page-assets', strategy:'#page-strategy', team:'#page-team', mine:'#page-mine',
+      topup:'#page-topup', withdraw:'#page-withdraw', wdaddr:'#page-withdraw-address'
+    };
     Object.values(map).forEach(sel=>{ const el=$(sel); if(el) el.style.display='none' });
     $(map[key]).style.display='block';
     $$('.tab').forEach(t=>t.classList.toggle('active', t.getAttribute('data-nav')===key));
@@ -500,6 +648,8 @@
     if(key==='strategy') renderStrategy();
     if(key==='team') renderTeam();
     if(key==='topup') renderTopUp();
+    if(key==='withdraw') renderWithdraw();
+    if(key==='wdaddr') renderWithdrawAddress();
   }
   $$('.tab').forEach(t=> t.addEventListener('click', ()=> showPage(t.getAttribute('data-nav')) ));
   $$('.navlink').forEach(a => a.addEventListener('click', (e)=>{ e.preventDefault(); showPage(a.getAttribute('data-nav')); }));
@@ -622,24 +772,8 @@
     $('#p_team').textContent = mask(state.profit.cumulativeTeamRevenue);
     $('#p_team_today').textContent = mask(state.profit.teamRevenueToday);
   }
-  function openTopup(){ showPage('topup') } // navigate to the new Top Up screen
-  function openWithdraw(){
-    const wrap = document.createElement('div');
-    wrap.innerHTML = `<div class="row" style="grid-template-columns:1fr 1fr; gap:12px; align-items:center">
-      <label>Amount (USDT)</label><input id="inpW" type="number" min="0" value="3"/>
-      <label>Note</label><input id="inpNote" type="text" placeholder="Optional" style="width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:14px"/>
-    </div>`;
-    const ok = document.createElement('button'); ok.className='btn primary'; ok.textContent='Confirm';
-    ok.addEventListener('click', ()=>{
-      const val = Math.max(0, Number(wrap.querySelector('#inpW').value||0));
-      if(val > state.balances.USDT.available){ alert('Insufficient balance'); return }
-      state.balances.USDT.available -= val;
-      pushLedger('withdraw', -val, wrap.querySelector('#inpNote').value||'');
-      closeModal(); renderAssets(); renderStrategy();
-    });
-    const cancel = Object.assign(document.createElement('button'), {className:'btn outline', textContent:'Cancel'});
-    openModal('Withdrawal', wrap, [cancel, ok]);
-  }
+  function goTopup(){ showPage('topup') }
+  function goWithdraw(){ showPage('withdraw') }
   function openBill(){
     const wrap = document.createElement('div');
     const tbl = Object.assign(document.createElement('table'), {className:'table'});
@@ -689,10 +823,10 @@
   }
   function wireAssets(){
     $('#toggleEye').addEventListener('click', ()=>{ state.hide = !state.hide; renderAssets() });
-    $('#btnTopup').addEventListener('click', openTopup);
-    $('#rowTopup').addEventListener('click', openTopup);
-    $('#btnWithdraw').addEventListener('click', openWithdraw);
-    $('#rowWithdraw').addEventListener('click', openWithdraw);
+    $('#btnTopup').addEventListener('click', goTopup);
+    $('#rowTopup').addEventListener('click', goTopup);
+    $('#btnWithdraw').addEventListener('click', goWithdraw);
+    $('#rowWithdraw').addEventListener('click', goWithdraw);
     $('#btnBill').addEventListener('click', openBill);
     $('#rowBill').addEventListener('click', openBill);
     $('#viewEarnings').addEventListener('click', ()=>{ $('#earningsView').style.display='block'; openEarnings() });
@@ -835,8 +969,6 @@
     const selected = state.topup.networks.find(n => n.id === state.topup.selected) || state.topup.networks[0];
     $('#netName').textContent = selected.label;
     $('#addrText').textContent = selected.address;
-
-    // Try external QR service; on fail, fallback to text canvas
     const img = $('#qrImg');
     img.onerror = ()=>{
       const c = document.createElement('canvas'); c.width=240; c.height=240; const ctx=c.getContext('2d');
@@ -845,27 +977,95 @@
     };
     img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data='+encodeURIComponent(selected.address);
   }
-  $('#copyAddr').addEventListener('click', async ()=>{
-    try{ await navigator.clipboard.writeText($('#addrText').textContent); alert('Address copied'); }catch{ alert('Copy failed'); }
-  });
-  $('#backTopUp').addEventListener('click', ()=> showPage('assets'));
 
-  // network bottom sheet
-  const sheet = $('#netSheet'); const list = $('#netList'); let pending = state.topup.selected;
-  function openSheet(){
+  // ---------- Withdraw main ----------
+  function renderWithdraw(){
+    const sel = state.topup.networks.find(n=>n.id===state.withdraw.selected);
+    $('#wdNetName').textContent = sel.label;
+    $('#wdAvail').textContent = fmt(state.balances.USDT.available);
+    const addr = state.withdraw.addresses[state.withdraw.selected];
+    const hasAddr = !!addr;
+    $('#addrSaved').style.display = hasAddr ? 'block' : 'none';
+    $('#addrSaved').textContent = hasAddr ? addr : '';
+    $('#addAddress').textContent = hasAddr ? 'Change Address' : 'Add An Address';
+    updateWdCalc();
+  }
+  function updateWdCalc(){
+    const amount = Number($('#wdAmount').value || 0);
+    const feeFixed = 2, pct = 0.10, min = 10;
+    const commission = Math.max(0, amount * pct);
+    $('#wdCommission').textContent = fmt(commission) + ' USDT';
+    const receive = Math.max(0, amount - commission - feeFixed);
+    $('#wdReceive').textContent = fmt(receive) + ' USDT';
+
+    const hasAddr = !!state.withdraw.addresses[state.withdraw.selected];
+    const ok = amount>=min && amount<=state.balances.USDT.available && hasAddr;
+    $('#wdConfirm').classList.toggle('disabled', !ok);
+  }
+  $('#wdAmount').addEventListener('input', updateWdCalc);
+  $('#wdAll').addEventListener('click', ()=>{ $('#wdAmount').value = state.balances.USDT.available; updateWdCalc(); });
+  $('#wdConfirm').addEventListener('click', ()=>{
+    if($('#wdConfirm').classList.contains('disabled')) return;
+    const amount = Number($('#wdAmount').value || 0);
+    state.balances.USDT.available -= amount;
+    pushLedger('withdraw', -amount, state.withdraw.selected+' → '+state.withdraw.addresses[state.withdraw.selected]);
+    alert('Withdrawal submitted.');
+    showPage('assets'); renderAssets();
+  });
+  $('#backWithdraw').addEventListener('click', ()=> showPage('assets'));
+  $('#addAddress').addEventListener('click', ()=> showPage('wdaddr'));
+
+  // ---------- Withdraw address screen ----------
+  function renderWithdrawAddress(){
+    const sel = state.topup.networks.find(n=>n.id===state.withdraw.selected);
+    $('#wdAddrNet').textContent = sel.label;
+    $('#inpWdAddress').value = state.withdraw.addresses[state.withdraw.selected] || '';
+    $('#inpEmail').value = state.withdraw.email || 'user@example.com';
+    $('#inpCode').value = '';
+    $('#inpTxPass').value = '';
+    checkSaveAddressEnabled();
+  }
+  function checkSaveAddressEnabled(){
+    const valid = $('#inpWdAddress').value.trim().length>5 && $('#inpCode').value.trim().length>=4 && $('#inpTxPass').value.trim().length>=4;
+    $('#btnSaveAddress').classList.toggle('disabled', !valid);
+  }
+  $('#inpWdAddress').addEventListener('input', checkSaveAddressEnabled);
+  $('#inpCode').addEventListener('input', checkSaveAddressEnabled);
+  $('#inpTxPass').addEventListener('input', checkSaveAddressEnabled);
+  $('#btnSendCode').addEventListener('click', ()=>{
+    state.withdraw.sentCode = String(Math.floor(100000 + Math.random()*900000));
+    alert('Verification code sent to '+($('#inpEmail').value||'your email')+': '+state.withdraw.sentCode);
+  });
+  $('#btnSaveAddress').addEventListener('click', ()=>{
+    if($('#btnSaveAddress').classList.contains('disabled')) return;
+    if(state.withdraw.sentCode && $('#inpCode').value.trim() !== state.withdraw.sentCode){ alert('Invalid verification code'); return }
+    state.withdraw.addresses[state.withdraw.selected] = $('#inpWdAddress').value.trim();
+    pushLedger('addr', 0, 'Saved withdrawal address '+state.withdraw.selected);
+    showPage('withdraw'); renderWithdraw();
+  });
+  $('#backWdAddr').addEventListener('click', ()=> showPage('withdraw'));
+
+  // ---------- Bottom sheet (shared) ----------
+  const sheet = $('#netSheet'); const list = $('#netList'); let sheetPending = null; let onConfirm = null;
+  function openSheet(currentId, callback){
+    sheetPending = currentId; onConfirm = callback;
     list.innerHTML='';
     state.topup.networks.forEach(n=>{
       const row=document.createElement('div'); row.className='item'; row.setAttribute('data-id', n.id);
-      row.innerHTML = `<div>${n.label}</div><div>${pending===n.id?'✅':''}</div>`;
-      row.addEventListener('click', ()=>{ pending=n.id; $$('#netList .item').forEach(x=>x.lastChild.textContent=''); row.lastChild.textContent='✅'; });
+      row.innerHTML = `<div>${n.label}</div><div>${sheetPending===n.id?'✅':''}</div>`;
+      row.addEventListener('click', ()=>{ sheetPending=n.id; $$('#netList .item').forEach(x=>x.lastChild.textContent=''); row.lastChild.textContent='✅'; });
       list.appendChild(row);
     });
     sheet.classList.add('open'); sheet.setAttribute('aria-hidden','false');
   }
   function closeSheet(){ sheet.classList.remove('open'); sheet.setAttribute('aria-hidden','true'); }
-  $('#netPicker').addEventListener('click', openSheet);
   $('#sheetCancel').addEventListener('click', closeSheet);
-  $('#sheetConfirm').addEventListener('click', ()=>{ state.topup.selected = pending; closeSheet(); renderTopUp(); });
+  $('#sheetConfirm').addEventListener('click', ()=>{ closeSheet(); if(typeof onConfirm==='function') onConfirm(sheetPending); });
+
+  // link pickers
+  $('#netPickerTopUp').addEventListener('click', ()=> openSheet(state.topup.selected, (id)=>{ state.topup.selected=id; renderTopUp(); }));
+  $('#netPickerWithdraw').addEventListener('click', ()=> openSheet(state.withdraw.selected, (id)=>{ state.withdraw.selected=id; renderWithdraw(); }));
+  $('#netPickerWdAddr').addEventListener('click', ()=> openSheet(state.withdraw.selected, (id)=>{ state.withdraw.selected=id; renderWithdrawAddress(); }));
 
   // ---------- Init ----------
   function initHome(){ renderHotList(); wireHome(); }
@@ -873,14 +1073,17 @@
   function init(){ initHome(); initAssets(); showPage('home'); }
   document.addEventListener('DOMContentLoaded', init);
 
-  // Expose navigation from assets top up
-  window.showTopUp = ()=> showPage('topup');
-  document.getElementById('btnTopup').onclick = openTopup;
-  document.getElementById('rowTopup').onclick = openTopup;
+  // Navigation adapters for assets buttons
+  document.getElementById('btnTopup').onclick = goTopup;
+  document.getElementById('rowTopup').onclick = goTopup;
+  document.getElementById('btnWithdraw').onclick = goWithdraw;
+  document.getElementById('rowWithdraw').onclick = goWithdraw;
 
-  // Ensure render when entering topup
+  // Ensure render when entering special screens
   const observer = new MutationObserver(()=>{
     if(document.getElementById('page-topup').style.display==='block'){ renderTopUp(); }
+    if(document.getElementById('page-withdraw').style.display==='block'){ renderWithdraw(); }
+    if(document.getElementById('page-withdraw-address').style.display==='block'){ renderWithdrawAddress(); }
   });
   observer.observe(document.body, { attributes:true, subtree:true, attributeFilter:['style'] });
 })();
