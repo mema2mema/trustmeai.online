@@ -1,0 +1,10 @@
+
+version: "3.9"
+services:
+  api:
+    build: .
+    ports: ["8787:8787"]
+    environment:
+      - APP_PORT=8787
+      - APP_AUTH_TOKEN=change-me-long-random
+      - PAPER_MODE=true
