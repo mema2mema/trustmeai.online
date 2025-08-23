@@ -76,7 +76,7 @@
             <div class="result-value" id="calcBalance">$0.00</div>
           </div>
         </div>
-        <p class="muted">This tool is for illustration only and does not constitute financial advice. Actual results may vary.</p>
+        <p class="muted">This tool is for illustration only. Actual results may vary.</p>
       </div>
 
       <!-- Partners -->
@@ -131,8 +131,8 @@
         <div class="advantage">
           <div class="adv-icon">📊</div>
           <div>
-            <div class="adv-title">Real‑Time Data</div>
-            <div class="muted">Access to major global markets with second‑level updates.</div>
+            <div class="adv-title">Real-Time Data</div>
+            <div class="muted">Access to major global markets with second-level updates.</div>
           </div>
         </div>
       </div>
@@ -151,9 +151,11 @@
     <section id="view-assets" class="view">
       <div class="card">
         <div class="card-title">Assets</div>
+        <p class="muted">Available USDT: <b id="balAvail">0</b> • Locked: <b id="balLocked">0</b> • Cumulative Income: <b id="balIncome">0</b></p>
         <div class="row gap">
           <button class="btn" id="openTopUp">Top-Up</button>
           <button class="btn" id="openWithdraw">Withdraw</button>
+          <button class="btn" id="demoAdd100">+100 (demo)</button>
         </div>
       </div>
     </section>
@@ -162,7 +164,10 @@
     <section id="view-strategy" class="view">
       <div class="card">
         <div class="card-title">Strategy</div>
-        <p>Current plan: <b>TMI1</b> — 50 to 500,000 USDT, target yield <b>1.5% – 3%</b>.</p>
+        <p id="stratStatus">Current plan: <b>TMI1</b> — 50 to 500,000 USDT, target yield <b>1.5% – 3%</b>.</p>
+        <div id="stratActions" class="row gap">
+          <button class="btn btn-primary" id="activateBtn">Activate TMI1</button>
+        </div>
       </div>
     </section>
 
@@ -177,12 +182,12 @@
     <!-- MINE -->
     <section id="view-mine" class="view">
       <div class="profile-banner">
-        <div class="pfp">T</div>
+        <div class="pfp">S</div>
         <div class="profile-info">
           <div class="profile-name" id="profileName">TrustMeAI-100222</div>
           <div class="profile-meta">UID: <span id="profileUid">100222</span> • Invite Code: <span id="inviteCode">MPQQ8K</span></div>
           <div class="chips">
-            <span class="chip">Level TMI1</span>
+            <span class="chip" id="levelChip">Level TMI1</span>
             <span class="chip chip-muted">Agent 0</span>
           </div>
         </div>
@@ -292,7 +297,13 @@
         <p class="muted">This address only supports USDT deposits on the selected network.</p>
       </div>
 
+      <label class="field">
+        <span>Mark received (demo)</span>
+        <input id="topupAmountDemo" type="number" min="0" placeholder="Enter amount to credit (demo)" />
+      </label>
+
       <div class="row gap">
+        <button class="btn btn-primary" id="creditDemo" type="button">Credit</button>
         <button class="btn" value="cancel">Close</button>
       </div>
     </form>
@@ -332,7 +343,49 @@
       </div>
 
       <div class="row gap">
-        <button class="btn btn-primary" value="default">Confirm</button>
+        <button class="btn btn-primary" id="confirmWithdraw" type="button">Confirm</button>
+        <button class="btn" value="cancel">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ACTIVATE TMI1 MODAL -->
+  <dialog id="activateDialog" class="modal">
+    <form method="dialog" class="modal-card">
+      <div class="modal-title">Activate TMI1</div>
+      <p class="muted">Plan range: <b>50 – 500,000 USDT</b>. Target daily yield <b>1.5% – 3%</b>.</p>
+
+      <label class="field">
+        <span>Amount to lock (USDT)</span>
+        <input id="actAmount" type="number" min="50" step="1" value="100" />
+      </label>
+
+      <label class="field">
+        <span>Daily yield %</span>
+        <input id="actRate" type="range" min="1.5" max="3" step="0.1" value="2.0" />
+        <div class="muted" id="actRateLabel">2.0%</div>
+      </label>
+
+      <label class="switcher">
+        <input id="actCompound" type="checkbox" checked />
+        <span>Compound daily</span>
+      </label>
+
+      <div class="result-grid">
+        <div class="result">
+          <div class="result-title">Est. Daily</div>
+          <div class="result-value" id="actDaily">$0.00</div>
+        </div>
+        <div class="result">
+          <div class="result-title">30d Earnings</div>
+          <div class="result-value" id="actMonth">$0.00</div>
+        </div>
+      </div>
+
+      <p class="muted" id="actWarning"></p>
+
+      <div class="row gap">
+        <button class="btn btn-primary" id="actConfirm" type="button">Confirm</button>
         <button class="btn" value="cancel">Close</button>
       </div>
     </form>
