@@ -1,821 +1,252 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TrustMe AI — App</title>
-<style>
-:root{--ink:#0f172a;--muted:#64748b;--line:#e5e7eb;--brand:#0b1220;--emerald:#10b981;--red:#ef4444}
-*{box-sizing:border-box}
-html,body{margin:0;background:#fff;color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-.container{max-width:1100px;margin:0 auto;padding:0 16px}
-.card{border:1px solid var(--line);border-radius:16px;background:#fff}
-.card .hd{padding:14px;border-bottom:1px solid var(--line);font-weight:800}
-.card .bd{padding:14px}
-.btn{padding:10px 16px;border-radius:14px;border:1px solid var(--line);background:#fff;font-weight:800;cursor:pointer}
-.btn.primary{background:var(--brand);color:#fff;border-color:transparent}
-.btn.outline{background:#fff;color:#111;border-color:var(--line)}
-.btn.ghost{background:transparent;border-color:transparent}
-.btn.block{display:block;width:100%}
-.btn:disabled{opacity:.5;pointer-events:none}
-header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.bar{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
-.logo{width:32px;height:32px;border-radius:10px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:900}
-.bottom{position:fixed;left:0;right:0;bottom:0;border-top:1px solid var(--line);background:#fff;z-index:15}
-.tabs{display:grid;grid-template-columns:repeat(5,1fr);text-align:center;font-size:12px}
-.tab{padding:10px 0;cursor:pointer}
-.active{color:var(--emerald);font-weight:800}
-.row{display:grid;gap:12px}
-@media(min-width:860px){.row-4{grid-template-columns:repeat(4,1fr)}.row-3{grid-template-columns:repeat(3,1fr)}}
-.titlebar{position:sticky;top:56px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;padding:12px 0;z-index:9}
-input[type=text],input[type=number],input[type=password],input[type=date],select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:14px;outline:none}
-.muted{color:var(--muted)}
-.kpi{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;gap:8px}
-.kpi .box{border:1px solid var(--line);border-radius:12px;padding:12px}
-.kpi .cap{font-size:12px;color:var(--muted)}
-.kpi .val{font-size:22px;font-weight:900}
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.icon{font-size:22px;margin-bottom:8px}
-.icon-btn{border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;cursor:pointer;background:#fff}
-/* Mine */
-.mine-hero{border-radius:16px;background:linear-gradient(135deg,#059669,#34d399);color:#fff;overflow:hidden}
-.mine-hero .bd{padding:16px}
-.badge{background:rgba(255,255,255,.15);padding:6px 10px;border-radius:999px;font-weight:800}
-.copy-btn{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:6px;background:rgba(255,255,255,.2);cursor:pointer;margin-left:6px}
-/* Modal */
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,.35);z-index:50}
-.modal.open{display:flex}
-.modal .panel{width:min(560px,96vw);background:#fff;border:1px solid var(--line);border-radius:16px}
-.modal .panel .hd{display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid var(--line);font-weight:900}
-.modal .panel .bd{padding:14px}
-.modal .actions{display:flex;gap:8px;justify-content:flex-end;padding:14px;border-top:1px solid var(--line)}
-.auth-title{font-size:22px;font-weight:900;margin-bottom:8px}
-.auth-tabs{display:flex;gap:20px;font-weight:800;color:var(--muted);border-bottom:1px solid var(--line);margin:10px 0 16px}
-.auth-tab{padding:8px 0;cursor:pointer;position:relative}
-.auth-tab.active{color:#111}
-.auth-tab.active::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--emerald)}
-/* Sheet */
-.sheet{position:fixed;left:0;right:0;bottom:-100%;background:#fff;border-top-left-radius:16px;border-top-right-radius:16px;box-shadow:0 -12px 24px rgba(0,0,0,.1);transition:.28s;z-index:60}
-.sheet.open{bottom:0}
-.sheet .handle{width:64px;height:5px;background:#e5e7eb;border-radius:999px;margin:8px auto 0}
-.sheet .hd{padding:10px 16px;font-weight:900;border-bottom:1px solid var(--line)}
-.sheet .body{max-height:60vh;overflow-y:auto;padding:6px 10px 14px}
-.opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border:1px solid var(--line);border-radius:12px;margin:8px 6px;cursor:pointer}
-.opt .l{display:flex;align-items:center;gap:10px}
-/* QR */
-.qr{--s:10;display:grid;grid-template-columns:repeat(25,var(--s)px);gap:2px;justify-content:center;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff}
-.qr i{display:block;width:var(--s)px;height:var(--s)px;background:#000}
-.qr b{display:block;width:var(--s)px;height:var(--s)px;background:#fff}
-/* Home extras */
-.hero{border-radius:16px;background:linear-gradient(120deg,#111827,#334155);color:#fff;padding:24px;margin-bottom:16px}
-.hero h1{margin:0 0 8px 0;font-size:22px}
-main{padding-bottom:84px}
-
-/* Strategy tabs */
-.st-tabs{display:flex;gap:22px;border-bottom:1px solid var(--line);padding:0 14px}
-.st-tab{padding:12px 0;cursor:pointer;color:var(--muted);font-weight:800;position:relative}
-.st-tab.active{color:#111}
-.st-tab.active::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--emerald)}
-.st-row{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:12px;padding:12px}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TrustMe AI</title>
+  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' ry='16' fill='%2308142B'/><text x='50' y='62' font-size='56' text-anchor='middle' fill='%23B3E5FC' font-family='Arial, Helvetica, sans-serif'>T</text></svg>">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header>
-  <div class="container bar">
-    <div style="display:flex;align-items:center;gap:8px">
-      <div class="logo">T</div><div style="font-weight:900">TrustMe AI</div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="avatar">T</div>
+      <div class="brand-text">
+        <div class="brand-title">TrustMe AI</div>
+        <div class="brand-sub" id="brandSub">Secure • Automated • Real‑Time</div>
+      </div>
     </div>
-    <button id="btnGetStarted" class="btn primary">Get Started</button>
-  </div>
-</header>
+    <button id="getStartedBtn" class="btn btn-primary-outline">Get Started</button>
+  </header>
 
-<main>
-  <!-- HOME -->
-  <section id="page-home" class="container" style="padding:16px 0">
-    <div class="hero">
-      <h1>Trade smarter with TrustMe AI</h1>
-      <div class="muted">Secure, transparent, and automated strategies. Start with TMI1 (1.5%–3%).</div>
-    </div>
-
-    <div class="row row-4">
-      <a class="card bd gated" data-nav="assets" style="text-align:center"><div class="icon">💳</div><div style="font-weight:800">Top‑Up</div></a>
-      <a class="card bd gated" data-nav="assets" style="text-align:center"><div class="icon">💸</div><div style="font-weight:800">Withdraw</div></a>
-      <a class="card bd gated" data-nav="strategy" style="text-align:center"><div class="icon">📊</div><div style="font-weight:800">Strategy</div></a>
-      <a class="card bd gated" data-nav="mine" style="text-align:center"><div class="icon">👤</div><div style="font-weight:800">Mine</div></a>
-    </div>
-
-    <div class="row row-3" style="margin-top:16px">
+  <main id="viewContainer">
+    <!-- FRONT PAGE -->
+    <section id="view-home" class="view active">
       <div class="card">
-        <div class="hd">Calculator</div>
-        <div class="bd">
-          <div class="row">
-            <div>
-              <label>Amount (USDT)</label>
-              <input id="calcAmt" type="number" min="50" max="500000" value="1000">
-            </div>
-            <div>
-              <label>Rate (daily %)</label>
-              <select id="calcRate">
-                <option>1.5</option><option>2</option><option selected>3</option>
-              </select>
-            </div>
-            <div>
-              <label>Days</label>
-              <input id="calcDays" type="number" min="1" value="30">
-            </div>
-          </div>
-          <div style="height:10px"></div>
-          <button id="calcBtn" class="btn outline">Calculate</button>
-          <div id="calcOut" class="muted" style="margin-top:8px">Enter values and tap Calculate.</div>
+        <div class="card-title">Welcome</div>
+        <p>Use the tabs below to manage your <b>Assets</b>, define your <b>Strategy</b>, organize your <b>Team</b>, and view your profile in <b>Mine</b>.</p>
+      </div>
+      <div class="grid-2">
+        <div class="big-tile" id="tileTopUp">
+          <div class="tile-icon">💳</div>
+          <div class="tile-title">Top‑Up</div>
+        </div>
+        <div class="big-tile" id="tileWithdraw">
+          <div class="tile-icon">💸</div>
+          <div class="tile-title">Withdraw</div>
         </div>
       </div>
+
       <div class="card">
-        <div class="hd">Why TrustMe AI</div>
-        <div class="bd">
-          <ul class="muted">
-            <li><b>Transparent Security</b> — Every transaction is traceable.</li>
-            <li><b>Automated Trading</b> — 24/7 execution, no manual intervention.</li>
-            <li><b>Real‑Time Data</b> — Second‑level market updates.</li>
-          </ul>
-        </div>
+        <div class="card-title">Why TrustMe AI</div>
+        <ul class="bullets">
+          <li>Transparent Security — every operation is auditable.</li>
+          <li>Automated Trading — 24/7 execution without manual steps.</li>
+          <li>Real‑Time Data — second‑level market updates.</li>
+        </ul>
       </div>
+
       <div class="card">
-        <div class="hd">Roadmap</div>
-        <div class="bd muted">
-          <p><b>Q3 2025:</b> Web app & strategy TMI1.</p>
-          <p><b>Q4 2025:</b> Exchange API integration & deposits/withdrawals.</p>
-          <p><b>Q1 2026:</b> Mobile apps, advanced analytics, copy trading.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ASSETS -->
-  <section id="page-assets" class="container" style="display:none;padding:0 16px 90px 16px">
-    <div id="assets-overview">
-      <div class="titlebar"><div style="font-weight:900">Assets</div></div>
-      <div class="card" style="margin-top:12px">
-        <div class="hd">Total Assets (USDT)</div>
-        <div class="bd">
-          <div class="kpi">
-            <div class="box"><div class="cap">Experience Money</div><div class="val" id="expMoney">200</div></div>
-            <div class="box"><div class="cap">Available Assets</div><div class="val" id="availAssets">300</div></div>
-            <div class="box"><div class="cap">Total Lock</div><div class="val">0</div></div>
-            <div class="box"><div class="cap">Waiting For Release</div><div class="val">0</div></div>
-          </div>
-          <div style="height:10px"></div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn primary" id="goTopUp">Top Up</button>
-            <button class="btn outline" id="goWithdraw">Withdraw</button>
-            <button class="btn outline" id="goBill">Bill</button>
-          </div>
-        </div>
-      </div>
-
-      <div style="height:12px"></div>
-      <div class="card">
-        <div class="hd">My Profits</div>
-        <div class="bd">
-          <div class="kpi">
-            <div class="box"><div class="cap">Cumulative Income (USDT)</div><div class="val">0</div></div>
-            <div class="box"><div class="cap">Today's Earnings (USDT)</div><div class="val">0</div></div>
-            <div class="box"><div class="cap">Transaction Income (USDT)</div><div class="val">0</div></div>
-            <div class="box"><div class="cap">Team Revenue (USDT)</div><div class="val">0</div></div>
-          </div>
-          <div style="height:10px"></div>
-          <button id="viewEarnings" class="btn outline">View The Earnings</button>
-        </div>
-      </div>
-
-      <div style="height:12px"></div>
-      <div class="card">
-        <div class="hd">Asset List</div>
-        <div class="bd">
-          <div class="row">
-            <div class="pill" style="display:flex;align-items:center;gap:16px;justify-content:space-between;border:1px solid var(--line);border-radius:12px;padding:12px">
-              <div style="display:flex;align-items:center;gap:10px"><div>🟢</div><div><b>USDT</b><div class="muted" style="font-size:12px">Available 300</div></div></div>
-              <div style="display:flex;gap:8px">
-                <button class="btn outline" id="goTopUp2">Top Up</button>
-                <button class="btn outline" id="goWithdraw2">Withdraw</button>
-                <button class="btn outline" id="goBill2">Bill</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Top Up -->
-    <div id="assets-topup" style="display:none">
-      <div class="titlebar">
-        <button class="btn outline" id="backTopUp">←</button>
-        <div style="font-weight:900">Top Up</div>
-      </div>
-      <div style="height:8px"></div>
-      <div class="card">
-        <div class="bd">
-          <label>Choose A Currency</label>
-          <div id="selTopupCurrency" class="pill" style="margin-top:6px">USDT <span class="muted">▼</span></div>
-          <div style="height:10px"></div>
-          <label>Select The Network</label>
-          <div id="selTopupNet" class="pill" style="margin-top:6px"><span id="topupNetLabel">TRON (TRC20)</span> <span class="muted">▼</span></div>
-          <div style="height:10px"></div>
-          <label>Recharge Address</label>
-          <div class="muted" style="font-size:12px">This address only supports USDT deposits on the selected network.</div>
-          <div style="height:10px"></div>
-          <div class="qr" id="qrBox"></div>
-          <div style="height:10px"></div>
-          <div class="pill"><span id="rechargeAddress">TQ1vYnESLMbt967YY34FTqmvmE32kNbrN</span> <button id="copyRecharge" class="btn outline">Copy</button></div>
-        </div>
-      </div>
-      <div style="height:12px"></div>
-      <div class="card">
-        <div class="hd">TrustMe AI Recharge Guide</div>
-        <div class="bd">
-          <div class="muted">
-            <p>• Ensure network matches: TRC20 / BEP20 / ERC20.</p>
-            <p>• Minimum deposit amount: <b>5 USDT</b>.</p>
-            <p>• Deposits may take time to confirm on-chain.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Withdraw -->
-    <div id="assets-withdraw" style="display:none">
-      <div class="titlebar">
-        <button class="btn outline" id="backWithdraw">←</button>
-        <div style="font-weight:900">Withdraw</div>
-      </div>
-      <div style="height:8px"></div>
-      <div class="card">
-        <div class="bd">
-          <label>Withdrawal Currency</label>
-          <div class="pill" style="margin-top:6px">USDT <span class="muted">▼</span></div>
-          <div style="height:10px"></div>
-          <label>Select The Network</label>
-          <div id="selWithdrawNet" class="pill" style="margin-top:6px"><span id="withdrawNetLabel">TRON (TRC20)</span> <span class="muted">▼</span></div>
-          <div style="height:10px"></div>
-          <div class="muted" style="color:var(--red)">Please confirm the wallet address you fill supports TRC20 / BEP20 / ERC20 transfers. Using other networks may cause loss of funds.</div>
-          <div style="height:12px"></div>
-          <label>Withdrawal Address</label>
-          <button id="addAddress" class="btn outline block" style="margin-top:6px">Add An Address</button>
-          <div id="wdQrWrap" style="display:none;margin-top:10px">
-            <div class="muted">Address QR</div>
-            <div class="qr" id="wdQr"></div>
-          </div>
-          <div style="height:12px"></div>
-          <label>Withdrawal Amount</label>
-          <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
-            <input type="number" id="wdAmount" placeholder="Enter the withdrawal amount" min="0" step="0.01">
-            <div class="pill">USDT</div>
-            <button id="wdAll" class="btn outline">All</button>
-          </div>
-          <div class="muted" style="text-align:right;margin-top:6px">Available <span id="availableUsdt">300</span> USDT</div>
-          <div style="height:10px"></div>
-          <div class="muted">
-            <p>Minimum Withdrawal Quantity: <b>10 USDT</b></p>
-            <p>Fixed Handling Fee: <b>2 USDT</b></p>
-            <p>Platform Commission Draw 10%: <b id="feePct">10%</b></p>
-            <p>Withdrawal Schedule: <b>Every day</b></p>
-          </div>
-          <div style="height:10px"></div>
-          <div><b>Number Of Accounts</b> <span id="actualReceive" style="color:#059669;font-weight:900">0 USDT</span></div>
-          <div class="muted" style="font-size:12px">Actual Amount = Requested − Platform Commission − Gas Fee (fixed).</div>
-          <div style="height:12px"></div>
-          <button id="wdConfirm" class="btn primary block" disabled>confirm</button>
-        </div>
-      </div>
-      <div style="height:12px"></div>
-      <div class="card">
-        <div class="hd">Withdrawal Prompt</div>
-        <div class="bd muted">After submission, transactions are processed within minutes depending on network congestion.</div>
-      </div>
-    </div>
-
-    <!-- Withdraw Address -->
-    <div id="assets-address" style="display:none">
-      <div class="titlebar">
-        <button class="btn outline" id="backAddress">←</button>
-        <div style="font-weight:900">Withdrawal Address</div>
-      </div>
-      <div style="height:8px"></div>
-      <div class="card">
-        <div class="bd">
-          <label>Choose A Currency</label>
-          <div class="pill" style="margin-top:6px">USDT <span class="muted">▼</span></div>
-          <div style="height:10px"></div>
-          <label>Select The Network</label>
-          <div id="selAddrNet" class="pill" style="margin-top:6px"><span id="addrNetLabel">TRON (TRC20)</span> <span class="muted">▼</span></div>
-          <div style="height:10px"></div>
-          <label>Withdrawal Address</label>
-          <input id="addrInput" type="text" placeholder="Enter the withdrawal address" style="margin-top:6px">
-          <div style="height:10px"></div>
-          <label>Mail</label>
-          <input id="addrMail" type="text" placeholder="Enter your email" style="margin-top:6px">
-          <div style="height:10px"></div>
-          <label>Verification Code</label>
-          <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
-            <input id="addrCode" type="text" placeholder="enter confirmation code">
-            <button id="addrSend" class="btn outline">Send</button>
-          </div>
-          <div style="height:10px"></div>
-          <label>Transaction Password</label>
-          <input id="addrPwd" type="password" placeholder="Enter the transaction password" style="margin-top:6px">
-          <div style="height:12px"></div>
-          <button id="addrConfirm" class="btn primary block">confirm</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Bill -->
-    <div id="assets-bill" style="display:none">
-      <div class="titlebar">
-        <button class="btn outline" id="backBill">←</button>
-        <div style="font-weight:900">Bill</div>
-      </div>
-      <div style="height:8px"></div>
-      <div class="card"><div class="bd muted">No Records Yet</div></div>
-    </div>
-  </section>
-
-  <!-- STRATEGY -->
-  <section id="page-strategy" class="container" style="display:none;padding:0 16px 90px 16px">
-    <div class="titlebar"><div style="font-weight:900">Strategy</div></div>
-    <div style="height:12px"></div>
-
-    <div class="card">
-      <div class="hd">Account Balance (USDT)</div>
-      <div class="bd">
-        <div class="kpi">
-          <div class="box"><div class="cap">Balance</div><div class="val">3</div></div>
-          <div class="box"><div class="cap">Today’s Earnings</div><div class="val">0</div></div>
-          <div class="box"><div class="cap">Cumulative Income</div><div class="val">0</div></div>
-          <div class="box"><div class="cap">Funds Available</div><div class="val">3</div></div>
-        </div>
-      </div>
-    </div>
-
-    <div style="height:10px"></div>
-    <div class="st-tabs">
-      <div class="st-tab active" data-tab="st">Strategy</div>
-      <div class="st-tab" data-tab="today">Today</div>
-      <div class="st-tab" data-tab="bill">Bill</div>
-    </div>
-
-    <div id="st-panel" style="padding:14px 0">
-      <div class="st-row" id="openPlan">
-        <div>💠 <b style="margin-left:6px">TMI1</b> <span class="muted" style="margin-left:6px">1.5% – 3%</span></div>
-        <div class="muted">50 ~ 500000 USDT ➜</div>
-      </div>
-      <div style="height:10px"></div>
-      <button class="btn outline" id="btnInvest">Not Unlocked</button>
-    </div>
-
-    <div id="today-panel" style="display:none;padding:14px 0">
-      <div class="card"><div class="bd muted">No Data Yet</div></div>
-    </div>
-
-    <div id="bill-panel" style="display:none;padding:14px 0">
-      <div class="card"><div class="bd muted">No Records Yet</div></div>
-    </div>
-  </section>
-
-  <!-- TEAM -->
-  <section id="page-team" class="container" style="display:none;padding:0 16px 90px 16px">
-    <div class="titlebar"><div style="font-weight:900">Team</div></div>
-    <div style="height:12px"></div>
-    <div class="card"><div class="bd">
-      <div class="muted">Share your invite code and link to grow your team.</div>
-      <div style="height:10px"></div>
-      <div class="pill"><span id="teamInvite">—</span> <button id="copyTeamInvite" class="btn outline">Copy</button></div>
-    </div></div>
-  </section>
-
-  <!-- MINE -->
-  <section id="page-mine" class="container" style="display:none;padding:16px 0">
-    <!-- Signed out -->
-    <div id="mineSignedOut">
-      <div class="card">
-        <div class="hd">Mine</div>
-        <div class="bd">Please <button class="btn primary" id="inlineLogin">Log in</button> to view your profile.</div>
-      </div>
-    </div>
-
-    <!-- Signed in -->
-    <div id="mineSignedIn" style="display:none">
-      <div class="mine-hero">
-        <div class="bd">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-            <div style="display:flex;align-items:center;gap:12px">
-              <div id="avatar" style="width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-weight:900">T</div>
-              <div>
-                <div style="font-weight:900" id="displayName">TrustMe‑User</div>
-                <div style="color:rgba(255,255,255,.9)">
-                  UID: <span id="uid">—</span>
-                  <span class="copy-btn" id="copyUid" title="Copy UID">📋</span>
-                  &nbsp; | Invite Code: <span id="invite">—</span>
-                  <span class="copy-btn" id="copyInvite" title="Copy invite">📋</span>
-                </div>
-              </div>
-            </div>
-            <button id="btnUpgrade" class="btn" style="background:#fff;color:#065f46;border:none">Upgrade level</button>
-          </div>
-          <div style="height:14px"></div>
-          <div style="display:flex;align-items:center;gap:18px">
-            <div class="badge">Level <b id="levelName">TMI1</b></div>
-            <div class="badge">Agent <b id="agentLevel">0</b></div>
-          </div>
-        </div>
-      </div>
-
-      <div style="height:14px"></div>
-      <div class="grid-4">
-        <div class="icon-btn" id="btnInvite"><div class="icon">🎁</div><div>Invite Friends</div></div>
-        <div class="icon-btn" id="btnAgent"><div class="icon">⭐</div><div>Agent Level</div></div>
-        <div class="icon-btn" id="btnMyProfits"><div class="icon">💵</div><div>My Profits</div></div>
-        <div class="icon-btn" id="btnOrders"><div class="icon">🧾</div><div>Order Record</div></div>
-      </div>
-
-      <div style="height:14px"></div>
-      <div class="card">
-        <div class="hd">Common Functions</div>
-        <div class="bd grid-4">
-          <div class="icon-btn" id="btnRules"><div class="icon">📘</div><div>Operational Rules</div></div>
-          <div class="icon-btn" id="btnSafety"><div class="icon">🛡️</div><div>Safety Center</div></div>
-          <div class="icon-btn" id="btnFeedback"><div class="icon">✉️</div><div>Feedback</div></div>
-          <div class="icon-btn" id="btnHelp"><div class="icon">❓</div><div>Help Center</div></div>
-        </div>
-      </div>
-
-      <div style="height:14px"></div>
-      <div class="card">
-        <div class="hd">Other Features</div>
-        <div class="bd grid-4">
-          <div class="icon-btn" id="btnProfile"><div class="icon">👤</div><div>Personal Info</div></div>
-          <div class="icon-btn" id="btnAbout"><div class="icon">ℹ️</div><div>About</div></div>
-          <div class="icon-btn" id="btnLang"><div class="icon">🌐</div><div>Language</div></div>
-          <div class="icon-btn" id="btnSupport"><div class="icon">💬</div><div>Customer Service</div></div>
-          <div class="icon-btn" id="btnSocial"><div class="icon">📣</div><div>Social Media</div></div>
-          <div class="icon-btn" id="btnCache"><div class="icon">🧹</div><div>Clear Cache</div></div>
-        </div>
-      </div>
-
-      <div style="height:14px"></div>
-      <button id="btnLogout" class="btn outline block">Log Out</button>
-    </div>
-  </section>
-
-  <!-- RULES -->
-  <section id="page-rules" class="container" style="display:none;padding:0 16px 120px 16px">
-    <div class="titlebar">
-      <button id="backRules" class="btn outline">←</button>
-      <div style="font-weight:900">Operational Rules</div>
-    </div>
-    <div class="card" style="margin-top:12px">
-      <div class="bd">
-        <p><b>TrustMe AI</b> protects your account and funds with industry‑grade security. This page summarizes the essentials.</p>
-        <ol>
-          <li><b>Account.</b> Keep your login secret. Enable phone/email verification for withdrawals.</li>
-          <li><b>Networks.</b> Always match the chain (TRC20 / BEP20 / ERC20) when depositing/withdrawing.</li>
-          <li><b>Strategy.</b> TMI1 targets 1.5%–3% depending on market conditions.</li>
-          <li><b>Fees.</b> Network gas is paid to the blockchain. Platform fees (if any) show before confirm.</li>
-          <li><b>Support.</b> We never ask for your password or seed phrase.</li>
+        <div class="card-title">Roadmap</div>
+        <ol class="bullets">
+          <li>Phase 1 — UX & onboarding</li>
+          <li>Phase 2 — Exchange API integration</li>
+          <li>Phase 3 — Live strategies and settlements</li>
         </ol>
       </div>
-    </div>
-  </section>
-</main>
+    </section>
 
-<footer class="bottom">
-  <div class="container tabs">
-    <div class="tab active" data-nav="home">🏠<div>Front Page</div></div>
-    <div class="tab gated" data-nav="assets">💼<div>Assets</div></div>
-    <div class="tab gated" data-nav="strategy">📊<div>Strategy</div></div>
-    <div class="tab gated" data-nav="team">👥<div>Team</div></div>
-    <div class="tab" data-nav="mine">👤<div>Mine</div></div>
-  </div>
-</footer>
-
-<!-- Modal + Sheet -->
-<div id="modal" class="modal" aria-hidden="true">
-  <div class="panel">
-    <div class="hd"><span id="modalTitle">Modal</span><button id="modalClose" class="btn outline">✕</button></div>
-    <div class="bd" id="modalBody"></div>
-    <div class="actions" id="modalActions"></div>
-  </div>
-</div>
-
-<div id="sheet" class="sheet" aria-hidden="true">
-  <div class="handle"></div>
-  <div class="hd" id="sheetTitle">Select</div>
-  <div class="body" id="sheetList"></div>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-  const BRAND = 'TrustMe AI';
-  const $ = (q)=>document.querySelector(q);
-  const $$ = (q)=>Array.from(document.querySelectorAll(q));
-
-  // ----- STATE & STORAGE -----
-  const state = {user:{loggedIn:false, uid:'', invite:'', name:'', level:'TMI1', agent:0}, assets:{available:300, address:{TRC20:'TQ1vYnESLMbt967YY34FTqmvmE32kNbrN', BEP20:'0xB8F8b4f2B0aAbC6a92eF91C71b11bE55Cc82dA11', ERC20:'0xE2d413dC0b4B55f91fE8a1b2F3c44a11CceE2211'}, withdrawAddress:'' }, strategy:{tab:'st', plan:'TMI1', min:50, max:500000, rate:'1.5% – 3%'}};
-  try{ const saved = JSON.parse(localStorage.getItem('tm_user')||'null'); if(saved && saved.loggedIn) Object.assign(state.user, saved); }catch{}
-  function persist(){ localStorage.setItem('tm_user', JSON.stringify(state.user)); }
-
-  // ----- NAVIGATION + GATING -----
-  function showPage(key){
-    const pages=['home','assets','strategy','team','mine','rules'];
-    pages.forEach(p=> $('#page-'+p).style.display = (p===key?'block':'none'));
-    $$('.tab').forEach(t=> t.classList.toggle('active', t.dataset.nav===key));
-    if(key==='mine') renderMine();
-    if(key==='assets') showAssets('overview');
-    if(key==='team') $('#teamInvite').textContent = state.user.invite || '—';
-    if(key==='strategy') renderStrategyTabs();
-  }
-  function requireLogin(target){
-    if(!state.user.loggedIn){ openLogin(target); return false; }
-    showPage(target); return true;
-  }
-  $$('.tab').forEach(t=> t.addEventListener('click', ()=>{
-    const target = t.dataset.nav;
-    if(t.classList.contains('gated')){ requireLogin(target); }
-    else{ showPage(target); }
-  }));
-  $$('.gated').forEach(n=> n.addEventListener('click', (e)=>{
-    const target=n.dataset.nav; requireLogin(target);
-  }));
-  $('#backRules').addEventListener('click', ()=> showPage('mine'));
-
-  // ----- MODAL HELPERS -----
-  function openModal(title, bodyNode, actions){
-    $('#modalTitle').textContent = title;
-    const b = $('#modalBody'); b.innerHTML=''; b.appendChild(bodyNode);
-    const a = $('#modalActions'); a.innerHTML=''; actions.forEach(btn=>a.appendChild(btn));
-    $('#modal').classList.add('open'); $('#modal').setAttribute('aria-hidden','false');
-  }
-  function closeModal(){ $('#modal').classList.remove('open'); $('#modal').setAttribute('aria-hidden','true'); }
-  $('#modalClose').addEventListener('click', closeModal);
-  $('#modal').addEventListener('click', (e)=>{ if(e.target.id==='modal') closeModal(); });
-
-  // ----- SHEET (for network/plan selection) -----
-  let _sheetConfirm = null;
-  function openSheet(title, options, selected, onConfirm){
-    $('#sheetTitle').textContent = title;
-    const list = $('#sheetList'); list.innerHTML='';
-    options.forEach(opt=>{
-      const node = document.createElement('div');
-      node.className='opt';
-      node.innerHTML = '<div class="l"><div>'+opt.icon+'</div><div>'+opt.label+'</div></div><div>'+(opt.value===selected?'✔️':'')+'</div>';
-      node.onclick = ()=>{ _sheetConfirm = ()=> onConfirm(opt); closeSheet(); };
-      list.appendChild(node);
-    });
-    _sheetConfirm = null;
-    $('#sheet').classList.add('open'); $('#sheet').setAttribute('aria-hidden','false');
-  }
-  function closeSheet(){ $('#sheet').classList.remove('open'); $('#sheet').setAttribute('aria-hidden','true'); setTimeout(()=>{ if(_sheetConfirm) _sheetConfirm(); _sheetConfirm=null; }, 100); }
-  $('#sheet').addEventListener('click', (e)=>{ if(e.target.id==='sheet') closeSheet(); });
-
-  // ----- AUTH -----
-  function openLogin(afterNav){
-    const wrap = document.createElement('div');
-    wrap.innerHTML = `<div class="auth-title">Log In to ${BRAND}</div>
-      <div class="auth-tabs"><div id="tabPhone" class="auth-tab active">Phone Number</div><div id="tabMail" class="auth-tab">Mail</div></div>
-      <div id="panePhone">
-        <label>Phone Number</label>
-        <div style="display:flex;gap:8px;margin-top:6px"><select><option>+45</option><option>+1</option></select><input type="text" placeholder="Enter your mobile phone number"></div>
-        <div style="height:10px"></div><label>Password</label><input type="password" placeholder="Enter your password">
+    <!-- ASSETS (gated) -->
+    <section id="view-assets" class="view">
+      <div class="card">
+        <div class="card-title">Assets</div>
+        <div class="row gap">
+          <button class="btn" id="openTopUp">Top‑Up</button>
+          <button class="btn" id="openWithdraw">Withdraw</button>
+        </div>
       </div>
-      <div id="paneMail" style="display:none">
-        <label>Mail</label><input type="text" placeholder="Enter your email address" style="margin-top:6px">
-        <div style="height:10px"></div><label>Password</label><input type="password" placeholder="Enter your password">
-      </div>`;
-    wrap.querySelector('#tabPhone').onclick = ()=>{ wrap.querySelector('#tabPhone').classList.add('active'); wrap.querySelector('#tabMail').classList.remove('active'); wrap.querySelector('#panePhone').style.display='block'; wrap.querySelector('#paneMail').style.display='none'; };
-    wrap.querySelector('#tabMail').onclick  = ()=>{ wrap.querySelector('#tabMail').classList.add('active');  wrap.querySelector('#tabPhone').classList.remove('active'); wrap.querySelector('#panePhone').style.display='none'; wrap.querySelector('#paneMail').style.display='block'; };
+    </section>
 
-    const btnLogin = Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Log In'});
-    btnLogin.onclick = ()=>{
-      state.user.loggedIn = true;
-      state.user.uid = state.user.uid || String(100000 + Math.floor(Math.random()*900000));
-      state.user.invite = state.user.invite || Math.random().toString(36).slice(2,7).toUpperCase();
-      state.user.name = state.user.name || ('TrustMe-'+state.user.uid);
-      persist(); closeModal(); renderMine(); showPage(afterNav || 'mine');
-    };
-    const linkToReg = Object.assign(document.createElement('button'),{className:'btn outline',textContent:'Register Now'});
-    linkToReg.style.marginRight='auto';
-    linkToReg.onclick = ()=>{ closeModal(); openRegister(afterNav); };
-    openModal('Auth', wrap, [linkToReg, btnLogin]);
-  }
-  function openRegister(afterNav){
-    const wrap = document.createElement('div');
-    wrap.innerHTML = `<div class="auth-title">Register to ${BRAND}</div>
-      <label>Phone Number</label>
-      <div style="display:flex;gap:8px;margin-top:6px"><select><option>+45</option><option>+1</option></select><input type="text" placeholder="Enter your mobile phone number"></div>
-      <div style="height:10px"></div><label>Mail</label><input type="text" placeholder="Enter your email address" style="margin-top:6px">
-      <div style="height:10px"></div><label>Invitation Code</label><input type="text" placeholder="Enter the invitation code">
-      <div style="height:10px"></div><label>Password</label><input type="password" placeholder="6-20 characters">`;
-    const btnReg = Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Register'});
-    btnReg.onclick = ()=>{ state.user.loggedIn=true; state.user.uid=String(100000+Math.floor(Math.random()*900000)); state.user.invite=Math.random().toString(36).slice(2,7).toUpperCase(); state.user.name='TrustMe-'+state.user.uid; persist(); closeModal(); renderMine(); showPage(afterNav || 'mine'); };
-    const linkToLogin = Object.assign(document.createElement('button'),{className:'btn outline',textContent:'Log In Now'});
-    linkToLogin.style.marginRight='auto';
-    linkToLogin.onclick = ()=>{ closeModal(); openLogin(afterNav); };
-    openModal('Register', wrap, [linkToLogin, btnReg]);
-  }
+    <!-- STRATEGY (gated) -->
+    <section id="view-strategy" class="view">
+      <div class="card">
+        <div class="card-title">Strategy</div>
+        <p>Current plan: <b>TMI1</b> — 50 to 500,000 USDT, target yield <b>1.5% – 3%</b>.</p>
+      </div>
+    </section>
 
-  // Buttons to open auth
-  $('#btnGetStarted').addEventListener('click', ()=>openLogin());
-  document.body.addEventListener('click', (e)=>{ if(e.target && e.target.id==='inlineLogin') openLogin(); });
+    <!-- TEAM (gated) -->
+    <section id="view-team" class="view">
+      <div class="card">
+        <div class="card-title">Team</div>
+        <p>Invite friends and grow your rewards.</p>
+      </div>
+    </section>
 
-  // ----- MINE RENDER -----
-  function renderMine(){
-    const signedIn = state.user.loggedIn;
-    $('#mineSignedIn').style.display = signedIn ? 'block' : 'none';
-    $('#mineSignedOut').style.display = signedIn ? 'none' : 'block';
-    if(!signedIn) return;
-    $('#displayName').textContent = state.user.name || 'TrustMe‑User';
-    $('#uid').textContent = state.user.uid || '—';
-    $('#invite').textContent = state.user.invite || '—';
-    $('#levelName').textContent = state.user.level;
-    $('#agentLevel').textContent = state.user.agent;
-    $('#avatar').textContent = (state.user.name||'T')[0].toUpperCase();
-    $('#teamInvite').textContent = state.user.invite || '—';
-  }
+    <!-- MINE -->
+    <section id="view-mine" class="view">
+      <div class="profile-banner">
+        <div class="pfp">S</div>
+        <div class="profile-info">
+          <div class="profile-name" id="profileName">TrustMeAI‑100222</div>
+          <div class="profile-meta">UID: <span id="profileUid">100222</span> • Invite Code: <span id="inviteCode">MPQQ8K</span></div>
+          <div class="chips">
+            <span class="chip">Level TMI1</span>
+            <span class="chip chip-muted">Agent 0</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="upgradeBtn">Upgrade level</button>
+      </div>
 
-  // ----- HOME CALCULATOR -----
-  function calc(){ 
-    const amt = Math.max(0, Number($('#calcAmt').value||0));
-    const rate = Math.max(0, Number($('#calcRate').value||0))/100;
-    const days = Math.max(1, Number($('#calcDays').value||1));
-    const daily = amt*rate;
-    const total = daily*days;
-    $('#calcOut').innerHTML = `<b>Daily:</b> ${daily.toFixed(2)} USDT · <b>Total:</b> ${total.toFixed(2)} USDT in ${days} days`;
-  }
-  $('#calcBtn').addEventListener('click', calc);
+      <div class="quick-grid">
+        <a class="quick" href="#" data-action="invite"><span>🎁</span> Invite Friends</a>
+        <a class="quick" href="#" data-action="agent"><span>⭐</span> Agent Level</a>
+        <a class="quick" href="#" data-action="profits"><span>💵</span> My Profits</a>
+        <a class="quick" href="#" data-action="orders"><span>🧾</span> Order Record</a>
+      </div>
 
-  // ----- ASSETS SUBNAV -----
-  function showAssets(view){
-    ['overview','topup','withdraw','address','bill'].forEach(v=> $('#assets-'+v).style.display = (v===view?'block':'none'));
-    if(view==='topup'){ buildQR($('#rechargeAddress').textContent, '#qrBox'); }
-    if(view==='withdraw' && state.assets.withdrawAddress){ $('#wdQrWrap').style.display='block'; buildQR(state.assets.withdrawAddress,'#wdQr'); }
-    if(view!=='withdraw'){ $('#wdQrWrap').style.display='none'; }
-  }
+      <div class="card">
+        <div class="card-title">Common Functions</div>
+        <div class="quick-grid">
+          <a class="quick" href="#" data-action="rules"><span>📘</span> Operational Rules</a>
+          <a class="quick" href="#" data-action="safety"><span>🛡️</span> Safety Center</a>
+          <a class="quick" href="#" data-action="feedback"><span>✉️</span> Feedback</a>
+          <a class="quick" href="#" data-action="help"><span>❓</span> Help Center</a>
+        </div>
+      </div>
 
-  // ----- QR builder -----
-  function buildQR(text, selector){
-    const box = document.querySelector(selector); box.innerHTML='';
-    let seed = 0; for(let i=0;i<text.length;i++){ seed = (seed*31 + text.charCodeAt(i))>>>0; }
-    const rnd = ()=>{ seed = (1103515245*seed + 12345) & 0x7fffffff; return seed/0x7fffffff; };
-    for(let i=0;i<25*25;i++){ const el=document.createElement(rnd()>0.56?'i':'b'); box.appendChild(el); }
-  }
+      <div class="card">
+        <div class="card-title">Other Features</div>
+        <div class="quick-grid">
+          <a class="quick" href="#" data-action="personal"><span>👤</span> Personal Info</a>
+          <a class="quick" href="#" data-action="about"><span>ℹ️</span> About</a>
+          <a class="quick" href="#" data-action="lang"><span>🌐</span> Language</a>
+          <a class="quick" href="#" data-action="support"><span>💬</span> Customer Service</a>
+        </div>
+      </div>
+    </section>
+  </main>
 
-  // ----- Team copy -----
-  async function copyText(t){ try{ await navigator.clipboard.writeText(t); alert('Copied'); }catch(e){ const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); alert('Copied'); }}
+  <nav class="tabbar">
+    <button class="tab active" data-view="home">🏠<span>Front Page</span></button>
+    <button class="tab" data-view="assets">🧳<span>Assets</span></button>
+    <button class="tab" data-view="strategy">📈<span>Strategy</span></button>
+    <button class="tab" data-view="team">👥<span>Team</span></button>
+    <button class="tab" data-view="mine">🧑‍💼<span>Mine</span></button>
+  </nav>
 
-  // Home tiles require login
-  $$('.gated').forEach(n=> n.addEventListener('click', (e)=>{
-    const target=n.dataset.nav; requireLogin(target);
-  }));
+  <!-- LOGIN MODAL -->
+  <dialog id="authDialog" class="modal">
+    <form method="dialog" class="modal-card" id="authForm" onsubmit="return false;">
+      <div class="modal-title">Log In</div>
+      <div class="tabs-line">
+        <button type="button" class="pill active" data-auth-tab="phone">Phone Number</button>
+        <button type="button" class="pill" data-auth-tab="mail">Mail</button>
+      </div>
 
-  // Assets entry buttons
-  const toTopUp = ()=>{ if(requireLogin('assets')) showAssets('topup'); };
-  const toWithdraw = ()=>{ if(requireLogin('assets')) showAssets('withdraw'); };
-  $('#goTopUp').addEventListener('click', toTopUp);
-  $('#goWithdraw').addEventListener('click', toWithdraw);
-  $('#goBill').addEventListener('click', ()=>{ if(requireLogin('assets')) showAssets('bill'); });
-  $('#goTopUp2').addEventListener('click', toTopUp);
-  $('#goWithdraw2').addEventListener('click', toWithdraw);
-  $('#goBill2').addEventListener('click', ()=>{ if(requireLogin('assets')) showAssets('bill'); });
+      <div id="formPhone">
+        <label class="field">
+          <span>Phone number</span>
+          <div class="input-row">
+            <select class="code"><option selected>+45</option><option>+1</option><option>+44</option></select>
+            <input placeholder="Enter your mobile phone number" />
+          </div>
+        </label>
+      </div>
+      <div id="formMail" style="display:none">
+        <label class="field">
+          <span>Email</span>
+          <input placeholder="Enter your email address" type="email" />
+        </label>
+      </div>
 
-  // Assets back buttons
-  $('#backTopUp').addEventListener('click', ()=> showAssets('overview'));
-  $('#backWithdraw').addEventListener('click', ()=> showAssets('overview'));
-  $('#backAddress').addEventListener('click', ()=> showAssets('withdraw'));
-  $('#backBill').addEventListener('click', ()=> showAssets('overview'));
-  $('#viewEarnings').addEventListener('click', ()=> showAssets('bill'));
+      <label class="field"><span>Password</span><input placeholder="Enter your password" type="password" /></label>
 
-  // Network selection for TopUp/Withdraw/Address
-  const networks = [
-    {value:'TRC20', label:'TRON (TRC20)', icon:'🔴'},
-    {value:'BEP20', label:'BNB Smart Chain (BEP20)', icon:'🟡'},
-    {value:'ERC20', label:'Ethereum (ERC20)', icon:'⚪'}
-  ];
-  let topupNet='TRC20', withdrawNet='TRC20', addrNet='TRC20';
+      <div class="row between">
+        <label class="checkbox"><input type="checkbox" /> Remember me</label>
+        <a href="#" class="link">Forget the password</a>
+      </div>
 
-  function setTopupNet(n){
-    topupNet = n.value;
-    $('#topupNetLabel').textContent = n.label;
-    const addr = state.assets.address[n.value];
-    $('#rechargeAddress').textContent = addr;
-    buildQR(addr, '#qrBox');
-  }
-  function setWithdrawNet(n){ withdrawNet = n.value; $('#withdrawNetLabel').textContent = n.label; }
-  function setAddrNet(n){ addrNet = n.value; $('#addrNetLabel').textContent = n.label; }
+      <div class="row gap">
+        <button class="btn btn-primary" id="loginBtn" type="button">Log In</button>
+        <button class="btn" id="registerBtn" type="button">Register</button>
+      </div>
+    </form>
+  </dialog>
 
-  $('#selTopupNet').addEventListener('click', ()=> openSheet('Select The Network', networks, topupNet, setTopupNet));
-  $('#selWithdrawNet').addEventListener('click', ()=> openSheet('Select The Network', networks, withdrawNet, setWithdrawNet));
-  $('#selAddrNet').addEventListener('click', ()=> openSheet('Select The Network', networks, addrNet, setAddrNet));
+  <!-- TOP-UP MODAL -->
+  <dialog id="topupDialog" class="modal">
+    <form method="dialog" class="modal-card">
+      <div class="modal-title">Top Up</div>
+      <label class="field">
+        <span>Choose a Currency</span>
+        <div class="select-like"><span class="token usdt">●</span> USDT</div>
+      </label>
 
-  // Copy recharge address
-  $('#copyRecharge').addEventListener('click', ()=> copyText($('#rechargeAddress').textContent));
+      <label class="field">
+        <span>Select the Network</span>
+        <select id="topupNetwork">
+          <option value="TRC20" selected>TRON (TRC20)</option>
+          <option value="BEP20">BNB Smart Chain (BEP20)</option>
+          <option value="ERC20">Ethereum (ERC20)</option>
+        </select>
+      </label>
 
-  // Withdraw amount calculations
-  const minWd=10, fixedFee=2, pct=0.10;
-  const amtInput = $('#wdAmount');
-  function recalc(){
-    const available = state.assets.available;
-    const a = Number(amtInput.value||0);
-    const ok = a>=minWd && a<=available;
-    const actual = Math.max(0, a - fixedFee - (a*pct));
-    $('#actualReceive').textContent = (ok? actual.toFixed(2):0) + ' USDT';
-    $('#wdConfirm').disabled = !ok;
-  }
-  amtInput.addEventListener('input', recalc);
-  $('#wdAll').addEventListener('click', ()=>{ amtInput.value = state.assets.available; recalc(); });
+      <div class="qr-wrap">
+        <canvas id="topupQr" width="256" height="256"></canvas>
+        <div class="addr-row">
+          <input id="topupAddress" readonly value="TQ1-PLACEHOLDER-TRC20-ADDRESS" />
+          <button type="button" class="btn" id="copyTopup">Copy</button>
+        </div>
+        <p class="muted">This address only supports USDT deposits on the selected network.</p>
+      </div>
 
-  // Add Address flow
-  $('#addAddress').addEventListener('click', ()=> showAssets('address'));
-  $('#addrSend').addEventListener('click', ()=> alert('Verification code sent (demo).'));
-  $('#addrConfirm').addEventListener('click', ()=>{
-    const addr = $('#addrInput').value.trim();
-    if(!addr){ alert('Enter address'); return; }
-    state.assets.withdrawAddress = addr;
-    alert('Address saved (demo).');
-    showAssets('withdraw');
-    $('#wdQrWrap').style.display='block';
-    buildQR(addr, '#wdQr');
-  });
+      <div class="row gap">
+        <button class="btn" value="cancel">Close</button>
+      </div>
+    </form>
+  </dialog>
 
-  // Confirm withdraw
-  $('#wdConfirm').addEventListener('click', ()=>{
-    alert('Withdrawal submitted (demo).');
-    amtInput.value=''; recalc();
-  });
+  <!-- WITHDRAW MODAL -->
+  <dialog id="withdrawDialog" class="modal">
+    <form method="dialog" class="modal-card">
+      <div class="modal-title">Withdraw</div>
+      <label class="field">
+        <span>Withdrawal Currency</span>
+        <div class="select-like"><span class="token usdt">●</span> USDT</div>
+      </label>
 
-  // ----- Strategy tabs and plan picker -----
-  function setStrategyTab(t){
-    state.strategy.tab = t;
-    renderStrategyTabs();
-  }
-  function renderStrategyTabs(){
-    $$('.st-tab').forEach(el=> el.classList.toggle('active', el.dataset.tab===state.strategy.tab));
-    $('#st-panel').style.display = state.strategy.tab==='st' ? 'block' : 'none';
-    $('#today-panel').style.display = state.strategy.tab==='today' ? 'block' : 'none';
-    $('#bill-panel').style.display = state.strategy.tab==='bill' ? 'block' : 'none';
-  }
-  $$('.st-tab').forEach(el=> el.addEventListener('click', ()=> setStrategyTab(el.dataset.tab)));
+      <label class="field">
+        <span>Select the Network</span>
+        <select id="withdrawNetwork">
+          <option value="TRC20" selected>TRON (TRC20)</option>
+          <option value="BEP20">BNB Smart Chain (BEP20)</option>
+          <option value="ERC20">Ethereum (ERC20)</option>
+        </select>
+      </label>
 
-  $('#openPlan').addEventListener('click', ()=>{
-    const opts=[{value:'TMI1',label:'TMI1 — 1.5% – 3%  ·  50~500000 USDT',icon:'💠'}];
-    openSheet('Select Strategy', opts, state.strategy.plan, (opt)=>{ state.strategy.plan=opt.value; alert('TMI1 selected'); });
-  });
+      <label class="field">
+        <span>Withdrawal Address</span>
+        <input id="withdrawAddress" placeholder="Enter the withdrawal address" />
+      </label>
 
-  // Team copy invite
-  $('#copyTeamInvite').addEventListener('click', ()=> copyText(state.user.invite || '—'));
+      <label class="field">
+        <span>Amount (USDT)</span>
+        <input id="withdrawAmount" placeholder="Enter the withdrawal amount" type="number" min="0" />
+      </label>
 
-  // Mine actions (delegated)
-  document.body.addEventListener('click', async (e)=>{
-    const id = e.target.id;
-    if(id==='copyUid'){ await copyText($('#uid').textContent); }
-    if(id==='copyInvite'){ await copyText($('#invite').textContent); }
-    if(id==='btnInvite'){
-      const body=document.createElement('div');
-      const link=(location.origin?location.origin:'https://trustmeai.online') + '/register?ref=' + (state.user.invite||'TMAI');
-      body.innerHTML='<div style="font-weight:800">Invite Friends</div><div class="muted" style="margin:8px 0">Share your link:</div><div class="card bd" style="word-break:break-all">'+link+'</div>';
-      const copy=Object.assign(document.createElement('button'),{className:'btn outline',textContent:'Copy'});
-      copy.onclick=()=> copyText(link);
-      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-      openModal('Invite', body, [copy, close]);
-    }
-    if(id==='btnAgent'){
-      const body=document.createElement('div'); body.innerHTML='<b>Agent Levels</b><p class="muted">Grow referrals to unlock higher agent rebates.</p>';
-      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-      openModal('Agent Level', body, [close]);
-    }
-    if(id==='btnMyProfits'){ requireLogin('assets') && showAssets('overview'); }
-    if(id==='btnOrders'){ const body=document.createElement('div'); body.innerHTML='<div class="muted">No orders yet.</div>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('Order Record', body, [close]); }
-    if(id==='btnRules'){ showPage('rules'); }
-    if(id==='btnSafety'){ const body=document.createElement('div'); body.innerHTML='<ul><li>Bind email for withdrawals</li><li>Use a strong password</li><li>Never share codes</li></ul>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('Safety Center', body, [close]); }
-    if(id==='btnFeedback'){ const body=document.createElement('div'); body.innerHTML='<label>Feedback</label><textarea style="width:100%;min-height:120px;border:1px solid #e2e7eb;border-radius:12px;padding:10px" placeholder="Tell us what to improve…"></textarea>'; const send=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Send'}); send.onclick=()=>{ alert('Thanks!'); closeModal(); }; openModal('Feedback', body, [send]); }
-    if(id==='btnHelp'){ const body=document.createElement('div'); body.innerHTML='<div style="font-weight:800">Help Center</div><p class="muted">FAQs, guides, and support contacts.</p>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('Help Center', body, [close]); }
-    if(id==='btnProfile'){ const body=document.createElement('div'); body.innerHTML='<label>Display Name</label><input id="nm" type="text" value="'+(state.user.name||'')+'" style="margin-top:6px"><div style="height:8px"></div><label>Agent Level</label><input id="ag" type="number" value="'+(state.user.agent||0)+'">'; const save=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Save'}); save.onclick=()=>{ state.user.name=$('#nm').value||state.user.name; state.user.agent=Number($('#ag').value||0); persist(); renderMine(); closeModal(); }; openModal('Personal Info', body, [save]); }
-    if(id==='btnAbout'){ const body=document.createElement('div'); body.innerHTML='<b>About TrustMe AI Platform</b><p class="muted">Strategy: TMI1 (1.5%–3%). This app is a front‑end demo — APIs will connect deposits, withdrawals and live yields.</p>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('About', body, [close]); }
-    if(id==='btnLang'){ const body=document.createElement('div'); body.innerHTML='<label>Language</label><select><option>English</option><option>Dansk</option><option>తెలుగు</option></select>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('Language', body, [close]); }
-    if(id==='btnSupport'){ const body=document.createElement('div'); body.innerHTML='<p>Telegram: @trustme_support</p><p>Email: support@trustmeai.online</p>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('Customer Service', body, [close]); }
-    if(id==='btnSocial'){ const body=document.createElement('div'); body.innerHTML='<ul><li>Twitter: @trustme_ai</li><li>Telegram: @trustmeai_news</li></ul>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('Social Media', body, [close]); }
-    if(id==='btnCache'){ localStorage.removeItem('tm_user'); alert('Cache cleared.'); }
-    if(id==='btnLogout'){ state.user.loggedIn=false; persist(); renderMine(); showPage('home'); }
-  });
+      <div class="qr-wrap small">
+        <canvas id="withdrawQr" width="192" height="192"></canvas>
+        <p class="muted">QR above mirrors the address you typed (demo).</p>
+      </div>
 
-  // Clipboard from team invite pill
-  $('#copyTeamInvite').addEventListener('click', ()=> copyText($('#teamInvite').textContent));
+      <div class="row gap">
+        <button class="btn btn-primary" value="default">Confirm</button>
+        <button class="btn" value="cancel">Close</button>
+      </div>
+    </form>
+  </dialog>
 
-  // Init
-  showPage(state.user.loggedIn ? 'mine' : 'home');
-  renderMine();
-  // Prepare initial topup QR
-  buildQR($('#rechargeAddress').textContent, '#qrBox');
-  renderStrategyTabs();
-});
-</script>
+  <script src="app.js"></script>
 </body>
 </html>
