@@ -5,11 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TrustMe AI — App</title>
 <style>
-:root{
-  --bg:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --emerald:#10b981; --brand:#111827;
-}
+:root{--ink:#0f172a;--muted:#64748b;--line:#e5e7eb;--brand:#111827;--emerald:#10b981}
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+html,body{margin:0;background:#fff;color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
 .container{max-width:1100px;margin:0 auto;padding:0 16px}
 .card{border:1px solid var(--line);border-radius:16px;background:#fff}
 .card .hd{padding:14px;border-bottom:1px solid var(--line);font-weight:800}
@@ -17,9 +15,8 @@ html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui
 .btn{padding:10px 16px;border-radius:14px;border:1px solid var(--line);background:#fff;font-weight:800;cursor:pointer}
 .btn.primary{background:var(--brand);color:#fff;border-color:transparent}
 .btn.outline{background:#fff;color:#111;border-color:var(--line)}
-.btn.ghost{background:transparent;border-color:transparent;color:var(--muted)}
 .btn.block{display:block;width:100%}
-.btn.disabled{opacity:.5;pointer-events:none}
+.btn:disabled{opacity:.5;pointer-events:none}
 header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .bar{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
 .logo{width:32px;height:32px;border-radius:10px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:900}
@@ -28,23 +25,16 @@ header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.92);backdro
 .tab{padding:10px 0;cursor:pointer}
 .active{color:var(--emerald);font-weight:800}
 .row{display:grid;gap:12px}
-@media(min-width:860px){.row-2{grid-template-columns:1fr 1fr}.row-3{grid-template-columns:repeat(3,1fr)}.row-4{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:860px){.row-4{grid-template-columns:repeat(4,1fr)}}
 .titlebar{position:sticky;top:56px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;padding:12px 0;z-index:9}
-.pill{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--line);border-radius:12px;font-weight:800}
-.qrbox{display:grid;place-items:center;border:1px solid var(--line);border-radius:12px;padding:12px}
-.kv{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
-.kpi{text-align:center}
-.kpi .cap{font-size:12px;color:var(--muted)}
-.kpi .val{font-size:22px;font-weight:900}
-.muted{color:var(--muted)}
-/* Sheet */
-.sheet{position:fixed;left:0;right:0;bottom:-100%;background:#fff;border-top-left-radius:16px;border-top-right-radius:16px;box-shadow:0 -12px 24px rgba(0,0,0,.1);transition:.28s;z-index:50}
-.sheet.open{bottom:0}
-.sheet .handle{width:64px;height:5px;background:#e5e7eb;border-radius:999px;margin:8px auto 0}
-.sheet .hd{padding:10px 16px;font-weight:900;border-bottom:1px solid var(--line)}
-.sheet .body{max-height:60vh;overflow-y:auto;padding:6px 10px 14px}
-.opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border:1px solid var(--line);border-radius:12px;margin:8px 6px;cursor:pointer}
-.opt .l{display:flex;align-items:center;gap:10px}
+/* Mine */
+.mine-hero{border-radius:16px;background:linear-gradient(135deg,#059669,#34d399);color:#fff;overflow:hidden}
+.mine-hero .bd{padding:16px}
+.badge{background:rgba(255,255,255,.15);padding:6px 10px;border-radius:999px;font-weight:800}
+.copy-btn{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:6px;background:rgba(255,255,255,.2);cursor:pointer;margin-left:6px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.icon-btn{border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;cursor:pointer;background:#fff}
+.icon{font-size:22px;margin-bottom:8px}
 /* Modal */
 .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,.35)}
 .modal.open{display:flex}
@@ -57,32 +47,23 @@ header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.92);backdro
 .auth-tab{padding:8px 0;cursor:pointer;position:relative}
 .auth-tab.active{color:#111}
 .auth-tab.active::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--emerald)}
-.cc-wrap{display:flex;gap:8px;align-items:center}
-/* Mine header */
-.mine-hero{position:relative;border-radius:16px;background:linear-gradient(135deg,#059669,#34d399);color:#fff;overflow:hidden}
-.mine-hero .bd{padding:16px}
-.badge{background:rgba(255,255,255,.15);padding:6px 10px;border-radius:999px;font-weight:800}
-.copy-btn{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:6px;background:rgba(255,255,255,.2);cursor:pointer;margin-left:6px}
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.icon-btn{border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;cursor:pointer;background:#fff}
-.icon{font-size:22px;margin-bottom:8px}
-.group-title{font-weight:900;margin:8px 0}
-.rule-text{padding:12px 16px;line-height:1.7}
-input[type=text],input[type=number],input[type=password],input[type=date],select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:14px;outline:none}
+input[type=text],input[type=number],input[type=password],select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:14px;outline:none}
+.muted{color:var(--muted)}
+main{padding-bottom:84px}
 </style>
 </head>
 <body>
 <header>
   <div class="container bar">
-    <div class="brand" style="display:flex;align-items:center;gap:8px">
+    <div style="display:flex;align-items:center;gap:8px">
       <div class="logo">T</div><div style="font-weight:900">TrustMe AI</div>
     </div>
     <button id="btnGetStarted" class="btn primary">Get Started</button>
   </div>
 </header>
 
-<main style="padding-bottom:84px">
-  <!-- HOME (kept light; focus is Mine) -->
+<main>
+  <!-- HOME -->
   <section id="page-home" class="container" style="padding:16px 0">
     <div class="row row-4">
       <a class="card bd navlink" data-nav="assets" style="text-align:center"><div class="icon">💳</div><div style="font-weight:800">Top‑Up</div></a>
@@ -96,103 +77,112 @@ input[type=text],input[type=number],input[type=password],input[type=date],select
     </div>
   </section>
 
-  <!-- ASSETS (placeholder to keep app complete) -->
+  <!-- ASSETS -->
   <section id="page-assets" class="container" style="display:none;padding:16px 0">
-    <div class="card"><div class="hd">Assets</div><div class="bd">Coming from previous build. (This page still works; focus of this update is <b>Mine</b>.)</div></div>
+    <div class="card"><div class="hd">Assets</div><div class="bd">This page is placeholder. (Focus of this build is Mine.)</div></div>
   </section>
 
-  <!-- STRATEGY (placeholder) -->
+  <!-- STRATEGY -->
   <section id="page-strategy" class="container" style="display:none;padding:16px 0">
-    <div class="card"><div class="hd">Strategy</div><div class="bd">Your current level: <b id="stratLevel">TMI1</b> (0.5% ~ 3%).</div></div>
+    <div class="card"><div class="hd">Strategy</div><div class="bd">Current plan: <b>TMI1</b> — 50 to 300,000 USDT, target yield <b>0.5% – 3%</b>.</div></div>
   </section>
 
-  <!-- TEAM (placeholder) -->
+  <!-- TEAM -->
   <section id="page-team" class="container" style="display:none;padding:16px 0">
     <div class="card"><div class="hd">Team</div><div class="bd">Invite friends and grow your rewards.</div></div>
   </section>
 
   <!-- MINE -->
   <section id="page-mine" class="container" style="display:none;padding:16px 0">
-    <!-- Hero -->
-    <div class="mine-hero">
-      <div class="bd">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-          <div style="display:flex;align-items:center;gap:12px">
-            <div id="avatar" style="width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-weight:900">U</div>
-            <div>
-              <div style="font-weight:900" id="displayName">TrustMe‑User</div>
-              <div class="muted" style="color:rgba(255,255,255,.9)">
-                UID: <span id="uid">—</span>
-                <span class="copy-btn" id="copyUid" title="Copy UID">📋</span>
-                &nbsp; | Invite Code: <span id="invite">—</span>
-                <span class="copy-btn" id="copyInvite" title="Copy invite">📋</span>
+    <!-- Signed out -->
+    <div id="mineSignedOut">
+      <div class="card">
+        <div class="hd">Mine</div>
+        <div class="bd">Please <button class="btn primary" id="inlineLogin">Log in</button> to view your profile.</div>
+      </div>
+    </div>
+
+    <!-- Signed in -->
+    <div id="mineSignedIn" style="display:none">
+      <div class="mine-hero">
+        <div class="bd">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div id="avatar" style="width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-weight:900">U</div>
+              <div>
+                <div style="font-weight:900" id="displayName">TrustMe‑User</div>
+                <div style="color:rgba(255,255,255,.9)">
+                  UID: <span id="uid">—</span>
+                  <span class="copy-btn" id="copyUid" title="Copy UID">📋</span>
+                  &nbsp; | Invite Code: <span id="invite">—</span>
+                  <span class="copy-btn" id="copyInvite" title="Copy invite">📋</span>
+                </div>
               </div>
             </div>
+            <button id="btnUpgrade" class="btn" style="background:#fff;color:#065f46;border:none">Upgrade level</button>
           </div>
-          <button id="btnUpgrade" class="btn" style="background:#fff;color:#065f46;border:none">Upgrade level</button>
-        </div>
-
-        <div style="height:14px"></div>
-        <div style="display:flex;align-items:center;gap:18px">
-          <div class="badge">Level <b id="levelName">TMI1</b></div>
-          <div class="badge">Agent <b id="agentLevel">0</b></div>
+          <div style="height:14px"></div>
+          <div style="display:flex;align-items:center;gap:18px">
+            <div class="badge">Level <b id="levelName">TMI1</b></div>
+            <div class="badge">Agent <b id="agentLevel">0</b></div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Menu rows -->
-    <div style="height:14px"></div>
-    <div class="grid-4">
-      <div class="icon-btn" id="btnInvite"><div class="icon">🎁</div><div>Invite Friends</div></div>
-      <div class="icon-btn" id="btnAgent"><div class="icon">⭐</div><div>Agent Level</div></div>
-      <div class="icon-btn" id="btnMyProfits"><div class="icon">💵</div><div>My Profits</div></div>
-      <div class="icon-btn" id="btnOrders"><div class="icon">🧾</div><div>Order Record</div></div>
-    </div>
-
-    <div style="height:14px"></div>
-    <div class="card">
-      <div class="hd">Common Functions</div>
-      <div class="bd grid-4">
-        <div class="icon-btn" id="btnRules"><div class="icon">📘</div><div>Operational Rules</div></div>
-        <div class="icon-btn" id="btnSafety"><div class="icon">🛡️</div><div>Safety Center</div></div>
-        <div class="icon-btn" id="btnFeedback"><div class="icon">✉️</div><div>Feedback</div></div>
-        <div class="icon-btn" id="btnHelp"><div class="icon">❓</div><div>Help Center</div></div>
+      <div style="height:14px"></div>
+      <div class="grid-4">
+        <div class="icon-btn" id="btnInvite"><div class="icon">🎁</div><div>Invite Friends</div></div>
+        <div class="icon-btn" id="btnAgent"><div class="icon">⭐</div><div>Agent Level</div></div>
+        <div class="icon-btn" id="btnMyProfits"><div class="icon">💵</div><div>My Profits</div></div>
+        <div class="icon-btn" id="btnOrders"><div class="icon">🧾</div><div>Order Record</div></div>
       </div>
-    </div>
 
-    <div style="height:14px"></div>
-    <div class="card">
-      <div class="hd">Other Features</div>
-      <div class="bd grid-4">
-        <div class="icon-btn" id="btnProfile"><div class="icon">👤</div><div>Personal Info</div></div>
-        <div class="icon-btn" id="btnAbout"><div class="icon">ℹ️</div><div>About</div></div>
-        <div class="icon-btn" id="btnLang"><div class="icon">🌐</div><div>Language</div></div>
-        <div class="icon-btn" id="btnSupport"><div class="icon">💬</div><div>Customer Service</div></div>
-        <div class="icon-btn" id="btnSocial"><div class="icon">📣</div><div>Social Media</div></div>
-        <div class="icon-btn" id="btnCache"><div class="icon">🧹</div><div>Clear Cache</div></div>
+      <div style="height:14px"></div>
+      <div class="card">
+        <div class="hd">Common Functions</div>
+        <div class="bd grid-4">
+          <div class="icon-btn" id="btnRules"><div class="icon">📘</div><div>Operational Rules</div></div>
+          <div class="icon-btn" id="btnSafety"><div class="icon">🛡️</div><div>Safety Center</div></div>
+          <div class="icon-btn" id="btnFeedback"><div class="icon">✉️</div><div>Feedback</div></div>
+          <div class="icon-btn" id="btnHelp"><div class="icon">❓</div><div>Help Center</div></div>
+        </div>
       </div>
-    </div>
 
-    <div style="height:14px"></div>
-    <button id="btnLogout" class="btn outline block">Log Out</button>
+      <div style="height:14px"></div>
+      <div class="card">
+        <div class="hd">Other Features</div>
+        <div class="bd grid-4">
+          <div class="icon-btn" id="btnProfile"><div class="icon">👤</div><div>Personal Info</div></div>
+          <div class="icon-btn" id="btnAbout"><div class="icon">ℹ️</div><div>About</div></div>
+          <div class="icon-btn" id="btnLang"><div class="icon">🌐</div><div>Language</div></div>
+          <div class="icon-btn" id="btnSupport"><div class="icon">💬</div><div>Customer Service</div></div>
+          <div class="icon-btn" id="btnSocial"><div class="icon">📣</div><div>Social Media</div></div>
+          <div class="icon-btn" id="btnCache"><div class="icon">🧹</div><div>Clear Cache</div></div>
+        </div>
+      </div>
+
+      <div style="height:14px"></div>
+      <button id="btnLogout" class="btn outline block">Log Out</button>
+    </div>
   </section>
 
-  <!-- Rules screen -->
+  <!-- RULES -->
   <section id="page-rules" class="container" style="display:none;padding:0 16px 120px 16px">
     <div class="titlebar">
       <button id="backRules" class="btn outline">←</button>
       <div style="font-weight:900">Operational Rules</div>
     </div>
-    <div class="rule-text">
-      <p><b>TrustMe AI</b> protects your account and funds with industry‑grade security. This page summarizes the essentials in plain language.</p>
-      <ol>
-        <li><b>Account & Identity.</b> Keep your login secret. Enable email or phone verification for withdrawals.</li>
-        <li><b>Deposits & Withdrawals.</b> Always match the network (TRC20 / BEP20 / ERC20). Incorrect networks may result in loss of funds.</li>
-        <li><b>Strategy Yields.</b> Displayed yield ranges (0.5%–3% for TMI1) are targets and may vary with market conditions.</li>
-        <li><b>Fees.</b> Network fees are paid to the chain. Platform fees, if any, are shown clearly before you confirm a transaction.</li>
-        <li><b>Support.</b> Contact our support if you suspect unusual activity. We never ask for your password or seed phrase.</li>
-      </ol>
-      <p class="muted">By using TrustMe AI you agree to these terms and the full policy available in the Help Center.</p>
+    <div class="card" style="margin-top:12px">
+      <div class="bd">
+        <p><b>TrustMe AI</b> protects your account and funds with industry‑grade security. This page summarizes the essentials.</p>
+        <ol>
+          <li><b>Account.</b> Keep your login secret. Enable phone/email verification for withdrawals.</li>
+          <li><b>Networks.</b> Always match the chain (TRC20 / BEP20 / ERC20) when depositing/withdrawing.</li>
+          <li><b>Strategy.</b> TMI1 targets 0.5%–3% daily depending on market conditions.</li>
+          <li><b>Fees.</b> Network gas is paid to the blockchain. Platform fees (if any) are shown before confirm.</li>
+          <li><b>Support.</b> We never ask for your password or seed phrase.</li>
+        </ol>
+      </div>
     </div>
   </section>
 </main>
@@ -207,7 +197,7 @@ input[type=text],input[type=number],input[type=password],input[type=date],select
   </div>
 </footer>
 
-<!-- Modal & Sheet -->
+<!-- Modal -->
 <div id="modal" class="modal" aria-hidden="true">
   <div class="panel">
     <div class="hd"><span id="modalTitle">Modal</span><button id="modalClose" class="btn outline">✕</button></div>
@@ -216,202 +206,189 @@ input[type=text],input[type=number],input[type=password],input[type=date],select
   </div>
 </div>
 
-<div id="sheet" class="sheet" aria-hidden="true">
-  <div class="handle"></div>
-  <div class="hd" id="sheetTitle">Select</div>
-  <div class="body" id="sheetList"></div>
-</div>
-
 <script>
-(function(){
+document.addEventListener('DOMContentLoaded', function(){
   const $ = (q)=>document.querySelector(q);
   const $$ = (q)=>Array.from(document.querySelectorAll(q));
-  const fmt = (n)=>Number(n||0).toLocaleString();
 
-  // ---- State ----
-  const state = {
-    user: { loggedIn:false, uid:'', invite:'', name:'', level:'TMI1', agent:0 },
-  };
-  // try restore
-  try{
-    const saved = JSON.parse(localStorage.getItem('tm_user')||'null');
-    if(saved && saved.loggedIn){ Object.assign(state.user, saved); }
-  }catch{}
+  // ----- STATE & STORAGE -----
+  const state = {user:{loggedIn:false, uid:'', invite:'', name:'', level:'TMI1', agent:0}};
+  try{ const saved = JSON.parse(localStorage.getItem('tm_user')||'null'); if(saved && saved.loggedIn) Object.assign(state.user, saved); }catch{}
 
-  // ---- Navigation ----
+  function persist(){ localStorage.setItem('tm_user', JSON.stringify(state.user)); }
+
+  // ----- NAVIGATION -----
   function showPage(key){
-    const pages = ['home','assets','strategy','team','mine','rules'];
-    pages.forEach(p=> $('#page-'+p)?.style && ($('#page-'+p).style.display = (p===key?'block':'none')));
-    $$('.tab').forEach(t=> t.classList.toggle('active', t.getAttribute('data-nav')===key));
+    const pages=['home','assets','strategy','team','mine','rules'];
+    pages.forEach(p=> $('#page-'+p).style.display = (p===key?'block':'none'));
+    $$('.tab').forEach(t=> t.classList.toggle('active', t.dataset.nav===key));
     if(key==='mine') renderMine();
   }
-  $$('.tab').forEach(t=> t.addEventListener('click', ()=> showPage(t.getAttribute('data-nav')) ));
-  $$('.navlink').forEach(n=> n.addEventListener('click', (e)=>{ e.preventDefault(); showPage(n.getAttribute('data-nav')); }));
+  $$('.tab').forEach(t=> t.addEventListener('click', ()=> showPage(t.dataset.nav)));
+  $$('.navlink').forEach(n=> n.addEventListener('click', (e)=>{e.preventDefault(); showPage(n.dataset.nav);}));
+  $('#backRules').addEventListener('click', ()=> showPage('mine'));
 
-  // ---- Modal helpers ----
-  function openModal(title, body, actions){
+  // ----- MODAL HELPERS -----
+  function openModal(title, bodyNode, actions){
     $('#modalTitle').textContent = title;
-    const b = $('#modalBody'); b.innerHTML=''; b.appendChild(body);
-    const a = $('#modalActions'); a.innerHTML=''; actions.forEach(x=>a.appendChild(x));
+    const b = $('#modalBody'); b.innerHTML=''; b.appendChild(bodyNode);
+    const a = $('#modalActions'); a.innerHTML=''; actions.forEach(btn=>a.appendChild(btn));
     $('#modal').classList.add('open'); $('#modal').setAttribute('aria-hidden','false');
   }
   function closeModal(){ $('#modal').classList.remove('open'); $('#modal').setAttribute('aria-hidden','true'); }
   $('#modalClose').addEventListener('click', closeModal);
   $('#modal').addEventListener('click', (e)=>{ if(e.target.id==='modal') closeModal(); });
 
-  // ---- Auth Modals ----
+  // ----- AUTH -----
   function openLogin(){
     const wrap = document.createElement('div');
-    const title = Object.assign(document.createElement('div'),{className:'auth-title',textContent:'Log In'});
-    const tabs = Object.assign(document.createElement('div'),{className:'auth-tabs'});
-    const tPhone = Object.assign(document.createElement('div'),{className:'auth-tab active',textContent:'Phone Number'});
-    const tMail  = Object.assign(document.createElement('div'),{className:'auth-tab',textContent:'Mail'});
-    tabs.append(tPhone,tMail);
-    const phonePane = document.createElement('div');
-    phonePane.innerHTML = '<label>Phone Number</label><div class="cc-wrap" style="margin-top:6px"><select><option>+45</option><option>+1</option></select><input type="text" placeholder="Enter your mobile phone number"></div><div style="height:10px"></div><label>Password</label><input type="password" placeholder="Enter your password">';
-    const mailPane = document.createElement('div'); mailPane.style.display='none';
-    mailPane.innerHTML = '<label>Mail</label><input type="text" placeholder="Enter your email address" style="margin-top:6px"><div style="height:10px"></div><label>Password</label><input type="password" placeholder="Enter your password">';
-    tPhone.onclick = ()=>{ tPhone.classList.add('active'); tMail.classList.remove('active'); phonePane.style.display='block'; mailPane.style.display='none'; };
-    tMail.onclick  = ()=>{ tMail.classList.add('active');  tPhone.classList.remove('active'); phonePane.style.display='none'; mailPane.style.display='block'; };
-    wrap.append(title,tabs,phonePane,mailPane);
+    wrap.innerHTML = `<div class="auth-title">Log In</div>
+      <div class="auth-tabs"><div id="tabPhone" class="auth-tab active">Phone Number</div><div id="tabMail" class="auth-tab">Mail</div></div>
+      <div id="panePhone">
+        <label>Phone Number</label>
+        <div style="display:flex;gap:8px;margin-top:6px"><select><option>+45</option><option>+1</option></select><input type="text" placeholder="Enter your mobile phone number"></div>
+        <div style="height:10px"></div><label>Password</label><input type="password" placeholder="Enter your password">
+      </div>
+      <div id="paneMail" style="display:none">
+        <label>Mail</label><input type="text" placeholder="Enter your email address" style="margin-top:6px">
+        <div style="height:10px"></div><label>Password</label><input type="password" placeholder="Enter your password">
+      </div>`;
+    wrap.querySelector('#tabPhone').onclick = ()=>{ wrap.querySelector('#tabPhone').classList.add('active'); wrap.querySelector('#tabMail').classList.remove('active'); wrap.querySelector('#panePhone').style.display='block'; wrap.querySelector('#paneMail').style.display='none'; };
+    wrap.querySelector('#tabMail').onclick  = ()=>{ wrap.querySelector('#tabMail').classList.add('active');  wrap.querySelector('#tabPhone').classList.remove('active'); wrap.querySelector('#panePhone').style.display='none'; wrap.querySelector('#paneMail').style.display='block'; };
+
     const btnLogin = Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Log In'});
     btnLogin.onclick = ()=>{
-      // simulate login
       state.user.loggedIn = true;
       state.user.uid = state.user.uid || String(100000 + Math.floor(Math.random()*900000));
       state.user.invite = state.user.invite || Math.random().toString(36).slice(2,7).toUpperCase();
-      state.user.name = state.user.name || 'StarsAI-'+state.user.uid;
-      persistUser(); closeModal(); showPage('mine');
+      state.user.name = state.user.name || ('StarsAI-'+state.user.uid);
+      persist(); closeModal(); showPage('mine');
     };
-    const linkToReg = Object.assign(document.createElement('div'), {style:'margin-right:auto; align-self:center'});
-    linkToReg.innerHTML = 'Don\\'t Have An Account Yet? <span id="openReg" style="color:#059669;cursor:pointer;font-weight:800">Register Now</span>';
-    setTimeout(()=> $('#openReg')?.addEventListener('click', ()=>{ closeModal(); openRegister(); }),0);
+    const linkToReg = Object.assign(document.createElement('button'),{className:'btn outline',textContent:'Register Now'});
+    linkToReg.style.marginRight='auto';
+    linkToReg.onclick = ()=>{ closeModal(); openRegister(); };
     openModal('Auth', wrap, [linkToReg, btnLogin]);
   }
   function openRegister(){
     const wrap = document.createElement('div');
-    wrap.innerHTML = '<div class="auth-title">Register</div><label>Phone Number</label><div class="cc-wrap" style="margin-top:6px"><select><option>+45</option><option>+1</option></select><input type="text" placeholder="Enter your mobile phone number"></div><div style="height:10px"></div><label>Mail</label><input type="text" placeholder="Enter your email address" style="margin-top:6px"><div style="height:10px"></div><label>Invitation Code</label><input type="text" placeholder="Enter the invitation code"><div style="height:10px"></div><label>Password</label><input type="password" placeholder="6-20 characters"><div style="height:12px"></div><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" checked> I Agree to the <a href="#" style="color:#059669">Privacy Policy</a></label>';
+    wrap.innerHTML = `<div class="auth-title">Register</div>
+      <label>Phone Number</label>
+      <div style="display:flex;gap:8px;margin-top:6px"><select><option>+45</option><option>+1</option></select><input type="text" placeholder="Enter your mobile phone number"></div>
+      <div style="height:10px"></div><label>Mail</label><input type="text" placeholder="Enter your email address" style="margin-top:6px">
+      <div style="height:10px"></div><label>Invitation Code</label><input type="text" placeholder="Enter the invitation code">
+      <div style="height:10px"></div><label>Password</label><input type="password" placeholder="6-20 characters">`;
     const btnReg = Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Register'});
-    btnReg.onclick = ()=>{ state.user.loggedIn=true; state.user.uid = String(100000 + Math.floor(Math.random()*900000)); state.user.invite = Math.random().toString(36).slice(2,7).toUpperCase(); state.user.name = 'StarsAI-'+state.user.uid; persistUser(); closeModal(); showPage('mine'); };
-    const linkToLogin = Object.assign(document.createElement('div'), {style:'margin-right:auto; align-self:center'});
-    linkToLogin.innerHTML = 'Already Have An Account? <span id="openLoginNow" style="color:#059669;cursor:pointer;font-weight:800">Log In Now</span>';
-    setTimeout(()=> $('#openLoginNow')?.addEventListener('click', ()=>{ closeModal(); openLogin(); }),0);
+    btnReg.onclick = ()=>{ state.user.loggedIn=true; state.user.uid=String(100000+Math.floor(Math.random()*900000)); state.user.invite=Math.random().toString(36).slice(2,7).toUpperCase(); state.user.name='StarsAI-'+state.user.uid; persist(); closeModal(); showPage('mine'); };
+    const linkToLogin = Object.assign(document.createElement('button'),{className:'btn outline',textContent:'Log In Now'});
+    linkToLogin.style.marginRight='auto';
+    linkToLogin.onclick = ()=>{ closeModal(); openLogin(); };
     openModal('Register', wrap, [linkToLogin, btnReg]);
   }
+
+  // Buttons that open auth
   $('#btnGetStarted').addEventListener('click', openLogin);
+  document.body.addEventListener('click', (e)=>{
+    if(e.target && e.target.id==='inlineLogin') openLogin();
+  });
 
-  function persistUser(){ localStorage.setItem('tm_user', JSON.stringify(state.user)); }
-
-  // ---- Mine page ----
+  // ----- MINE RENDER -----
+  function fallbackCopy(text){
+    try{
+      const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); alert('Copied'); 
+    }catch(e){ console.log(e); }
+  }
   function renderMine(){
-    if(!state.user.loggedIn){
-      // Prompt to login
-      $('#page-mine').innerHTML = '<div class="card"><div class="hd">Mine</div><div class="bd">Please <button class="btn primary" id="inlineLogin">Log in</button> to view your profile.</div></div>';
-      $('#inlineLogin')?.addEventListener('click', openLogin);
-      return;
-    }
-    // restore template (minimal patch: reload page if not found)
-    if(!$('#uid')){ location.reload(); return; }
+    const signedIn = state.user.loggedIn;
+    $('#mineSignedIn').style.display = signedIn ? 'block' : 'none';
+    $('#mineSignedOut').style.display = signedIn ? 'none' : 'block';
+    if(!signedIn) return;
+    // set fields
     $('#displayName').textContent = state.user.name || 'TrustMe‑User';
     $('#uid').textContent = state.user.uid || '—';
     $('#invite').textContent = state.user.invite || '—';
     $('#levelName').textContent = state.user.level;
     $('#agentLevel').textContent = state.user.agent;
-    $('#stratLevel').textContent = state.user.level;
-    const letter = (state.user.name||'U')[0].toUpperCase();
-    $('#avatar').textContent = letter;
+    $('#avatar').textContent = (state.user.name||'U')[0].toUpperCase();
   }
-  // copy buttons
-  document.addEventListener('click', async (e)=>{
-    if(e.target.id==='copyUid'){ try{ await navigator.clipboard.writeText($('#uid').textContent); alert('UID copied'); }catch{} }
-    if(e.target.id==='copyInvite'){ try{ await navigator.clipboard.writeText($('#invite').textContent); alert('Invite code copied'); }catch{} }
+
+  // Mine action handlers (delegated, so they always work)
+  document.body.addEventListener('click', async (e)=>{
+    const id = e.target.id;
+    if(id==='copyUid'){ const t=$('#uid').textContent; try{ await navigator.clipboard.writeText(t); alert('Copied'); }catch{ fallbackCopy(t); } }
+    if(id==='copyInvite'){ const t=$('#invite').textContent; try{ await navigator.clipboard.writeText(t); alert('Copied'); }catch{ fallbackCopy(t); } }
+    if(id==='btnInvite'){
+      const body=document.createElement('div');
+      const link=(location.origin?location.origin:'https://trustmeai.online') + '/register?ref=' + (state.user.invite||'TMAI');
+      body.innerHTML='<div style="font-weight:800">Invite Friends</div><div class="muted" style="margin:8px 0">Share your link:</div><div class="card bd" style="word-break:break-all">'+link+'</div>';
+      const copy=Object.assign(document.createElement('button'),{className:'btn outline',textContent:'Copy'});
+      copy.onclick=async()=>{ try{await navigator.clipboard.writeText(link); alert('Copied');}catch{fallbackCopy(link);} };
+      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
+      openModal('Invite', body, [copy, close]);
+    }
+    if(id==='btnAgent'){
+      const body=document.createElement('div');
+      body.innerHTML='<b>Agent Levels</b><p class="muted">Grow referrals to unlock higher agent rebates.</p>';
+      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
+      openModal('Agent Level', body, [close]);
+    }
+    if(id==='btnMyProfits'){ showPage('assets'); }
+    if(id==='btnOrders'){
+      const body=document.createElement('div'); body.innerHTML='<div class="muted">No orders yet.</div>';
+      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
+      openModal('Order Record', body, [close]);
+    }
+    if(id==='btnRules'){ showPage('rules'); }
+    if(id==='btnSafety'){
+      const body=document.createElement('div'); body.innerHTML='<ul><li>Bind email for withdrawals</li><li>Use a strong password</li><li>Never share codes</li></ul>';
+      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
+      openModal('Safety Center', body, [close]);
+    }
+    if(id==='btnFeedback'){
+      const body=document.createElement('div'); body.innerHTML='<label>Feedback</label><textarea style="width:100%;min-height:120px;border:1px solid #e2e7eb;border-radius:12px;padding:10px" placeholder="Tell us what to improve…"></textarea>';
+      const send=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Send'});
+      send.onclick=()=>{ alert('Thanks!'); closeModal(); };
+      openModal('Feedback', body, [send]);
+    }
+    if(id==='btnHelp'){
+      const body=document.createElement('div'); body.innerHTML='<div style="font-weight:800">Help Center</div><p class="muted">FAQs, guides, and support contacts.</p>';
+      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
+      openModal('Help Center', body, [close]);
+    }
+    if(id==='btnProfile'){
+      const body=document.createElement('div');
+      body.innerHTML='<label>Display Name</label><input id="nm" type="text" value="'+(state.user.name||'')+'" style="margin-top:6px"><div style="height:8px"></div><label>Agent Level</label><input id="ag" type="number" value="'+(state.user.agent||0)+'">';
+      const save=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Save'});
+      save.onclick=()=>{ state.user.name=$('#nm').value||state.user.name; state.user.agent=Number($('#ag').value||0); persist(); renderMine(); closeModal(); };
+      openModal('Personal Info', body, [save]);
+    }
+    if(id==='btnAbout'){
+      const body=document.createElement('div'); body.innerHTML='<b>TrustMe AI</b><p class="muted">Version 0.5 — stable profile & auth popups.</p>';
+      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
+      openModal('About', body, [close]);
+    }
+    if(id==='btnLang'){
+      const body=document.createElement('div'); body.innerHTML='<label>Language</label><select><option>English</option><option>Dansk</option><option>తెలుగు</option></select>';
+      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
+      openModal('Language', body, [close]);
+    }
+    if(id==='btnSupport'){
+      const body=document.createElement('div'); body.innerHTML='<p>Telegram: @trustme_support</p><p>Email: support@trustmeai.online</p>';
+      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
+      openModal('Customer Service', body, [close]);
+    }
+    if(id==='btnSocial'){
+      const body=document.createElement('div'); body.innerHTML='<ul><li>Twitter: @trustme_ai</li><li>Telegram: @trustmeai_news</li></ul>';
+      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
+      openModal('Social Media', body, [close]);
+    }
+    if(id==='btnCache'){ localStorage.removeItem('tm_user'); alert('Cache cleared.'); }
+    if(id==='btnLogout'){ state.user.loggedIn=false; persist(); renderMine(); showPage('home'); }
   });
 
-  // Mine actions
-  $('#btnInvite').addEventListener('click', ()=>{
-    const body = document.createElement('div');
-    const link = location.origin ? (location.origin+'/register?ref='+state.user.invite) : ('https://trustmeai.online/register?ref='+state.user.invite);
-    body.innerHTML = '<div style="font-weight:800">Invite Friends</div><div class="muted" style="margin:8px 0">Share your link to earn team rewards.</div><div class="card bd" style="word-break:break-all">'+link+'</div>';
-    const copy = Object.assign(document.createElement('button'),{className:'btn outline',textContent:'Copy'});
-    copy.onclick = async ()=>{ try{ await navigator.clipboard.writeText(link); alert('Copied'); }catch{} };
-    const close = Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-    openModal('Invite', body, [copy, close]);
-  });
-  $('#btnAgent').addEventListener('click', ()=>{
-    const body = document.createElement('div');
-    body.innerHTML = '<b>Agent Levels</b><p class="muted">Increase your referrals and performance to unlock higher agent rebates.</p>';
-    const close = Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-    openModal('Agent Level', body, [close]);
-  });
-  $('#btnMyProfits').addEventListener('click', ()=>{
-    alert('Redirecting to Assets → My Profits'); showPage('assets');
-  });
-  $('#btnOrders').addEventListener('click', ()=>{
-    const body = document.createElement('div'); body.innerHTML='<div class="muted">No orders yet.</div>';
-    const close = Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-    openModal('Order Record', body, [close]);
-  });
-  $('#btnRules').addEventListener('click', ()=> showPage('rules'));
-  $('#backRules').addEventListener('click', ()=> showPage('mine'));
-  $('#btnSafety').addEventListener('click', ()=>{
-    const body = document.createElement('div'); body.innerHTML = '<ul><li>Bind email for withdrawals</li><li>Use a strong password</li><li>Never share codes</li></ul>';
-    const close = Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-    openModal('Safety Center', body, [close]);
-  });
-  $('#btnFeedback').addEventListener('click', ()=>{
-    const body = document.createElement('div');
-    body.innerHTML = '<label>Feedback</label><textarea id="fb" style="width:100%;min-height:120px;border:1px solid #e2e8f0;border-radius:12px;padding:10px" placeholder="Tell us what to improve…"></textarea>';
-    const send = Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Send'});
-    send.onclick = ()=>{ alert('Thanks!'); closeModal(); };
-    openModal('Feedback', body, [send]);
-  });
-  $('#btnHelp').addEventListener('click', ()=>{
-    const body = document.createElement('div');
-    body.innerHTML = '<div style="font-weight:800">Help Center</div><p class="muted">FAQs, guides, and support contacts.</p>';
-    const close = Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-    openModal('Help Center', body, [close]);
-  });
-  $('#btnProfile').addEventListener('click', ()=>{
-    const body = document.createElement('div');
-    body.innerHTML = '<label>Display Name</label><input id="nm" type="text" value="'+(state.user.name||'')+'" style="margin-top:6px"><div style="height:8px"></div><label>Agent Level</label><input id="ag" type="number" value="'+(state.user.agent||0)+'">';
-    const save = Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Save'});
-    save.onclick = ()=>{ state.user.name = document.getElementById('nm').value||state.user.name; state.user.agent = Number(document.getElementById('ag').value||0); persistUser(); renderMine(); closeModal(); };
-    openModal('Personal Info', body, [save]);
-  });
-  $('#btnAbout').addEventListener('click', ()=>{
-    const body = document.createElement('div'); body.innerHTML = '<b>TrustMe AI</b><p class="muted">Version 0.4 — UI preview for profile (Mine) and rules.</p>';
-    const close = Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-    openModal('About', body, [close]);
-  });
-  $('#btnLang').addEventListener('click', ()=>{
-    const body = document.createElement('div'); body.innerHTML = '<label>Language</label><select id="lng"><option value="en">English</option><option value="da">Dansk</option><option value="te">తెలుగు</option></select>';
-    const save = Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Save'});
-    save.onclick = ()=>{ alert('Language saved'); closeModal(); };
-    openModal('Language', body, [save]);
-  });
-  $('#btnSupport').addEventListener('click', ()=>{
-    const body = document.createElement('div'); body.innerHTML = '<p>Chat with us on Telegram: <a target="_blank" href="#">@trustme_support</a></p><p>Email: support@trustmeai.online</p>';
-    const close = Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-    openModal('Customer Service', body, [close]);
-  });
-  $('#btnSocial').addEventListener('click', ()=>{
-    const body = document.createElement('div'); body.innerHTML = '<ul><li>Twitter: @trustme_ai</li><li>Telegram Channel: @trustmeai_news</li></ul>';
-    const close = Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-    openModal('Social Media', body, [close]);
-  });
-  $('#btnCache').addEventListener('click', ()=>{
-    localStorage.removeItem('tm_user'); alert('Cache cleared for session data.');
-  });
-  $('#btnLogout').addEventListener('click', ()=>{
-    state.user.loggedIn = false; persistUser(); showPage('home');
-  });
-
-  // Init
+  // Init page
   showPage(state.user.loggedIn ? 'mine' : 'home');
-  if(state.user.loggedIn) renderMine();
-  // Expose for testing in console
-  window.__APP_STATE__ = state;
-})();
+  renderMine();
+});
 </script>
 </body>
 </html>
