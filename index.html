@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TrustMe AI — App</title>
 <style>
-:root{--ink:#0f172a;--muted:#64748b;--line:#e5e7eb;--brand:#111827;--emerald:#10b981}
+:root{--ink:#0f172a;--muted:#64748b;--line:#e5e7eb;--brand:#111827;--emerald:#10b981;--red:#ef4444}
 *{box-sizing:border-box}
 html,body{margin:0;background:#fff;color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
 .container{max-width:1100px;margin:0 auto;padding:0 16px}
@@ -15,28 +15,35 @@ html,body{margin:0;background:#fff;color:var(--ink);font:16px/1.5 system-ui,-app
 .btn{padding:10px 16px;border-radius:14px;border:1px solid var(--line);background:#fff;font-weight:800;cursor:pointer}
 .btn.primary{background:var(--brand);color:#fff;border-color:transparent}
 .btn.outline{background:#fff;color:#111;border-color:var(--line)}
+.btn.ghost{background:transparent;border-color:transparent}
 .btn.block{display:block;width:100%}
 .btn:disabled{opacity:.5;pointer-events:none}
-header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .bar{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
 .logo{width:32px;height:32px;border-radius:10px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:900}
-.bottom{position:fixed;left:0;right:0;bottom:0;border-top:1px solid var(--line);background:#fff}
+.bottom{position:fixed;left:0;right:0;bottom:0;border-top:1px solid var(--line);background:#fff;z-index:15}
 .tabs{display:grid;grid-template-columns:repeat(5,1fr);text-align:center;font-size:12px}
 .tab{padding:10px 0;cursor:pointer}
 .active{color:var(--emerald);font-weight:800}
 .row{display:grid;gap:12px}
 @media(min-width:860px){.row-4{grid-template-columns:repeat(4,1fr)}}
 .titlebar{position:sticky;top:56px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;padding:12px 0;z-index:9}
+input[type=text],input[type=number],input[type=password],input[type=date],select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:14px;outline:none}
+.muted{color:var(--muted)}
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;gap:8px}
+.kpi .box{border:1px solid var(--line);border-radius:12px;padding:12px}
+.kpi .cap{font-size:12px;color:var(--muted)}
+.kpi .val{font-size:22px;font-weight:900}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.icon{font-size:22px;margin-bottom:8px}
+.icon-btn{border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;cursor:pointer;background:#fff}
 /* Mine */
 .mine-hero{border-radius:16px;background:linear-gradient(135deg,#059669,#34d399);color:#fff;overflow:hidden}
 .mine-hero .bd{padding:16px}
 .badge{background:rgba(255,255,255,.15);padding:6px 10px;border-radius:999px;font-weight:800}
 .copy-btn{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:6px;background:rgba(255,255,255,.2);cursor:pointer;margin-left:6px}
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.icon-btn{border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center;cursor:pointer;background:#fff}
-.icon{font-size:22px;margin-bottom:8px}
 /* Modal */
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,.35)}
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(15,23,42,.35);z-index:50}
 .modal.open{display:flex}
 .modal .panel{width:min(560px,96vw);background:#fff;border:1px solid var(--line);border-radius:16px}
 .modal .panel .hd{display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid var(--line);font-weight:900}
@@ -47,8 +54,17 @@ header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.92);backdro
 .auth-tab{padding:8px 0;cursor:pointer;position:relative}
 .auth-tab.active{color:#111}
 .auth-tab.active::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--emerald)}
-input[type=text],input[type=number],input[type=password],select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:14px;outline:none}
-.muted{color:var(--muted)}
+/* Sheet */
+.sheet{position:fixed;left:0;right:0;bottom:-100%;background:#fff;border-top-left-radius:16px;border-top-right-radius:16px;box-shadow:0 -12px 24px rgba(0,0,0,.1);transition:.28s;z-index:60}
+.sheet.open{bottom:0}
+.sheet .handle{width:64px;height:5px;background:#e5e7eb;border-radius:999px;margin:8px auto 0}
+.sheet .hd{padding:10px 16px;font-weight:900;border-bottom:1px solid var(--line)}
+.sheet .body{max-height:60vh;overflow-y:auto;padding:6px 10px 14px}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border:1px solid var(--line);border-radius:12px;margin:8px 6px;cursor:pointer}
+.opt .l{display:flex;align-items:center;gap:10px}
+/* QR (fake visual) */
+.qr{--s:10;display:grid;grid-template-columns:repeat(25,var(--s)px);gap:2px;justify-content:center;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.qr i{display:block;width:var(--s)px;height:var(--s)px;background:#111}
 main{padding-bottom:84px}
 </style>
 </head>
@@ -78,18 +94,223 @@ main{padding-bottom:84px}
   </section>
 
   <!-- ASSETS -->
-  <section id="page-assets" class="container" style="display:none;padding:16px 0">
-    <div class="card"><div class="hd">Assets</div><div class="bd">This page is placeholder. (Focus of this build is Mine.)</div></div>
+  <section id="page-assets" class="container" style="display:none;padding:0 16px 90px 16px">
+    <div id="assets-overview">
+      <div class="titlebar"><div style="font-weight:900">Assets</div></div>
+      <div class="card" style="margin-top:12px">
+        <div class="hd">Total Assets (USDT)</div>
+        <div class="bd">
+          <div class="kpi">
+            <div class="box"><div class="cap">Experience Money</div><div class="val" id="expMoney">200</div></div>
+            <div class="box"><div class="cap">Available Assets</div><div class="val" id="availAssets">300</div></div>
+            <div class="box"><div class="cap">Total Lock</div><div class="val">0</div></div>
+            <div class="box"><div class="cap">Waiting For Release</div><div class="val">0</div></div>
+          </div>
+          <div style="height:10px"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn primary" id="goTopUp">Top Up</button>
+            <button class="btn outline" id="goWithdraw">Withdraw</button>
+            <button class="btn outline" id="goBill">Bill</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:12px"></div>
+      <div class="card">
+        <div class="hd">My Profits</div>
+        <div class="bd">
+          <div class="kpi">
+            <div class="box"><div class="cap">Cumulative Income (USDT)</div><div class="val">0</div></div>
+            <div class="box"><div class="cap">Today's Earnings (USDT)</div><div class="val">0</div></div>
+            <div class="box"><div class="cap">Transaction Income (USDT)</div><div class="val">0</div></div>
+            <div class="box"><div class="cap">Team Revenue (USDT)</div><div class="val">0</div></div>
+          </div>
+          <div style="height:10px"></div>
+          <button id="viewEarnings" class="btn outline">View The Earnings</button>
+        </div>
+      </div>
+
+      <div style="height:12px"></div>
+      <div class="card">
+        <div class="hd">Asset List</div>
+        <div class="bd">
+          <div class="row">
+            <div class="pill" style="display:flex;align-items:center;gap:16px;justify-content:space-between;border:1px solid var(--line);border-radius:12px;padding:12px">
+              <div style="display:flex;align-items:center;gap:10px"><div>🟢</div><div><b>USDT</b><div class="muted" style="font-size:12px">Available 300</div></div></div>
+              <div style="display:flex;gap:8px">
+                <button class="btn outline" id="goTopUp2">Top Up</button>
+                <button class="btn outline" id="goWithdraw2">Withdraw</button>
+                <button class="btn outline" id="goBill2">Bill</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Up -->
+    <div id="assets-topup" style="display:none">
+      <div class="titlebar">
+        <button class="btn outline" id="backTopUp">←</button>
+        <div style="font-weight:900">Top Up</div>
+      </div>
+      <div style="height:8px"></div>
+      <div class="card">
+        <div class="bd">
+          <label>Choose A Currency</label>
+          <div id="selTopupCurrency" class="pill" style="margin-top:6px">USDT <span class="muted">▼</span></div>
+          <div style="height:10px"></div>
+          <label>Select The Network</label>
+          <div id="selTopupNet" class="pill" style="margin-top:6px"><span id="topupNetLabel">TRON (TRC20)</span> <span class="muted">▼</span></div>
+          <div style="height:10px"></div>
+          <label>Recharge Address</label>
+          <div class="muted" style="font-size:12px">This address only supports USDT deposits on the selected network.</div>
+          <div style="height:10px"></div>
+          <div class="qr" id="qrBox"></div>
+          <div style="height:10px"></div>
+          <div class="pill"><span id="rechargeAddress">TQ1vYnESLMbt967YY34FTqmvmE32kNbrN</span> <button id="copyRecharge" class="btn outline">Copy</button></div>
+        </div>
+      </div>
+      <div style="height:12px"></div>
+      <div class="card">
+        <div class="hd">TrustMe AI Recharge Guide</div>
+        <div class="bd">
+          <div class="muted">
+            <p>• Ensure network matches: TRC20 / BEP20 / ERC20.</p>
+            <p>• Minimum deposit amount: <b>5 USDT</b>.</p>
+            <p>• Deposits may take time to confirm on-chain.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Withdraw -->
+    <div id="assets-withdraw" style="display:none">
+      <div class="titlebar">
+        <button class="btn outline" id="backWithdraw">←</button>
+        <div style="font-weight:900">Withdraw</div>
+      </div>
+      <div style="height:8px"></div>
+      <div class="card">
+        <div class="bd">
+          <label>Withdrawal Currency</label>
+          <div class="pill" style="margin-top:6px">USDT <span class="muted">▼</span></div>
+          <div style="height:10px"></div>
+          <label>Select The Network</label>
+          <div id="selWithdrawNet" class="pill" style="margin-top:6px"><span id="withdrawNetLabel">TRON (TRC20)</span> <span class="muted">▼</span></div>
+          <div style="height:10px"></div>
+          <div class="muted" style="color:var(--red)">Please confirm the wallet address you fill supports TRC20 / BEP20 / ERC20 transfers. Using other networks may cause loss of funds.</div>
+          <div style="height:12px"></div>
+          <label>Withdrawal Address</label>
+          <button id="addAddress" class="btn outline block" style="margin-top:6px">Add An Address</button>
+          <div style="height:12px"></div>
+          <label>Withdrawal Amount</label>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+            <input type="number" id="wdAmount" placeholder="Enter the withdrawal amount" min="0" step="0.01">
+            <div class="pill">USDT</div>
+            <button id="wdAll" class="btn outline">All</button>
+          </div>
+          <div class="muted" style="text-align:right;margin-top:6px">Available <span id="availableUsdt">300</span> USDT</div>
+          <div style="height:10px"></div>
+          <div class="muted">
+            <p>Minimum Withdrawal Quantity: <b>10 USDT</b></p>
+            <p>Fixed Handling Fee: <b>2 USDT</b></p>
+            <p>Platform Commission Draw 10%: <b id="feePct">10%</b></p>
+            <p>Withdrawal Schedule: <b>Every day</b></p>
+          </div>
+          <div style="height:10px"></div>
+          <div><b>Number Of Accounts</b> <span id="actualReceive" style="color:#059669;font-weight:900">0 USDT</span></div>
+          <div class="muted" style="font-size:12px">Actual Amount = Requested − Platform Commission − Gas Fee (fixed).</div>
+          <div style="height:12px"></div>
+          <button id="wdConfirm" class="btn primary block" disabled>confirm</button>
+        </div>
+      </div>
+      <div style="height:12px"></div>
+      <div class="card">
+        <div class="hd">Withdrawal Prompt</div>
+        <div class="bd muted">After submission, transactions are processed within minutes depending on network congestion.</div>
+      </div>
+    </div>
+
+    <!-- Withdraw Address -->
+    <div id="assets-address" style="display:none">
+      <div class="titlebar">
+        <button class="btn outline" id="backAddress">←</button>
+        <div style="font-weight:900">Withdrawal Address</div>
+      </div>
+      <div style="height:8px"></div>
+      <div class="card">
+        <div class="bd">
+          <label>Choose A Currency</label>
+          <div class="pill" style="margin-top:6px">USDT <span class="muted">▼</span></div>
+          <div style="height:10px"></div>
+          <label>Select The Network</label>
+          <div id="selAddrNet" class="pill" style="margin-top:6px"><span id="addrNetLabel">TRON (TRC20)</span> <span class="muted">▼</span></div>
+          <div style="height:10px"></div>
+          <label>Withdrawal Address</label>
+          <input id="addrInput" type="text" placeholder="Enter the withdrawal address" style="margin-top:6px">
+          <div style="height:10px"></div>
+          <label>Mail</label>
+          <input id="addrMail" type="text" placeholder="Enter your email" style="margin-top:6px">
+          <div style="height:10px"></div>
+          <label>Verification Code</label>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+            <input id="addrCode" type="text" placeholder="enter confirmation code">
+            <button id="addrSend" class="btn outline">Send</button>
+          </div>
+          <div style="height:10px"></div>
+          <label>Transaction Password</label>
+          <input id="addrPwd" type="password" placeholder="Enter the transaction password" style="margin-top:6px">
+          <div style="height:12px"></div>
+          <button id="addrConfirm" class="btn primary block">confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bill -->
+    <div id="assets-bill" style="display:none">
+      <div class="titlebar">
+        <button class="btn outline" id="backBill">←</button>
+        <div style="font-weight:900">Bill</div>
+      </div>
+      <div style="height:8px"></div>
+      <div class="card"><div class="bd muted">No Records Yet</div></div>
+    </div>
   </section>
 
   <!-- STRATEGY -->
-  <section id="page-strategy" class="container" style="display:none;padding:16px 0">
-    <div class="card"><div class="hd">Strategy</div><div class="bd">Current plan: <b>TMI1</b> — 50 to 300,000 USDT, target yield <b>0.5% – 3%</b>.</div></div>
+  <section id="page-strategy" class="container" style="display:none;padding:0 16px 90px 16px">
+    <div class="titlebar"><div style="font-weight:900">Strategy</div></div>
+    <div style="height:12px"></div>
+    <div class="card">
+      <div class="bd">
+        <div class="pill">TMI1 <span class="muted">0.5% – 3%</span></div>
+        <div class="muted" style="margin-top:8px">Range: 50 – 300,000 USDT</div>
+        <div style="height:10px"></div>
+        <button class="btn outline" id="btnInvest">Not Unlocked</button>
+      </div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="card">
+      <div class="hd">Today</div>
+      <div class="bd muted">No Data Yet</div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="card">
+      <div class="hd">Bill</div>
+      <div class="bd muted">Select dates to view transactions (coming with API).</div>
+    </div>
   </section>
 
   <!-- TEAM -->
-  <section id="page-team" class="container" style="display:none;padding:16px 0">
-    <div class="card"><div class="hd">Team</div><div class="bd">Invite friends and grow your rewards.</div></div>
+  <section id="page-team" class="container" style="display:none;padding:0 16px 90px 16px">
+    <div class="titlebar"><div style="font-weight:900">Team</div></div>
+    <div style="height:12px"></div>
+    <div class="card"><div class="bd">
+      <div class="muted">Share your invite code and link to grow your team.</div>
+      <div style="height:10px"></div>
+      <div class="pill"><span id="teamInvite">—</span> <button id="copyTeamInvite" class="btn outline">Copy</button></div>
+    </div></div>
   </section>
 
   <!-- MINE -->
@@ -178,8 +399,8 @@ main{padding-bottom:84px}
         <ol>
           <li><b>Account.</b> Keep your login secret. Enable phone/email verification for withdrawals.</li>
           <li><b>Networks.</b> Always match the chain (TRC20 / BEP20 / ERC20) when depositing/withdrawing.</li>
-          <li><b>Strategy.</b> TMI1 targets 0.5%–3% daily depending on market conditions.</li>
-          <li><b>Fees.</b> Network gas is paid to the blockchain. Platform fees (if any) are shown before confirm.</li>
+          <li><b>Strategy.</b> TMI1 targets 0.5%–3% depending on market conditions.</li>
+          <li><b>Fees.</b> Network gas is paid to the blockchain. Platform fees (if any) show before confirm.</li>
           <li><b>Support.</b> We never ask for your password or seed phrase.</li>
         </ol>
       </div>
@@ -197,7 +418,7 @@ main{padding-bottom:84px}
   </div>
 </footer>
 
-<!-- Modal -->
+<!-- Modal + Sheet -->
 <div id="modal" class="modal" aria-hidden="true">
   <div class="panel">
     <div class="hd"><span id="modalTitle">Modal</span><button id="modalClose" class="btn outline">✕</button></div>
@@ -206,13 +427,19 @@ main{padding-bottom:84px}
   </div>
 </div>
 
+<div id="sheet" class="sheet" aria-hidden="true">
+  <div class="handle"></div>
+  <div class="hd" id="sheetTitle">Select</div>
+  <div class="body" id="sheetList"></div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   const $ = (q)=>document.querySelector(q);
   const $$ = (q)=>Array.from(document.querySelectorAll(q));
 
   // ----- STATE & STORAGE -----
-  const state = {user:{loggedIn:false, uid:'', invite:'', name:'', level:'TMI1', agent:0}};
+  const state = {user:{loggedIn:false, uid:'', invite:'', name:'', level:'TMI1', agent:0}, assets:{available:300, address:{TRC20:'TQ1vYnESLMbt967YY34FTqmvmE32kNbrN', BEP20:'0xB8F8b4f2B0aAbC6a92eF91C71b11bE55Cc82dA11', ERC20:'0xE2d413dC0b4B55f91fE8a1b2F3c44a11CceE2211'} }};
   try{ const saved = JSON.parse(localStorage.getItem('tm_user')||'null'); if(saved && saved.loggedIn) Object.assign(state.user, saved); }catch{}
 
   function persist(){ localStorage.setItem('tm_user', JSON.stringify(state.user)); }
@@ -223,9 +450,11 @@ document.addEventListener('DOMContentLoaded', function(){
     pages.forEach(p=> $('#page-'+p).style.display = (p===key?'block':'none'));
     $$('.tab').forEach(t=> t.classList.toggle('active', t.dataset.nav===key));
     if(key==='mine') renderMine();
+    if(key==='assets') showAssets('overview');
+    if(key==='team') $('#teamInvite').textContent = state.user.invite || '—';
   }
   $$('.tab').forEach(t=> t.addEventListener('click', ()=> showPage(t.dataset.nav)));
-  $$('.navlink').forEach(n=> n.addEventListener('click', (e)=>{e.preventDefault(); showPage(n.dataset.nav);}));
+  $$('.navlink').forEach(n=> n.addEventListener('click', (e)=>{e.preventDefault(); const target=n.dataset.nav; showPage(target); if(target==='assets'){ showAssets('topup'); }}));
   $('#backRules').addEventListener('click', ()=> showPage('mine'));
 
   // ----- MODAL HELPERS -----
@@ -238,6 +467,24 @@ document.addEventListener('DOMContentLoaded', function(){
   function closeModal(){ $('#modal').classList.remove('open'); $('#modal').setAttribute('aria-hidden','true'); }
   $('#modalClose').addEventListener('click', closeModal);
   $('#modal').addEventListener('click', (e)=>{ if(e.target.id==='modal') closeModal(); });
+
+  // ----- SHEET (for network selection) -----
+  let _sheetConfirm = null;
+  function openSheet(title, options, selected, onConfirm){
+    $('#sheetTitle').textContent = title;
+    const list = $('#sheetList'); list.innerHTML='';
+    options.forEach(opt=>{
+      const node = document.createElement('div');
+      node.className='opt';
+      node.innerHTML = '<div class="l"><div>'+opt.icon+'</div><div>'+opt.label+'</div></div><div>'+(opt.value===selected?'✔️':'')+'</div>';
+      node.onclick = ()=>{ _sheetConfirm = ()=> onConfirm(opt); closeSheet(); };
+      list.appendChild(node);
+    });
+    _sheetConfirm = null;
+    $('#sheet').classList.add('open'); $('#sheet').setAttribute('aria-hidden','false');
+  }
+  function closeSheet(){ $('#sheet').classList.remove('open'); $('#sheet').setAttribute('aria-hidden','true'); setTimeout(()=>{ if(_sheetConfirm) _sheetConfirm(); _sheetConfirm=null; }, 100); }
+  $('#sheet').addEventListener('click', (e)=>{ if(e.target.id==='sheet') closeSheet(); });
 
   // ----- AUTH -----
   function openLogin(){
@@ -285,24 +532,16 @@ document.addEventListener('DOMContentLoaded', function(){
     openModal('Register', wrap, [linkToLogin, btnReg]);
   }
 
-  // Buttons that open auth
+  // Buttons to open auth
   $('#btnGetStarted').addEventListener('click', openLogin);
-  document.body.addEventListener('click', (e)=>{
-    if(e.target && e.target.id==='inlineLogin') openLogin();
-  });
+  document.body.addEventListener('click', (e)=>{ if(e.target && e.target.id==='inlineLogin') openLogin(); });
 
   // ----- MINE RENDER -----
-  function fallbackCopy(text){
-    try{
-      const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); alert('Copied'); 
-    }catch(e){ console.log(e); }
-  }
   function renderMine(){
     const signedIn = state.user.loggedIn;
     $('#mineSignedIn').style.display = signedIn ? 'block' : 'none';
     $('#mineSignedOut').style.display = signedIn ? 'none' : 'block';
     if(!signedIn) return;
-    // set fields
     $('#displayName').textContent = state.user.name || 'TrustMe‑User';
     $('#uid').textContent = state.user.uid || '—';
     $('#invite').textContent = state.user.invite || '—';
@@ -311,83 +550,140 @@ document.addEventListener('DOMContentLoaded', function(){
     $('#avatar').textContent = (state.user.name||'U')[0].toUpperCase();
   }
 
-  // Mine action handlers (delegated, so they always work)
+  // ----- ASSETS SUBNAV -----
+  function showAssets(view){
+    // toggle sections
+    ['overview','topup','withdraw','address','bill'].forEach(v=> $('#assets-'+v).style.display = (v===view?'block':'none'));
+    // extra wiring when entering views
+    if(view==='topup'){ buildQR($('#rechargeAddress').textContent); }
+  }
+
+  // ----- QR (fake but consistent) -----
+  function buildQR(text){
+    const box = $('#qrBox'); box.innerHTML='';
+    // simple seeded pseudo-random from text
+    let seed = 0; for(let i=0;i<text.length;i++){ seed = (seed*31 + text.charCodeAt(i))>>>0; }
+    const rnd = ()=>{ seed = (1103515245*seed + 12345) & 0x7fffffff; return seed/0x7fffffff; };
+    for(let i=0;i<25*25;i++){ if(rnd()>0.56){ const el=document.createElement('i'); box.appendChild(el);} else { const el=document.createElement('b'); el.style.display='block'; el.style.width='var(--s)px'; el.style.height='var(--s)px'; } }
+  }
+
+  // ----- TEAM COPY -----
+  async function copyText(t){ try{ await navigator.clipboard.writeText(t); alert('Copied'); }catch(e){ const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); alert('Copied'); }}
+
+  // ----- EVENTS (delegated where useful) -----
+  // Home tiles
+  $('#goTopUp')?.addEventListener('click', ()=>{ showPage('assets'); showAssets('topup'); });
+  $('#goWithdraw')?.addEventListener('click', ()=>{ showPage('assets'); showAssets('withdraw'); });
+  $('#goBill')?.addEventListener('click', ()=>{ showPage('assets'); showAssets('bill'); });
+  $('#goTopUp2')?.addEventListener('click', ()=>{ showPage('assets'); showAssets('topup'); });
+  $('#goWithdraw2')?.addEventListener('click', ()=>{ showPage('assets'); showAssets('withdraw'); });
+  $('#goBill2')?.addEventListener('click', ()=>{ showPage('assets'); showAssets('bill'); });
+
+  // Assets back buttons
+  $('#backTopUp').addEventListener('click', ()=> showAssets('overview'));
+  $('#backWithdraw').addEventListener('click', ()=> showAssets('overview'));
+  $('#backAddress').addEventListener('click', ()=> showAssets('withdraw'));
+  $('#backBill').addEventListener('click', ()=> showAssets('overview'));
+
+  // View Earnings (routes to bill list)
+  $('#viewEarnings').addEventListener('click', ()=> showAssets('bill'));
+
+  // Network selection for TopUp/Withdraw/Address
+  const networks = [
+    {value:'TRC20', label:'TRON (TRC20)', icon:'🔴'},
+    {value:'BEP20', label:'BNB Smart Chain (BEP20)', icon:'🟡'},
+    {value:'ERC20', label:'Ethereum (ERC20)', icon:'⚪'}
+  ];
+  let topupNet='TRC20', withdrawNet='TRC20', addrNet='TRC20';
+
+  function setTopupNet(n){
+    topupNet = n.value;
+    $('#topupNetLabel').textContent = n.label;
+    const addr = state.assets.address[n.value];
+    $('#rechargeAddress').textContent = addr;
+    buildQR(addr);
+  }
+  function setWithdrawNet(n){ withdrawNet = n.value; $('#withdrawNetLabel').textContent = n.label; }
+  function setAddrNet(n){ addrNet = n.value; $('#addrNetLabel').textContent = n.label; }
+
+  $('#selTopupNet').addEventListener('click', ()=> openSheet('Select The Network', networks, topupNet, setTopupNet));
+  $('#selWithdrawNet').addEventListener('click', ()=> openSheet('Select The Network', networks, withdrawNet, setWithdrawNet));
+  $('#selAddrNet').addEventListener('click', ()=> openSheet('Select The Network', networks, addrNet, setAddrNet));
+
+  // Copy recharge address
+  $('#copyRecharge').addEventListener('click', ()=> copyText($('#rechargeAddress').textContent));
+
+  // Withdraw amount calculations
+  const minWd=10, fixedFee=2, pct=0.10;
+  const amtInput = $('#wdAmount');
+  function recalc(){
+    const available = state.assets.available;
+    const a = Number(amtInput.value||0);
+    const ok = a>=minWd && a<=available;
+    const actual = Math.max(0, a - fixedFee - (a*pct));
+    $('#actualReceive').textContent = (ok? actual.toFixed(2):0) + ' USDT';
+    $('#wdConfirm').disabled = !ok;
+  }
+  amtInput.addEventListener('input', recalc);
+  $('#wdAll').addEventListener('click', ()=>{ amtInput.value = state.assets.available; recalc(); });
+
+  // Add Address flow
+  $('#addAddress').addEventListener('click', ()=> showAssets('address'));
+  $('#addrSend').addEventListener('click', ()=> alert('Verification code sent (demo).'));
+  $('#addrConfirm').addEventListener('click', ()=>{ alert('Address saved (demo).'); showAssets('withdraw'); });
+
+  // Confirm withdraw
+  $('#wdConfirm').addEventListener('click', ()=>{
+    alert('Withdrawal submitted (demo).');
+    // reset
+    amtInput.value=''; recalc();
+  });
+
+  // Team copy invite
+  $('#copyTeamInvite').addEventListener('click', ()=> copyText(state.user.invite || '—'));
+
+  // Mine actions (delegated)
   document.body.addEventListener('click', async (e)=>{
     const id = e.target.id;
-    if(id==='copyUid'){ const t=$('#uid').textContent; try{ await navigator.clipboard.writeText(t); alert('Copied'); }catch{ fallbackCopy(t); } }
-    if(id==='copyInvite'){ const t=$('#invite').textContent; try{ await navigator.clipboard.writeText(t); alert('Copied'); }catch{ fallbackCopy(t); } }
+    if(id==='copyUid'){ await copyText($('#uid').textContent); }
+    if(id==='copyInvite'){ await copyText($('#invite').textContent); }
     if(id==='btnInvite'){
       const body=document.createElement('div');
       const link=(location.origin?location.origin:'https://trustmeai.online') + '/register?ref=' + (state.user.invite||'TMAI');
       body.innerHTML='<div style="font-weight:800">Invite Friends</div><div class="muted" style="margin:8px 0">Share your link:</div><div class="card bd" style="word-break:break-all">'+link+'</div>';
       const copy=Object.assign(document.createElement('button'),{className:'btn outline',textContent:'Copy'});
-      copy.onclick=async()=>{ try{await navigator.clipboard.writeText(link); alert('Copied');}catch{fallbackCopy(link);} };
+      copy.onclick=()=> copyText(link);
       const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
       openModal('Invite', body, [copy, close]);
     }
     if(id==='btnAgent'){
-      const body=document.createElement('div');
-      body.innerHTML='<b>Agent Levels</b><p class="muted">Grow referrals to unlock higher agent rebates.</p>';
+      const body=document.createElement('div'); body.innerHTML='<b>Agent Levels</b><p class="muted">Grow referrals to unlock higher agent rebates.</p>';
       const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
       openModal('Agent Level', body, [close]);
     }
-    if(id==='btnMyProfits'){ showPage('assets'); }
-    if(id==='btnOrders'){
-      const body=document.createElement('div'); body.innerHTML='<div class="muted">No orders yet.</div>';
-      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-      openModal('Order Record', body, [close]);
-    }
+    if(id==='btnMyProfits'){ showPage('assets'); showAssets('overview'); }
+    if(id==='btnOrders'){ const body=document.createElement('div'); body.innerHTML='<div class="muted">No orders yet.</div>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('Order Record', body, [close]); }
     if(id==='btnRules'){ showPage('rules'); }
-    if(id==='btnSafety'){
-      const body=document.createElement('div'); body.innerHTML='<ul><li>Bind email for withdrawals</li><li>Use a strong password</li><li>Never share codes</li></ul>';
-      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-      openModal('Safety Center', body, [close]);
-    }
-    if(id==='btnFeedback'){
-      const body=document.createElement('div'); body.innerHTML='<label>Feedback</label><textarea style="width:100%;min-height:120px;border:1px solid #e2e7eb;border-radius:12px;padding:10px" placeholder="Tell us what to improve…"></textarea>';
-      const send=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Send'});
-      send.onclick=()=>{ alert('Thanks!'); closeModal(); };
-      openModal('Feedback', body, [send]);
-    }
-    if(id==='btnHelp'){
-      const body=document.createElement('div'); body.innerHTML='<div style="font-weight:800">Help Center</div><p class="muted">FAQs, guides, and support contacts.</p>';
-      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-      openModal('Help Center', body, [close]);
-    }
-    if(id==='btnProfile'){
-      const body=document.createElement('div');
-      body.innerHTML='<label>Display Name</label><input id="nm" type="text" value="'+(state.user.name||'')+'" style="margin-top:6px"><div style="height:8px"></div><label>Agent Level</label><input id="ag" type="number" value="'+(state.user.agent||0)+'">';
-      const save=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Save'});
-      save.onclick=()=>{ state.user.name=$('#nm').value||state.user.name; state.user.agent=Number($('#ag').value||0); persist(); renderMine(); closeModal(); };
-      openModal('Personal Info', body, [save]);
-    }
-    if(id==='btnAbout'){
-      const body=document.createElement('div'); body.innerHTML='<b>TrustMe AI</b><p class="muted">Version 0.5 — stable profile & auth popups.</p>';
-      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-      openModal('About', body, [close]);
-    }
-    if(id==='btnLang'){
-      const body=document.createElement('div'); body.innerHTML='<label>Language</label><select><option>English</option><option>Dansk</option><option>తెలుగు</option></select>';
-      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-      openModal('Language', body, [close]);
-    }
-    if(id==='btnSupport'){
-      const body=document.createElement('div'); body.innerHTML='<p>Telegram: @trustme_support</p><p>Email: support@trustmeai.online</p>';
-      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-      openModal('Customer Service', body, [close]);
-    }
-    if(id==='btnSocial'){
-      const body=document.createElement('div'); body.innerHTML='<ul><li>Twitter: @trustme_ai</li><li>Telegram: @trustmeai_news</li></ul>';
-      const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'});
-      openModal('Social Media', body, [close]);
-    }
+    if(id==='btnSafety'){ const body=document.createElement('div'); body.innerHTML='<ul><li>Bind email for withdrawals</li><li>Use a strong password</li><li>Never share codes</li></ul>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('Safety Center', body, [close]); }
+    if(id==='btnFeedback'){ const body=document.createElement('div'); body.innerHTML='<label>Feedback</label><textarea style="width:100%;min-height:120px;border:1px solid #e2e7eb;border-radius:12px;padding:10px" placeholder="Tell us what to improve…"></textarea>'; const send=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Send'}); send.onclick=()=>{ alert('Thanks!'); closeModal(); }; openModal('Feedback', body, [send]); }
+    if(id==='btnHelp'){ const body=document.createElement('div'); body.innerHTML='<div style="font-weight:800">Help Center</div><p class="muted">FAQs, guides, and support contacts.</p>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('Help Center', body, [close]); }
+    if(id==='btnProfile'){ const body=document.createElement('div'); body.innerHTML='<label>Display Name</label><input id="nm" type="text" value="'+(state.user.name||'')+'" style="margin-top:6px"><div style="height:8px"></div><label>Agent Level</label><input id="ag" type="number" value="'+(state.user.agent||0)+'">'; const save=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Save'}); save.onclick=()=>{ state.user.name=$('#nm').value||state.user.name; state.user.agent=Number($('#ag').value||0); persist(); renderMine(); closeModal(); }; openModal('Personal Info', body, [save]); }
+    if(id==='btnAbout'){ const body=document.createElement('div'); body.innerHTML='<b>TrustMe AI</b><p class="muted">Version 0.6 — Assets (Top Up, Withdraw, Address) + stable Mine.</p>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('About', body, [close]); }
+    if(id==='btnLang'){ const body=document.createElement('div'); body.innerHTML='<label>Language</label><select><option>English</option><option>Dansk</option><option>తెలుగు</option></select>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('Language', body, [close]); }
+    if(id==='btnSupport'){ const body=document.createElement('div'); body.innerHTML='<p>Telegram: @trustme_support</p><p>Email: support@trustmeai.online</p>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('Customer Service', body, [close]); }
+    if(id==='btnSocial'){ const body=document.createElement('div'); body.innerHTML='<ul><li>Twitter: @trustme_ai</li><li>Telegram: @trustmeai_news</li></ul>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('Social Media', body, [close]); }
     if(id==='btnCache'){ localStorage.removeItem('tm_user'); alert('Cache cleared.'); }
     if(id==='btnLogout'){ state.user.loggedIn=false; persist(); renderMine(); showPage('home'); }
   });
 
-  // Init page
+  // Clipboard from team invite pill
+  $('#copyTeamInvite').addEventListener('click', ()=> copyText($('#teamInvite').textContent));
+
+  // Init
   showPage(state.user.loggedIn ? 'mine' : 'home');
   renderMine();
+  // Prepare initial topup QR
+  buildQR($('#rechargeAddress').textContent);
 });
 </script>
 </body>
