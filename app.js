@@ -2,7 +2,7 @@
 const state = {
   brand: "TrustMe AI",
   loggedIn: false,
-  user: { name: "TrustMeAI‑100222", uid: "100222", invite: "MPQQ8K", level: "TMI1" },
+  user: { name: "TrustMeAI-100222", uid: "100222", invite: "MPQQ8K", level: "TMI1" },
 };
 
 // Views & tabs
@@ -99,7 +99,7 @@ function drawFakeQR(canvas, seed){
   }
 }
 
-// ===== Top‑Up =====
+// ===== Top-Up =====
 const topupDialog = document.getElementById("topupDialog");
 const topupNetwork = document.getElementById("topupNetwork");
 const topupAddress = document.getElementById("topupAddress");
@@ -140,5 +140,38 @@ withdrawNetwork.addEventListener("change", refreshWithdraw);
 function openWithdraw(){ refreshWithdraw(); withdrawDialog.showModal(); }
 document.getElementById("openWithdraw")?.addEventListener("click", openWithdraw);
 
-// Default active
+// ===== Calculator =====
+const $ = id => document.getElementById(id);
+const amt   = $("calcAmount");
+const rate  = $("calcRate");
+const days  = $("calcDays");
+const comp  = $("calcCompound");
+const lbl   = $("calcRateLabel");
+const outDaily   = $("calcDaily");
+const outPeriod  = $("calcPeriod");
+const outBalance = $("calcBalance");
+
+function calc(){
+  const A = Math.max(0, parseFloat(amt.value || 0));
+  const r = Math.max(0, parseFloat(rate.value || 0)) / 100.0; // daily rate
+  const d = Math.max(1, Math.min(365, parseInt(days.value || 1)));
+  lbl.textContent = (r*100).toFixed(1) + "%";
+
+  const daily = A * r;
+  let balance, earnings;
+  if (comp.checked){
+    balance = A * Math.pow(1+r, d);
+    earnings = balance - A;
+  } else {
+    earnings = daily * d;
+    balance = A + earnings;
+  }
+  outDaily.textContent   = "$" + daily.toFixed(2);
+  outPeriod.textContent  = "$" + earnings.toFixed(2);
+  outBalance.textContent = "$" + balance.toFixed(2);
+}
+[amt, rate, days, comp].forEach(el => el.addEventListener("input", calc));
+calc();
+
+// Default active view
 setActive("home");

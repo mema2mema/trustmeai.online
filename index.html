@@ -13,7 +13,7 @@
       <div class="avatar">T</div>
       <div class="brand-text">
         <div class="brand-title">TrustMe AI</div>
-        <div class="brand-sub" id="brandSub">Secure • Automated • Real‑Time</div>
+        <div class="brand-sub" id="brandSub">Secure • Automated • Real-Time</div>
       </div>
     </div>
     <button id="getStartedBtn" class="btn btn-primary-outline">Get Started</button>
@@ -26,10 +26,12 @@
         <div class="card-title">Welcome</div>
         <p>Use the tabs below to manage your <b>Assets</b>, define your <b>Strategy</b>, organize your <b>Team</b>, and view your profile in <b>Mine</b>.</p>
       </div>
+
+      <!-- Quick actions -->
       <div class="grid-2">
         <div class="big-tile" id="tileTopUp">
           <div class="tile-icon">💳</div>
-          <div class="tile-title">Top‑Up</div>
+          <div class="tile-title">Top-Up</div>
         </div>
         <div class="big-tile" id="tileWithdraw">
           <div class="tile-icon">💸</div>
@@ -37,13 +39,102 @@
         </div>
       </div>
 
+      <!-- Calculator -->
       <div class="card">
-        <div class="card-title">Why TrustMe AI</div>
-        <ul class="bullets">
-          <li>Transparent Security — every operation is auditable.</li>
-          <li>Automated Trading — 24/7 execution without manual steps.</li>
-          <li>Real‑Time Data — second‑level market updates.</li>
-        </ul>
+        <div class="card-title">Earnings Calculator</div>
+        <div class="calc-grid">
+          <label class="field">
+            <span>Amount (USDT)</span>
+            <input id="calcAmount" type="number" min="0" value="1000" />
+          </label>
+          <label class="field">
+            <span>Daily Yield % (TMI1: 1.5–3%)</span>
+            <input id="calcRate" type="range" min="1.5" max="3" step="0.1" value="2.0" />
+            <div class="muted" id="calcRateLabel">2.0%</div>
+          </label>
+          <label class="field">
+            <span>Days</span>
+            <input id="calcDays" type="number" min="1" max="365" value="30" />
+          </label>
+          <label class="switcher">
+            <input id="calcCompound" type="checkbox" checked />
+            <span>Compound daily</span>
+          </label>
+        </div>
+
+        <div class="result-grid">
+          <div class="result">
+            <div class="result-title">Est. Daily Earnings</div>
+            <div class="result-value" id="calcDaily">$0.00</div>
+          </div>
+          <div class="result">
+            <div class="result-title">Est. Earnings in Period</div>
+            <div class="result-value" id="calcPeriod">$0.00</div>
+          </div>
+          <div class="result">
+            <div class="result-title">Projected Balance</div>
+            <div class="result-value" id="calcBalance">$0.00</div>
+          </div>
+        </div>
+        <p class="muted">This tool is for illustration only and does not constitute financial advice. Actual results may vary.</p>
+      </div>
+
+      <!-- Partners -->
+      <div class="card">
+        <div class="partners-heading">
+          <div class="spark">✦</div>
+          <div>
+            <div class="partners-title">Partners</div>
+            <div class="muted">Official Partner</div>
+          </div>
+        </div>
+        <div class="partners-grid">
+          <div class="partner">Bitget</div>
+          <div class="partner">eToro</div>
+          <div class="partner">Gate</div>
+          <div class="partner">Binance</div>
+          <div class="partner">OKX</div>
+          <div class="partner">KuCoin</div>
+          <div class="partner">Kraken</div>
+          <div class="partner">Bybit</div>
+          <div class="partner">Gemini</div>
+          <div class="partner">crypto.com</div>
+        </div>
+      </div>
+
+      <!-- Our Advantages -->
+      <div class="card">
+        <div class="advantages-heading">
+          <div class="spark">✦</div>
+          <div>
+            <div class="partners-title">Our Advantages</div>
+            <div class="muted">Built for transparency and speed</div>
+          </div>
+        </div>
+
+        <div class="advantage">
+          <div class="adv-icon">🛡️</div>
+          <div>
+            <div class="adv-title">Transparent Security</div>
+            <div class="muted">Every transaction is traceable. Operations are transparent and public. Funds are secure.</div>
+          </div>
+        </div>
+
+        <div class="advantage">
+          <div class="adv-icon">🤖</div>
+          <div>
+            <div class="adv-title">Automated Trading</div>
+            <div class="muted">24/7 automatic trading execution, no manual intervention required.</div>
+          </div>
+        </div>
+
+        <div class="advantage">
+          <div class="adv-icon">📊</div>
+          <div>
+            <div class="adv-title">Real‑Time Data</div>
+            <div class="muted">Access to major global markets with second‑level updates.</div>
+          </div>
+        </div>
       </div>
 
       <div class="card">
@@ -61,7 +152,7 @@
       <div class="card">
         <div class="card-title">Assets</div>
         <div class="row gap">
-          <button class="btn" id="openTopUp">Top‑Up</button>
+          <button class="btn" id="openTopUp">Top-Up</button>
           <button class="btn" id="openWithdraw">Withdraw</button>
         </div>
       </div>
@@ -88,7 +179,7 @@
       <div class="profile-banner">
         <div class="pfp">S</div>
         <div class="profile-info">
-          <div class="profile-name" id="profileName">TrustMeAI‑100222</div>
+          <div class="profile-name" id="profileName">TrustMeAI-100222</div>
           <div class="profile-meta">UID: <span id="profileUid">100222</span> • Invite Code: <span id="inviteCode">MPQQ8K</span></div>
           <div class="chips">
             <span class="chip">Level TMI1</span>

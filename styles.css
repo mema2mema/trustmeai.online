@@ -26,6 +26,37 @@ a{color:#7bd2ff;text-decoration:none}.link{color:#7bd2ff}.muted{color:#a9b6c9;fo
 .big-tile{background:#0f1a30;border:1px dashed #274362;border-radius:16px;display:grid;place-items:center;padding:22px;cursor:pointer}
 .tile-icon{font-size:28px}.tile-title{margin-top:6px;color:#cfe6ff}
 
+/* Calculator */
+.calc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.switcher{display:flex;gap:10px;align-items:center;margin:8px 0}
+.result-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:8px}
+.result{background:#0c1628;border:1px solid #1e2d45;border-radius:12px;padding:12px}
+.result-title{color:#a9b6c9;font-size:.9rem}
+.result-value{font-size:1.3rem;font-weight:800;margin-top:4px}
+
+/* Partners */
+.partners-heading,.advantages-heading{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.spark{font-size:18px;color:#5be5ba}
+.partners-title{font-weight:800}
+.partners-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.partner{background:#0e1a2f;border:1px solid #213452;border-radius:12px;display:grid;place-items:center;height:64px;color:#93a7c5}
+
+/* Advantages */
+.advantage{display:flex;gap:12px;align-items:flex-start;margin:18px 0}
+.adv-icon{width:44px;height:44px;border-radius:12px;background:#0e1d32;display:grid;place-items:center;font-size:22px;border:1px solid #223552}
+.adv-title{font-weight:700}
+
+/* Inputs & fields */
+.field{display:grid;gap:6px;margin:12px 0}
+.input-row{display:flex;gap:8px}
+.input-row .code{background:#0b1220;border:1px solid #203455;color:#cfe6ff;border-radius:10px;padding:8px}
+.field input,.field select{background:#0b1220;border:1px solid #203455;color:#cfe6ff;border-radius:10px;padding:10px}
+.select-like{background:#0b1220;border:1px solid #203455;color:#cfe6ff;border-radius:10px;padding:10px}
+.checkbox{display:flex;gap:8px;align-items:center}
+.pill{padding:8px 12px;border-radius:999px;border:1px solid #203455;background:#0b1220;color:#cfe6ff;cursor:pointer}
+.pill.active{border-color:#19b879;background:#0f1a30}
+.tabs-line{display:flex;gap:8px}
+
 /* Profile banner */
 .profile-banner{display:flex;gap:16px;align-items:center;background:linear-gradient(90deg,#16c79a22,#16c79a11);border:1px solid #1d6957;border-radius:16px;padding:16px;margin:12px 0}
 .pfp{width:48px;height:48px;border-radius:50%;background:#0a3b2f;display:grid;place-items:center;font-weight:700}
@@ -50,17 +81,6 @@ a{color:#7bd2ff;text-decoration:none}.link{color:#7bd2ff}.muted{color:#a9b6c9;fo
 .modal{border:none;border-radius:16px;padding:0}
 .modal-card{background:#0f1a30;border:1px solid #203455;border-radius:16px;padding:16px;min-width:320px;max-width:520px;color:#e7f1ff}
 .modal-title{font-weight:800;margin-bottom:10px}
-.field{display:grid;gap:6px;margin:12px 0}
-.input-row{display:flex;gap:8px}
-.input-row .code{background:#0b1220;border:1px solid #203455;color:#cfe6ff;border-radius:10px;padding:8px}
-.field input,.field select{background:#0b1220;border:1px solid #203455;color:#cfe6ff;border-radius:10px;padding:10px}
-.select-like{background:#0b1220;border:1px solid #203455;color:#cfe6ff;border-radius:10px;padding:10px}
-.checkbox{display:flex;gap:8px;align-items:center}
-.pill{padding:8px 12px;border-radius:999px;border:1px solid #203455;background:#0b1220;color:#cfe6ff;cursor:pointer}
-.pill.active{border-color:#19b879;background:#0f1a30}
-.tabs-line{display:flex;gap:8px}
-
-/* QR */
 .qr-wrap{display:grid;gap:10px;place-items:center;margin:8px 0}
 .qr-wrap.small canvas{width:192px;height:192px}
 .addr-row{display:flex;gap:8px;width:100%}
@@ -68,3 +88,14 @@ a{color:#7bd2ff;text-decoration:none}.link{color:#7bd2ff}.muted{color:#a9b6c9;fo
 
 /* Tokens */
 .token.usdt{color:#24e49a}
+
+/* Responsive tweaks */
+@media (max-width:720px){
+  .calc-grid{grid-template-columns:1fr}
+  .result-grid{grid-template-columns:1fr 1fr}
+  .partners-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:480px){
+  .result-grid{grid-template-columns:1fr}
+  .partners-grid{grid-template-columns:repeat(2,1fr)}
+}
