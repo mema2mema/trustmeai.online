@@ -58,12 +58,6 @@
   .titlebar{ position:sticky; top:56px; background:#fff; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px; padding:12px 0; z-index:9 }
   .pill{ display:flex; align-items:center; justify-content:space-between; padding:12px; border:1px solid var(--line); border-radius:12px; font-weight:700 }
   .qrbox{ display:grid; place-items:center; border:1px solid var(--line); border-radius:12px; padding:12px; background:#fff }
-  .sheet{ position:fixed; left:0; right:0; bottom:-100%; background:#fff; border-top-left-radius:16px; border-top-right-radius:16px; box-shadow:0 -12px 24px rgba(0,0,0,.08); transition:.3s; z-index:50 }
-  .sheet.open{ bottom:0; }
-  .sheet .hd{ padding:14px; border-bottom:1px solid var(--line); font-weight:700; display:flex; align-items:center; justify-content:space-between }
-  .sheet .bd{ max-height:50vh; overflow:auto; }
-  .sheet .item{ padding:14px 16px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; cursor:pointer }
-  .row2{ display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center }
   .seg{ display:flex; gap:18px; border-bottom:1px solid var(--line); padding:0 14px }
   .seg .segbtn{ border:none; background:none; padding:12px 6px; font-weight:700; color:var(--muted); cursor:pointer }
   .seg .segbtn.active{ color:var(--emerald); position:relative }
@@ -262,7 +256,7 @@
       <div class="bd">
         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px">
           <div style="font-weight:800">Account Balance(USDT)</div>
-          <div id="myLevelPill" style="background:#10b981; color:#fff; padding:6px 12px; border-radius:999px; font-weight:800;">My Level S0</div>
+          <div id="myLevelPill" style="background:#10b981; color:#fff; padding:6px 12px; border-radius:999px; font-weight:800;">My Level TMI1</div>
         </div>
         <div style="font-size:40px; font-weight:900" id="stratBalance">0</div>
         <div class="row row-4" style="margin-top:6px">
@@ -287,11 +281,10 @@
           <div style="display:flex; align-items:center; gap:10px">
             <div style="width:28px;height:28px;border-radius:6px;background:#e5e7eb;display:grid;place-items:center">⛏️</div>
             <div>
-              <div id="levelLine" style="font-weight:800">S0 1% ~ 2%</div>
-              <div class="muted" id="levelRange" style="font-size:12px">100~200 USDT</div>
+              <div id="levelLine" style="font-weight:800">TMI1 0.5% ~ 3%</div>
+              <div class="muted" id="levelRange" style="font-size:12px">50~300000 USDT</div>
             </div>
           </div>
-          <button id="btnLevelPicker" class="btn outline">›</button>
         </div>
       </div>
       <div style="height:8px"></div>
@@ -304,7 +297,7 @@
           <div style="display:flex; align-items:center; gap:10px; font-weight:700"><span style="width:28px;height:28px;border-radius:50%;background:#ecfeff;display:grid;place-items:center">Ξ</span><div>ETH</div></div>
           <div style="height:10px"></div>
           <div class="row row-3">
-            <div class="kpi"><div class="cap">Daily Chemical Yield</div><div class="val">1% ~ 2%</div></div>
+            <div class="kpi"><div class="cap">Daily Chemical Yield</div><div class="val">0.5% ~ 3%</div></div>
             <div class="kpi"><div class="cap">Participate Assets</div><div class="val">4.3802M</div></div>
             <div class="kpi"><div class="cap">Participating Users</div><div class="val">12925</div></div>
           </div>
@@ -319,11 +312,10 @@
           <div style="display:flex; align-items:center; gap:10px">
             <div style="width:28px;height:28px;border-radius:6px;background:#e5e7eb;display:grid;place-items:center">⛏️</div>
             <div>
-              <div id="levelLineToday" style="font-weight:800">S0 1% ~ 2%</div>
-              <div class="muted" id="levelRangeToday" style="font-size:12px">100~200 USDT</div>
+              <div id="levelLineToday" style="font-weight:800">TMI1 0.5% ~ 3%</div>
+              <div class="muted" id="levelRangeToday" style="font-size:12px">50~300000 USDT</div>
             </div>
           </div>
-          <button id="btnLevelPickerToday" class="btn outline">›</button>
         </div>
       </div>
       <div class="muted" style="text-align:center; padding:28px">No Data Yet</div>
@@ -630,18 +622,6 @@
   </div>
 </footer>
 
-<!-- Network bottom sheet -->
-<div id="netSheet" class="sheet" aria-hidden="true">
-  <div class="hd"><button id="sheetCancel" class="btn ghost">Cancel</button><div>Select The Network</div><button id="sheetConfirm" class="btn ghost">Confirm</button></div>
-  <div class="bd" id="netList"></div>
-</div>
-
-<!-- Strategy level bottom sheet -->
-<div id="levelSheet" class="sheet" aria-hidden="true">
-  <div class="hd"><button id="lvlCancel" class="btn ghost">Cancel</button><div>Select Level</div><button id="lvlConfirm" class="btn ghost">Confirm</button></div>
-  <div class="bd" id="levelList"></div>
-</div>
-
 <div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
   <div class="panel">
     <div class="hd"><span id="modalTitle">Modal</span><button id="modalClose" class="btn outline">✕</button></div>
@@ -667,9 +647,7 @@
     },
     ledger: [],
     strategies: [
-      { id:'exp-gold', name:'Experience Gold Strategy', pair:'ETH/USDT', range:[1,2], tvl:4.3738e6, users:12914, desc:'Balanced ETH grid strategy with capital protection controls.', points: genSeries(60, 4000, 120) },
-      { id:'sol-boost', name:'SOL Boost', pair:'SOL/USDT', range:[0.8,1.6], tvl:1.19e6, users:6842, desc:'Momentum scalper on SOL spot with auto risk-off.', points: genSeries(60, 200, 18) },
-      { id:'btc-stable', name:'BTC Stable', pair:'BTC/USDT', range:[0.3,0.9], tvl:6.02e6, users:21103, desc:'Low-volatility BTC swing with tight drawdown guard.', points: genSeries(60, 60000, 800) }
+      { id:'exp-gold', name:'Experience Gold Strategy', pair:'ETH/USDT', range:[0.5,3.0], tvl:4.3738e6, users:12914, desc:'Balanced ETH grid strategy with capital protection controls.' }
     ],
     positions: [],
     referrals: { code: '', size: 0, direct: 0, members: [] },
@@ -690,17 +668,8 @@
       dailyLimit: 100000
     },
     strategy: {
-      myLevel: 'S0',
-      levels: [
-        { id:'S0', pct:[1.0,2.0], amt:[100,200] },
-        { id:'S1', pct:[0.8,1.5], amt:[50,1000] },
-        { id:'S2', pct:[1.0,1.8], amt:[1000,5000] },
-        { id:'S3', pct:[1.2,2.1], amt:[5000,25000] },
-        { id:'S4', pct:[1.4,2.4], amt:[10000,65000] },
-        { id:'S5', pct:[1.6,2.7], amt:[15000,150000] },
-        { id:'S6', pct:[2.0,3.0], amt:[30000,1000000] }
-      ],
-      selected: 'S0'
+      myLevel: 'TMI1',
+      level: { id:'TMI1', pct:[0.5,3.0], amt:[50,300000] }
     }
   };
 
@@ -718,7 +687,6 @@
   $('#modalClose').addEventListener('click', closeModal);
   $('#modal').addEventListener('click', (e)=>{ if(e.target.id==='modal') closeModal() });
   function pushLedger(type, amount, note=''){ state.ledger.unshift({ ts: Date.now(), type, amount: Number(amount), note }) }
-  function genSeries(n, base, spread){ const a=[]; let v=base; for(let i=0;i<n;i++){ v += (Math.random()-.48)*spread; a.push(Math.max(0, v)); } return a; }
 
   function showPage(key){
     const map = {
@@ -858,12 +826,12 @@
   function goWithdraw(){ showPage('withdraw') }
   function openBill(){
     const wrap = document.createElement('div');
-    const tbl = Object.assign(document.createElement('table'), {className:'table'});
-    tbl.innerHTML = '<thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Note</th></tr></thead><tbody></tbody>';
-    const tb = tbl.querySelector('tbody');
     if(state.ledger.length===0){
       const p = document.createElement('div'); p.className='muted'; p.style.textAlign='center'; p.style.padding='20px'; p.textContent='No Records Yet'; wrap.appendChild(p);
     } else {
+      const tbl = Object.assign(document.createElement('table'), {className:'table'});
+      tbl.innerHTML = '<thead><tr><th>Time</th><th>Type</th><th>Amount</th><th>Note</th></tr></thead><tbody></tbody>';
+      const tb = tbl.querySelector('tbody');
       state.ledger.forEach(r=>{
         const tr = document.createElement('tr');
         const t = new Date(r.ts).toLocaleString();
@@ -931,14 +899,6 @@
     });
   }
 
-  function drawMiniChart(el, arr){
-    const DPR = window.devicePixelRatio||1; const w=220, h=56; const c=document.createElement('canvas'); c.width=w*DPR; c.height=h*DPR; c.style.width=w+'px'; c.style.height=h+'px';
-    const ctx=c.getContext('2d'); const P={l:6*DPR,r:6*DPR,t:6*DPR,b:6*DPR}; const W=c.width-P.l-P.r; const H=c.height-P.t-P.b;
-    const max=Math.max(...arr), min=Math.min(...arr), y=v=> P.t + H - ((v-min)/(max-min+1e-9))*H, step=W/Math.max(1,arr.length-1);
-    ctx.beginPath(); ctx.moveTo(P.l,y(arr[0])); for(let i=1;i<arr.length;i++){ ctx.lineTo(P.l+i*step,y(arr[i])); } ctx.strokeStyle='#10b981'; ctx.lineWidth=2*DPR; ctx.stroke();
-    el.appendChild(c);
-  }
-
   // ---- STRATEGY PAGE ----
   function renderStrategyPage(){
     $('#stratBalance').textContent = fmt(state.balances.USDT.available);
@@ -950,11 +910,11 @@
     syncLevelLabels();
   }
   function syncLevelLabels(){
-    const lvl = state.strategy.levels.find(x=>x.id===state.strategy.selected);
-    $('#levelLine').textContent = `${lvl.id} ${lvl.pct[0]}% ~ ${lvl.pct[1]}%`;
-    $('#levelRange').textContent = `${fmt(lvl.amt[0])}~${fmt(lvl.amt[1])} USDT`;
-    $('#levelLineToday').textContent = `${lvl.id} ${lvl.pct[0]}% ~ ${lvl.pct[1]}%`;
-    $('#levelRangeToday').textContent = `${fmt(lvl.amt[0])}~${fmt(lvl.amt[1])} USDT`;
+    const l = state.strategy.level;
+    $('#levelLine').textContent = `${l.id} ${l.pct[0]}% ~ ${l.pct[1]}%`;
+    $('#levelRange').textContent = `${fmt(l.amt[0])}~${fmt(l.amt[1])} USDT`;
+    $('#levelLineToday').textContent = `${l.id} ${l.pct[0]}% ~ ${l.pct[1]}%`;
+    $('#levelRangeToday').textContent = `${fmt(l.amt[0])}~${fmt(l.amt[1])} USDT`;
   }
   // tab switching
   $$('.segbtn').forEach(btn=> btn.addEventListener('click', ()=>{
@@ -962,23 +922,6 @@
     const key = btn.getAttribute('data-stab');
     ['s_strategy','s_today','s_bill'].forEach(k=> $('#stab-'+k).style.display = (k===key)?'block':'none');
   }));
-  // level pickers -> open sheet
-  $('#btnLevelPicker').addEventListener('click', openLevelSheet);
-  $('#btnLevelPickerToday').addEventListener('click', openLevelSheet);
-  function openLevelSheet(){
-    const sheet = $('#levelSheet'); const list = $('#levelList');
-    let pending = state.strategy.selected;
-    list.innerHTML='';
-    state.strategy.levels.forEach(l=>{
-      const row=document.createElement('div'); row.className='item';
-      row.innerHTML = `<div><b>${l.id}</b> ${l.pct[0]}% - ${l.pct[1]}%<div class="muted" style="font-size:12px">${fmt(l.amt[0])}~${fmt(l.amt[1])} USDT</div></div><div>${l.id===pending?'✅':''}</div>`;
-      row.addEventListener('click', ()=>{ pending=l.id; $$('#levelList .item').forEach(x=>x.lastChild.textContent=''); row.lastChild.textContent='✅'; });
-      list.appendChild(row);
-    });
-    $('#lvlCancel').onclick = ()=>{ sheet.classList.remove('open'); sheet.setAttribute('aria-hidden','true'); };
-    $('#lvlConfirm').onclick = ()=>{ state.strategy.selected=pending; sheet.classList.remove('open'); sheet.setAttribute('aria-hidden','true'); syncLevelLabels(); };
-    sheet.classList.add('open'); sheet.setAttribute('aria-hidden','false');
-  }
 
   function renderTeam(){
     if(!state.referrals.code){
@@ -1073,7 +1016,7 @@
   });
   $('#backWithdraw').addEventListener('click', ()=> showPage('assets'));
   $('#addAddress').addEventListener('click', ()=> showPage('wdaddr'));
-  // FIX: back arrow on Top Up page
+  // Back arrow on Top Up page
   $('#backTopUp').addEventListener('click', ()=> showPage('assets'));
 
   function renderWithdrawAddress(){
@@ -1104,26 +1047,6 @@
     showPage('withdraw'); renderWithdraw();
   });
   $('#backWdAddr').addEventListener('click', ()=> showPage('withdraw'));
-
-  const sheet = $('#netSheet'); const list = $('#netList'); let sheetPending = null; let onConfirm = null;
-  function openSheet(currentId, callback){
-    sheetPending = currentId; onConfirm = callback;
-    list.innerHTML='';
-    state.topup.networks.forEach(n=>{
-      const row=document.createElement('div'); row.className='item'; row.setAttribute('data-id', n.id);
-      row.innerHTML = `<div>${n.label}</div><div>${sheetPending===n.id?'✅':''}</div>`;
-      row.addEventListener('click', ()=>{ sheetPending=n.id; $$('#netList .item').forEach(x=>x.lastChild.textContent=''); row.lastChild.textContent='✅'; });
-      list.appendChild(row);
-    });
-    sheet.classList.add('open'); sheet.setAttribute('aria-hidden','false');
-  }
-  function closeSheet(){ sheet.classList.remove('open'); sheet.setAttribute('aria-hidden','true'); }
-  $('#sheetCancel').addEventListener('click', closeSheet);
-  $('#sheetConfirm').addEventListener('click', ()=>{ closeSheet(); if(typeof onConfirm==='function') onConfirm(sheetPending); });
-
-  $('#netPickerTopUp').addEventListener('click', ()=> openSheet(state.topup.selected, (id)=>{ state.topup.selected=id; renderTopUp(); }));
-  $('#netPickerWithdraw').addEventListener('click', ()=> openSheet(state.withdraw.selected, (id)=>{ state.withdraw.selected=id; renderWithdraw(); }));
-  $('#netPickerWdAddr').addEventListener('click', ()=> openSheet(state.withdraw.selected, (id)=>{ state.withdraw.selected=id; renderWithdrawAddress(); }));
 
   function initHome(){ renderHotList(); wireHome(); }
   function initAssets(){ wireAssets(); renderAssets(); }
