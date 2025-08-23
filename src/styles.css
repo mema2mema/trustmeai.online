@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{ --radius: 1rem; }
+.btn{ @apply px-4 py-2 rounded-2xl text-sm font-medium transition shadow-sm focus:outline-none focus:ring; }
+.btn-default{ @apply bg-slate-900 text-white hover:bg-slate-800; }
+.btn-outline{ @apply border border-slate-200 hover:bg-slate-50; }
+.card{ @apply rounded-2xl border border-slate-200 bg-white; }
+.input{ @apply border rounded-2xl px-3 py-2 outline-none focus:ring w-full; }
+.label{ @apply text-sm; }
+.tablist{ @apply inline-flex items-center gap-1 rounded-2xl bg-slate-100 p-1; }
+.tab{ @apply px-3 py-1.5 rounded-xl text-sm text-slate-600; }
+.tab-active{ @apply bg-white shadow text-slate-900; }
+.badge{ @apply px-2 py-1 rounded-lg text-xs font-semibold; }
