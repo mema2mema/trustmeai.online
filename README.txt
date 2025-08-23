@@ -1,28 +1,29 @@
-TrustMe AI — Classic Auth Add‑On
-================================
+TrustMe AI — Home Yield Calculator (Drop‑in)
+===============================================
 
-What this is
+This bundle adds a responsive Yield Calculator to your **Home** page.
+No CSS edits needed. One file self-injects HTML + styles.
+
+Files
+-----
+js/home-calculator.bundle.js          # self-injects styles + calculator section
+index-example-with-calculator.html    # example homepage using the bundle
+
+Quick Install (fastest)
+-----------------------
+1) Upload `js/home-calculator.bundle.js` to your site's `js/` folder.
+2) Open **index.html** and add this tag before </body>:
+   <script src="js/home-calculator.bundle.js" defer></script>
+3) Deploy. Done.
+
+How it works
 ------------
-A drop‑in Login/Register for your OLD site style.
-• Puts two pill buttons (Login / Register) in your header, right side.
-• Opens glass pop‑up modals that match your old green theme.
-• Uses your backend API (set the API URL in auth-classic.js).
+• The script adds a 'Yield Calculator' section after your first main container.
+• If it can't find a container, it appends to <body>.
+• It matches your dark "glass" style and is fully responsive.
 
-How to install (3 steps)
-------------------------
-1) Copy folders:
-   - css/auth-classic.css
-   - js/auth-classic.js
-   into your existing `trustmeai-online/` project.
-
-2) In every page that has the top navbar, add this placeholder where the buttons should sit (usually right side of the nav):
-   <div id="authArea"></div>
-
-3) Include files:
-   In <head> (after your main CSS):
-     <link rel="stylesheet" href="css/auth-classic.css">
-   Before </body> (after your other scripts):
-     <script>const API = "http://localhost:8080";</script> <!-- change to your API -->
-     <script src="js/auth-classic.js" defer></script>
-
-That’s it. You’ll see Login/Register again.
+Deep-link
+---------
+• Clicking 'Activate Plan' will send users to strategy.html with:
+    strategy.html#plan=T2&amount=5000
+  You can read those values on that page to preselect a plan (optional).
