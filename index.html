@@ -74,13 +74,23 @@
   .opt .name{ font-weight:800 }
   .opt .sub{ font-size:12px; color:var(--muted) }
   .sheet .pad{ height: 24px }
+  /* Auth modal */
+  .auth-title{ font-size:22px; font-weight:900; margin-bottom:8px }
+  .auth-tabs{ display:flex; gap:20px; font-weight:800; color:var(--muted); border-bottom:1px solid var(--line); margin:10px 0 16px 0 }
+  .auth-tab{ padding:8px 0; cursor:pointer; position:relative }
+  .auth-tab.active{ color:var(--ink) }
+  .auth-tab.active::after{ content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:var(--emerald) }
+  .cc-wrap{ display:flex; gap:8px; align-items:center }
+  .cc-wrap select{ width:90px }
+  .auth-footer{ display:flex; justify-content:space-between; align-items:center; margin-top:8px }
+  .link{ color:#059669; cursor:pointer; font-weight:700; }
 </style>
 </head>
 <body>
 <header>
   <div class="container bar">
     <div class="brand"><div class="logo">T</div><div>TrustMe AI</div></div>
-    <button class="btn primary">Get Started</button>
+    <button id="btnGetStarted" class="btn primary">Get Started</button>
   </div>
 </header>
 
@@ -101,7 +111,7 @@
           <h1 style="font-size:40px; font-weight:900; letter-spacing:-.02em">TrustMe AI: <span class="muted">Smarter trading. Transparent performance.</span></h1>
           <p class="muted" style="max-width:60ch;margin-top:10px">Real-time performance dashboards and a clean admin panel. See profits, withdrawals, and compounding with our live calculator.</p>
           <div style="display:flex; gap:10px; margin-top:14px">
-            <button class="btn primary">Launch App</button>
+            <button class="btn primary" id="btnLaunch">Launch App</button>
             <button class="btn outline">🌐 Auto Language</button>
           </div>
         </div>
@@ -153,6 +163,7 @@
     </section>
   </section>
 
+  <!-- Assets -->
   <section id="page-assets" style="display:none">
     <section class="container" style="padding:12px 0">
       <div class="card">
@@ -263,6 +274,7 @@
     </section>
   </section>
 
+  <!-- Strategy -->
   <section id="page-strategy" class="container" style="display:none; padding:16px 0 24px 0">
     <div class="card">
       <div class="bd">
@@ -351,6 +363,7 @@
     </div>
   </section>
 
+  <!-- Team -->
   <section id="page-team" class="container" style="display:none; padding:16px 0 24px 0">
     <div class="card">
       <div class="hd">Invite & Rewards</div>
@@ -390,6 +403,7 @@
     </div>
   </section>
 
+  <!-- Mine -->
   <section id="page-mine" class="container" style="display:none; padding:16px 0 24px 0">
     <div class="card">
       <div class="bd">
@@ -427,6 +441,7 @@
     </div>
   </section>
 
+  <!-- Top Up -->
   <section id="page-topup" class="screen" style="display:none; padding:0 16px 120px 16px;">
     <div class="titlebar">
       <button id="backTopUp" class="btn outline">←</button>
@@ -488,6 +503,7 @@
     </div>
   </section>
 
+  <!-- Withdraw -->
   <section id="page-withdraw" class="screen" style="display:none; padding:0 16px 160px 16px;">
     <div class="titlebar">
       <button id="backWithdraw" class="btn outline">←</button>
@@ -570,6 +586,7 @@
     </div>
   </section>
 
+  <!-- Withdraw Address -->
   <section id="page-withdraw-address" class="screen" style="display:none; padding:0 16px 120px 16px;">
     <div class="titlebar">
       <button id="backWdAddr" class="btn outline">←</button>
@@ -715,11 +732,7 @@
     $('#sheet').setAttribute('aria-hidden','true');
     sheetCB = null;
   }
-  $('#sheet').addEventListener('click', (e)=>{
-    // close if clicking outside body area (bottom padding acts as a safe zone)
-    const body = $('#sheetList').getBoundingClientRect();
-    if(e.target.id==='sheet') closeSheet();
-  });
+  $('#sheet').addEventListener('click', (e)=>{ if(e.target.id==='sheet') closeSheet(); });
 
   // ---------- Modal ----------
   function openModal(title, bodyNode, actions){
@@ -733,6 +746,130 @@
   $('#modal').addEventListener('click', (e)=>{ if(e.target.id==='modal') closeModal() });
 
   function pushLedger(type, amount, note=''){ state.ledger.unshift({ ts: Date.now(), type, amount: Number(amount), note }) }
+
+  // ---------- Auth Modals ----------
+  function buildLogin(){
+    const wrap = document.createElement('div');
+    const title = Object.assign(document.createElement('div'), {className:'auth-title', textContent:'Log In'});
+    const tabs = document.createElement('div'); tabs.className='auth-tabs';
+    const tPhone = Object.assign(document.createElement('div'), {className:'auth-tab active', textContent:'Phone Number'});
+    const tMail  = Object.assign(document.createElement('div'), {className:'auth-tab', textContent:'Mail'});
+    tabs.append(tPhone, tMail);
+
+    const phonePane = document.createElement('div');
+    phonePane.innerHTML = `
+      <label>Phone Number</label>
+      <div class="cc-wrap" style="margin-top:6px">
+        <select id="loginCC"><option value="+1">+1</option><option value="+45" selected>+45</option><option value="+91">+91</option><option value="+61">+61</option></select>
+        <input id="loginPhone" type="text" placeholder="Enter your mobile phone number"/>
+      </div>
+      <div style="height:10px"></div>
+      <label>Password</label>
+      <div style="position:relative">
+        <input id="loginPhonePass" type="password" placeholder="Enter your password"/>
+      </div>
+      <div class="auth-footer">
+        <label style="display:flex; align-items:center; gap:8px"><input id="rememberMe" type="checkbox"/> Remember Me</label>
+        <span class="link" id="forgotPass">Forget The Password</span>
+      </div>
+    `;
+
+    const mailPane = document.createElement('div');
+    mailPane.style.display='none';
+    mailPane.innerHTML = `
+      <label>Mail</label>
+      <input id="loginEmail" type="text" placeholder="Enter your email address" style="margin-top:6px"/>
+      <div style="height:10px"></div>
+      <label>Password</label>
+      <div style="position:relative">
+        <input id="loginEmailPass" type="password" placeholder="Enter your password"/>
+      </div>
+      <div class="auth-footer">
+        <label style="display:flex; align-items:center; gap:8px"><input id="rememberMe2" type="checkbox"/> Remember Me</label>
+        <span class="link" id="forgotPass2">Forget The Password</span>
+      </div>
+    `;
+
+    tPhone.addEventListener('click', ()=>{ tPhone.classList.add('active'); tMail.classList.remove('active'); phonePane.style.display='block'; mailPane.style.display='none' });
+    tMail.addEventListener('click',  ()=>{ tMail.classList.add('active');  tPhone.classList.remove('active'); phonePane.style.display='none'; mailPane.style.display='block' });
+
+    wrap.append(title, tabs, phonePane, mailPane);
+
+    const btnLogin = Object.assign(document.createElement('button'), {className:'btn primary', textContent:'Log In'});
+    const linkToReg = Object.assign(document.createElement('div'), {style:'margin-right:auto; align-self:center'});
+    linkToReg.innerHTML = `Don't Have An Account Yet? <span class="link" id="goRegister">Register Now</span>`;
+
+    btnLogin.addEventListener('click', ()=>{ alert('Logged in (demo)'); closeModal(); });
+    setTimeout(()=>{ document.getElementById('goRegister').addEventListener('click', ()=>{ closeModal(); openRegister(); }); }, 0);
+
+    openModal('Auth', wrap, [linkToReg, btnLogin]);
+  }
+
+  function openLogin(){ buildLogin(); }
+
+  function openRegister(){
+    const wrap = document.createElement('div');
+    const title = Object.assign(document.createElement('div'), {className:'auth-title', textContent:'Register'});
+    wrap.appendChild(title);
+    const form = document.createElement('div');
+    form.innerHTML = `
+      <label>Phone Number</label>
+      <div class="cc-wrap" style="margin-top:6px">
+        <select id="regCC"><option value="+45" selected>+45</option><option value="+1">+1</option><option value="+91">+91</option></select>
+        <input id="regPhone" type="text" placeholder="Enter your mobile phone number"/>
+      </div>
+      <div style="height:10px"></div>
+      <label>Mail</label>
+      <input id="regEmail" type="text" placeholder="Enter your email address" style="margin-top:6px"/>
+      <div style="height:10px"></div>
+      <label>Verification Code</label>
+      <div class="cc-wrap" style="margin-top:6px">
+        <input id="regCode" type="text" placeholder="enter confirmation code"/>
+        <button id="regSend" class="btn outline">Send</button>
+      </div>
+      <div style="height:10px"></div>
+      <label>Invitation Code</label>
+      <input id="regInvite" type="text" placeholder="The invitation code cannot be empty"/>
+      <div style="height:10px"></div>
+      <label>Password</label>
+      <input id="regPass" type="password" placeholder="6-20 characters combined with letters and numbers"/>
+      <div style="height:10px"></div>
+      <input id="regPass2" type="password" placeholder="Enter your password again"/>
+      <div style="height:12px"></div>
+      <label style="display:flex; align-items:center; gap:8px"><input id="agree" type="checkbox" checked/> I Have Read And Agreed To <a class="link" href="#">Privacy Policy</a></label>
+    `;
+    wrap.appendChild(form);
+
+    const btnReg = Object.assign(document.createElement('button'), {className:'btn primary disabled', textContent:'Register'});
+    const linkToLogin = Object.assign(document.createElement('div'), {style:'margin-right:auto; align-self:center'});
+    linkToLogin.innerHTML = `Already Have An Account? <span class="link" id="goLoginNow">Log In Now</span>`;
+
+    function checkReg(){
+      const ok = $('#regPhone').value.trim().length>5 && $('#regEmail').value.includes('@') && $('#regCode').value.trim().length>=4 && $('#regInvite').value.trim().length>0 && $('#regPass').value.trim().length>=6 && $('#regPass2').value.trim() === $('#regPass').value.trim() && $('#agree').checked;
+      btnReg.classList.toggle('disabled', !ok);
+    }
+    ['regPhone','regEmail','regCode','regInvite','regPass','regPass2','agree'].forEach(id=>{
+      setTimeout(()=>{ const el=document.getElementById(id); if(el) el.addEventListener('input', checkReg); },0);
+    });
+    setTimeout(()=>{
+      document.getElementById('regSend').addEventListener('click', ()=>{
+        alert('Verification code sent (demo): 123456');
+      });
+    }, 0);
+
+    btnReg.addEventListener('click', ()=>{
+      if(btnReg.classList.contains('disabled')) return;
+      alert('Registered (demo)');
+      closeModal(); buildLogin();
+    });
+    setTimeout(()=>{ document.getElementById('goLoginNow').addEventListener('click', ()=>{ closeModal(); buildLogin(); }); }, 0);
+
+    openModal('Register', wrap, [linkToLogin, btnReg]);
+  }
+
+  // Wire Get Started to open Login
+  $('#btnGetStarted').addEventListener('click', openLogin);
+  $('#btnLaunch').addEventListener('click', ()=>{ document.querySelector('[data-nav=\"assets\"]').click(); });
 
   // ---------- Navigation ----------
   function showPage(key){
