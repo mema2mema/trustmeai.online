@@ -70,6 +70,13 @@ input[type=text],input[type=number],input[type=password],input[type=date],select
 .hero{border-radius:16px;background:linear-gradient(120deg,#111827,#334155);color:#fff;padding:24px;margin-bottom:16px}
 .hero h1{margin:0 0 8px 0;font-size:22px}
 main{padding-bottom:84px}
+
+/* Strategy tabs */
+.st-tabs{display:flex;gap:22px;border-bottom:1px solid var(--line);padding:0 14px}
+.st-tab{padding:12px 0;cursor:pointer;color:var(--muted);font-weight:800;position:relative}
+.st-tab.active{color:#111}
+.st-tab.active::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--emerald)}
+.st-row{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:12px;padding:12px}
 </style>
 </head>
 <body>
@@ -87,7 +94,7 @@ main{padding-bottom:84px}
   <section id="page-home" class="container" style="padding:16px 0">
     <div class="hero">
       <h1>Trade smarter with TrustMe AI</h1>
-      <div class="muted">Secure, transparent, and automated strategies. Start with TMI1 (0.5%–3%).</div>
+      <div class="muted">Secure, transparent, and automated strategies. Start with TMI1 (1.5%–3%).</div>
     </div>
 
     <div class="row row-4">
@@ -104,12 +111,12 @@ main{padding-bottom:84px}
           <div class="row">
             <div>
               <label>Amount (USDT)</label>
-              <input id="calcAmt" type="number" min="50" max="300000" value="1000">
+              <input id="calcAmt" type="number" min="50" max="500000" value="1000">
             </div>
             <div>
               <label>Rate (daily %)</label>
               <select id="calcRate">
-                <option>0.5</option><option>1</option><option>1.5</option><option>2</option><option>2.5</option><option selected>3</option>
+                <option>1.5</option><option>2</option><option selected>3</option>
               </select>
             </div>
             <div>
@@ -336,23 +343,41 @@ main{padding-bottom:84px}
   <section id="page-strategy" class="container" style="display:none;padding:0 16px 90px 16px">
     <div class="titlebar"><div style="font-weight:900">Strategy</div></div>
     <div style="height:12px"></div>
+
     <div class="card">
+      <div class="hd">Account Balance (USDT)</div>
       <div class="bd">
-        <div class="pill">TMI1 <span class="muted">0.5% – 3%</span></div>
-        <div class="muted" style="margin-top:8px">Range: 50 – 300,000 USDT</div>
-        <div style="height:10px"></div>
-        <button class="btn outline" id="btnInvest">Not Unlocked</button>
+        <div class="kpi">
+          <div class="box"><div class="cap">Balance</div><div class="val">3</div></div>
+          <div class="box"><div class="cap">Today’s Earnings</div><div class="val">0</div></div>
+          <div class="box"><div class="cap">Cumulative Income</div><div class="val">0</div></div>
+          <div class="box"><div class="cap">Funds Available</div><div class="val">3</div></div>
+        </div>
       </div>
     </div>
-    <div style="height:12px"></div>
-    <div class="card">
-      <div class="hd">Today</div>
-      <div class="bd muted">No Data Yet</div>
+
+    <div style="height:10px"></div>
+    <div class="st-tabs">
+      <div class="st-tab active" data-tab="st">Strategy</div>
+      <div class="st-tab" data-tab="today">Today</div>
+      <div class="st-tab" data-tab="bill">Bill</div>
     </div>
-    <div style="height:12px"></div>
-    <div class="card">
-      <div class="hd">Bill</div>
-      <div class="bd muted">Select dates to view transactions (coming with API).</div>
+
+    <div id="st-panel" style="padding:14px 0">
+      <div class="st-row" id="openPlan">
+        <div>💠 <b style="margin-left:6px">TMI1</b> <span class="muted" style="margin-left:6px">1.5% – 3%</span></div>
+        <div class="muted">50 ~ 500000 USDT ➜</div>
+      </div>
+      <div style="height:10px"></div>
+      <button class="btn outline" id="btnInvest">Not Unlocked</button>
+    </div>
+
+    <div id="today-panel" style="display:none;padding:14px 0">
+      <div class="card"><div class="bd muted">No Data Yet</div></div>
+    </div>
+
+    <div id="bill-panel" style="display:none;padding:14px 0">
+      <div class="card"><div class="bd muted">No Records Yet</div></div>
     </div>
   </section>
 
@@ -453,7 +478,7 @@ main{padding-bottom:84px}
         <ol>
           <li><b>Account.</b> Keep your login secret. Enable phone/email verification for withdrawals.</li>
           <li><b>Networks.</b> Always match the chain (TRC20 / BEP20 / ERC20) when depositing/withdrawing.</li>
-          <li><b>Strategy.</b> TMI1 targets 0.5%–3% depending on market conditions.</li>
+          <li><b>Strategy.</b> TMI1 targets 1.5%–3% depending on market conditions.</li>
           <li><b>Fees.</b> Network gas is paid to the blockchain. Platform fees (if any) show before confirm.</li>
           <li><b>Support.</b> We never ask for your password or seed phrase.</li>
         </ol>
@@ -494,9 +519,8 @@ document.addEventListener('DOMContentLoaded', function(){
   const $$ = (q)=>Array.from(document.querySelectorAll(q));
 
   // ----- STATE & STORAGE -----
-  const state = {user:{loggedIn:false, uid:'', invite:'', name:'', level:'TMI1', agent:0}, assets:{available:300, address:{TRC20:'TQ1vYnESLMbt967YY34FTqmvmE32kNbrN', BEP20:'0xB8F8b4f2B0aAbC6a92eF91C71b11bE55Cc82dA11', ERC20:'0xE2d413dC0b4B55f91fE8a1b2F3c44a11CceE2211'}, withdrawAddress:'' }};
+  const state = {user:{loggedIn:false, uid:'', invite:'', name:'', level:'TMI1', agent:0}, assets:{available:300, address:{TRC20:'TQ1vYnESLMbt967YY34FTqmvmE32kNbrN', BEP20:'0xB8F8b4f2B0aAbC6a92eF91C71b11bE55Cc82dA11', ERC20:'0xE2d413dC0b4B55f91fE8a1b2F3c44a11CceE2211'}, withdrawAddress:'' }, strategy:{tab:'st', plan:'TMI1', min:50, max:500000, rate:'1.5% – 3%'}};
   try{ const saved = JSON.parse(localStorage.getItem('tm_user')||'null'); if(saved && saved.loggedIn) Object.assign(state.user, saved); }catch{}
-
   function persist(){ localStorage.setItem('tm_user', JSON.stringify(state.user)); }
 
   // ----- NAVIGATION + GATING -----
@@ -507,6 +531,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if(key==='mine') renderMine();
     if(key==='assets') showAssets('overview');
     if(key==='team') $('#teamInvite').textContent = state.user.invite || '—';
+    if(key==='strategy') renderStrategyTabs();
   }
   function requireLogin(target){
     if(!state.user.loggedIn){ openLogin(target); return false; }
@@ -533,7 +558,7 @@ document.addEventListener('DOMContentLoaded', function(){
   $('#modalClose').addEventListener('click', closeModal);
   $('#modal').addEventListener('click', (e)=>{ if(e.target.id==='modal') closeModal(); });
 
-  // ----- SHEET (for network selection) -----
+  // ----- SHEET (for network/plan selection) -----
   let _sheetConfirm = null;
   function openSheet(title, options, selected, onConfirm){
     $('#sheetTitle').textContent = title;
@@ -726,6 +751,24 @@ document.addEventListener('DOMContentLoaded', function(){
     amtInput.value=''; recalc();
   });
 
+  // ----- Strategy tabs and plan picker -----
+  function setStrategyTab(t){
+    state.strategy.tab = t;
+    renderStrategyTabs();
+  }
+  function renderStrategyTabs(){
+    $$('.st-tab').forEach(el=> el.classList.toggle('active', el.dataset.tab===state.strategy.tab));
+    $('#st-panel').style.display = state.strategy.tab==='st' ? 'block' : 'none';
+    $('#today-panel').style.display = state.strategy.tab==='today' ? 'block' : 'none';
+    $('#bill-panel').style.display = state.strategy.tab==='bill' ? 'block' : 'none';
+  }
+  $$('.st-tab').forEach(el=> el.addEventListener('click', ()=> setStrategyTab(el.dataset.tab)));
+
+  $('#openPlan').addEventListener('click', ()=>{
+    const opts=[{value:'TMI1',label:'TMI1 — 1.5% – 3%  ·  50~500000 USDT',icon:'💠'}];
+    openSheet('Select Strategy', opts, state.strategy.plan, (opt)=>{ state.strategy.plan=opt.value; alert('TMI1 selected'); });
+  });
+
   // Team copy invite
   $('#copyTeamInvite').addEventListener('click', ()=> copyText(state.user.invite || '—'));
 
@@ -755,7 +798,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if(id==='btnFeedback'){ const body=document.createElement('div'); body.innerHTML='<label>Feedback</label><textarea style="width:100%;min-height:120px;border:1px solid #e2e7eb;border-radius:12px;padding:10px" placeholder="Tell us what to improve…"></textarea>'; const send=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Send'}); send.onclick=()=>{ alert('Thanks!'); closeModal(); }; openModal('Feedback', body, [send]); }
     if(id==='btnHelp'){ const body=document.createElement('div'); body.innerHTML='<div style="font-weight:800">Help Center</div><p class="muted">FAQs, guides, and support contacts.</p>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('Help Center', body, [close]); }
     if(id==='btnProfile'){ const body=document.createElement('div'); body.innerHTML='<label>Display Name</label><input id="nm" type="text" value="'+(state.user.name||'')+'" style="margin-top:6px"><div style="height:8px"></div><label>Agent Level</label><input id="ag" type="number" value="'+(state.user.agent||0)+'">'; const save=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Save'}); save.onclick=()=>{ state.user.name=$('#nm').value||state.user.name; state.user.agent=Number($('#ag').value||0); persist(); renderMine(); closeModal(); }; openModal('Personal Info', body, [save]); }
-    if(id==='btnAbout'){ const body=document.createElement('div'); body.innerHTML='<b>TrustMe AI</b><p class="muted">Version 0.7 — Login‑gated tabs + Home calculator/roadmap + QR for Top‑Up & Withdraw.</p>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('About', body, [close]); }
+    if(id==='btnAbout'){ const body=document.createElement('div'); body.innerHTML='<b>About TrustMe AI Platform</b><p class="muted">Strategy: TMI1 (1.5%–3%). This app is a front‑end demo — APIs will connect deposits, withdrawals and live yields.</p>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('About', body, [close]); }
     if(id==='btnLang'){ const body=document.createElement('div'); body.innerHTML='<label>Language</label><select><option>English</option><option>Dansk</option><option>తెలుగు</option></select>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('Language', body, [close]); }
     if(id==='btnSupport'){ const body=document.createElement('div'); body.innerHTML='<p>Telegram: @trustme_support</p><p>Email: support@trustmeai.online</p>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('Customer Service', body, [close]); }
     if(id==='btnSocial'){ const body=document.createElement('div'); body.innerHTML='<ul><li>Twitter: @trustme_ai</li><li>Telegram: @trustmeai_news</li></ul>'; const close=Object.assign(document.createElement('button'),{className:'btn primary',textContent:'Close'}); openModal('Social Media', body, [close]); }
@@ -771,6 +814,7 @@ document.addEventListener('DOMContentLoaded', function(){
   renderMine();
   // Prepare initial topup QR
   buildQR($('#rechargeAddress').textContent, '#qrBox');
+  renderStrategyTabs();
 });
 </script>
 </body>
