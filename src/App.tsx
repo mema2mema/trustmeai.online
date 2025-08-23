@@ -1,11 +1,8 @@
 import React, {useMemo, useState, useEffect} from 'react'
-import { motion } from 'framer-motion'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
-import { Calculator as CalcIcon, ShieldCheck, TrendingUp, Rocket, Languages, Mail, Phone } from 'lucide-react'
 import { Button } from './components/ui/Button'
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/Card'
 import { Input } from './components/ui/Input'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from './components/ui/Tabs'
 import { Switch } from './components/ui/Switch'
 import { Label } from './components/ui/Label'
 
@@ -46,7 +43,7 @@ function ProfitCalculator(){
   return (
     <Card className="w-full border border-gray-200 shadow-soft">
       <CardHeader className="pb-2">
-        <CardTitle className="flex items-center gap-2 text-xl"><CalcIcon className="w-5 h-5"/> Live Profit & Withdrawal Calculator</CardTitle>
+        <CardTitle className="flex items-center gap-2 text-xl">📟 Live Profit & Withdrawal Calculator</CardTitle>
       </CardHeader>
       <CardContent className="grid md:grid-cols-2 gap-6">
         <div className="space-y-3">
@@ -98,7 +95,7 @@ function ProfitCalculator(){
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="day" tickLine={false} axisLine={false} tickFormatter={(v)=>`D${v}`}/>
                 <YAxis tickLine={false} axisLine={false} tickFormatter={(v)=>`$${fmt(Number(v))}`}/>
-                <Tooltip formatter={(v:any, n:any)=> n==='balance' ? `$${fmt(Number(v))}` : `$${fmt(Number(v))}`} labelFormatter={(l:any)=>`Day ${l}`}/>
+                <Tooltip formatter={(v:any)=> `$${fmt(Number(v))}`} labelFormatter={(l:any)=>`Day ${l}`}/>
                 <Area type="monotone" dataKey="balance" fillOpacity={0.2} strokeWidth={2} />
                 <Area type="monotone" dataKey="withdrawn" fillOpacity={0.1} strokeWidth={2} />
               </AreaChart>
@@ -124,13 +121,9 @@ function useAutoLang(){
 export default function App(){
   const t = useAutoLang()
   const features = [
-    { icon: <ShieldCheck className="w-5 h-5"/>, title: "Transparency First", text: "Live logs, profit history, and optional TXIDs for auditability." },
-    { icon: <TrendingUp className="w-5 h-5"/>, title: "Smart Adjustments", text: "AI realism & risk controls that adapt to market conditions." },
-    { icon: <Rocket className="w-5 h-5"/>, title: "Auto‑Reinvest", text: "Let compound growth work with caps and toggles you control." },
-  ]
-  const plans = [
-    { d: 1, label: "1 Day" }, { d: 7, label: "7 Days" }, { d: 30, label: "30 Days" },
-    { d: 60, label: "60 Days" }, { d: 90, label: "90 Days" }, { d: 120, label: "120 Days" },
+    { icon: '🛡️', title: "Transparency First", text: "Live logs, profit history, and optional TXIDs for auditability." },
+    { icon: '📈', title: "Smart Adjustments", text: "AI realism & risk controls that adapt to market conditions." },
+    { icon: '🚀', title: "Auto‑Reinvest", text: "Let compound growth work with caps and toggles you control." },
   ]
   const hotCoins = [
     {s:'ETH', p:4744.4, ch:-1.81433}, {s:'BTC', p:115963.63, ch:-0.83154}, {s:'SOL', p:204.86, ch: 2.07783},
@@ -150,39 +143,28 @@ export default function App(){
           <div className="hidden md:flex items-center gap-6 text-sm">
             <a href="#calculator" className="hover:underline">Calculator</a>
             <a href="#plans" className="hover:underline">Plans</a>
-            <a href="#referrals" className="hover:underline">Referrals</a>
-            <a href="#faq" className="hover:underline">FAQ</a>
+            <a href="#partners" className="hover:underline">Partners</a>
+            <a href="#advantages" className="hover:underline">Advantages</a>
+            <a href="#hot" className="hover:underline">Hot List</a>
             <a href="#contact" className="hover:underline">Contact</a>
           </div>
           <button className="btn btn-default rounded-2xl">Get Started</button>
         </div>
       </header>
 
-      <section className="max-w-6xl mx-auto px-4 py-4 grid grid-cols-4 gap-3 text-sm">
-        {['Top‑Up','Withdraw','Help Center','Platform Intro'].map((x,i)=>(
-          <a key={i} className="rounded-2xl border border-slate-200 p-3 flex flex-col items-center hover:bg-slate-50" href="#">
-            <span className="text-emerald-600">{['💳','💸','❓','📚'][i]}</span><span className="mt-1 font-medium">{x}</span>
-          </a>
-        ))}
-      </section>
-
       <section className="max-w-6xl mx-auto px-4 py-10 md:py-14">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div>
-            <motion.h1 initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{duration:.5}} className="text-4xl md:text-5xl font-extrabold tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
               {t.heroTitle}: <span className="text-slate-500">{t.heroSubtitle}</span>
-            </motion.h1>
+            </h1>
             <p className="mt-4 text-slate-600 max-w-prose">Real-time performance dashboards, telegram alerts, and a clean admin panel. See profits, withdrawals, and compounding with our live calculator.</p>
             <div className="mt-6 flex flex-wrap gap-3">
               <button className="btn btn-default rounded-2xl">Launch App</button>
               <button className="btn btn-outline rounded-2xl"><span className="mr-2">🌐</span> Auto Language</button>
             </div>
             <div className="mt-8 grid sm:grid-cols-3 gap-3">
-              {[
-                {icon:'🛡️', title:'Transparency First', text:'Live logs, profit history, and optional TXIDs for auditability.'},
-                {icon:'📈', title:'Smart Adjustments', text:'AI realism & risk controls that adapt to market conditions.'},
-                {icon:'🚀', title:'Auto‑Reinvest', text:'Let compound growth work with caps and toggles you control.'},
-              ].map((f,i)=>(
+              {features.map((f,i)=>(
                 <div key={i} className="card p-4">
                   <div className="flex items-center gap-2 text-slate-700"><span>{f.icon}</span><span className="font-medium">{f.title}</span></div>
                   <p className="text-sm text-slate-600 mt-2">{f.text}</p>
@@ -190,7 +172,7 @@ export default function App(){
               ))}
             </div>
           </div>
-          <div>{React.createElement(ProfitCalculator)}</div>
+          <div><ProfitCalculator/></div>
         </div>
       </section>
 
@@ -215,21 +197,7 @@ export default function App(){
         </div>
       </section>
 
-      <section id="plans" className="bg-white border-y border-gray-100 mt-8">
-        <div className="max-w-6xl mx-auto px-4 py-10">
-          <h2 className="text-2xl font-bold mb-6">Investment Plans</h2>
-          <div className="grid md:grid-cols-3 gap-4">
-            {['1 Day','7 Days','30 Days','60 Days','90 Days','120 Days'].map((label,i)=>(
-              <div key={i} className="card">
-                <div className="border-b border-slate-100 p-4 font-semibold">{label}</div>
-                <div className="p-4 text-sm text-slate-600">Simulate with the calculator and choose the plan that fits your goals (1 to 120 days supported, up to 365 in simulator).</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-4 mt-10">
+      <section id="partners" className="max-w-6xl mx-auto px-4 mt-10">
         <h3 className="text-center text-sm text-emerald-700">Partners</h3>
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-6 mt-4 text-slate-400 place-items-center">
           <div>Bitget</div><div>eToro</div><div>Gate</div><div>BINANCE</div><div>OKX</div><div>KUCOIN</div>
@@ -237,7 +205,7 @@ export default function App(){
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 mt-10">
+      <section id="advantages" className="max-w-6xl mx-auto px-4 mt-10">
         <h3 className="text-center text-lg font-semibold">Our Advantages</h3>
         <div className="grid sm:grid-cols-3 gap-6 mt-6 text-center">
           <div className="p-4"><div className="text-3xl">🛡️</div><div className="font-semibold mt-2">Transparent Security</div><p className="text-sm text-slate-600 mt-1">Every transaction is traceable. Funds are secure.</p></div>
@@ -246,7 +214,7 @@ export default function App(){
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 mt-10 pb-24">
+      <section id="hot" className="max-w-6xl mx-auto px-4 mt-10 pb-24">
         <div className="card mb-3">
           <div className="border-b border-slate-100 p-4 font-semibold">🔥 Hot List</div>
           <div className="p-4 divide-y">
@@ -279,38 +247,6 @@ export default function App(){
         </div>
       </section>
 
-      <section id="contact" className="max-w-6xl mx-auto px-4 py-10">
-        <h2 className="text-2xl font-bold mb-6">Contact</h2>
-        <div className="grid md:grid-cols-2 gap-6 items-start">
-          <div className="space-y-3 text-slate-700">
-            <p className="flex items-center gap-2">✉️ support@trustmeai.online</p>
-            <p className="flex items-center gap-2">📞 +45 00 00 00 00</p>
-            <p className="text-sm text-slate-500">We usually respond within 24 hours.</p>
-          </div>
-          <div className="card">
-            <div className="border-b border-slate-100 p-4 font-semibold">Send us a message</div>
-            <div className="p-4">
-              <form onSubmit={(e)=>{e.preventDefault(); alert("Thanks! We'll get back to you at support@trustmeai.online")}} className="space-y-3">
-                <div className="grid grid-cols-3 gap-2 items-center">
-                  <label className="label">Name</label>
-                  <div className="col-span-2"><input required placeholder="Your name" className="input"/></div>
-                </div>
-                <div className="grid grid-cols-3 gap-2 items-center">
-                  <label className="label">Email</label>
-                  <div className="col-span-2"><input required type="email" placeholder="you@example.com" className="input"/></div>
-                </div>
-                <div className="grid grid-cols-3 gap-2 items-start">
-                  <label className="label">Message</label>
-                  <div className="col-span-2"><textarea required className="w-full border rounded-2xl p-2 h-28 outline-none focus:ring" placeholder="How can we help?"></textarea></div>
-                </div>
-                <button type="submit" className="btn btn-default rounded-2xl">Send</button>
-                <p className="text-xs text-slate-500">This demo form triggers an alert. Wire it to support@trustmeai.online on production.</p>
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <footer className="bg-slate-900 text-slate-100">
         <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-6">
           <div>
@@ -328,12 +264,12 @@ export default function App(){
             <ul className="space-y-1 text-sm text-slate-300">
               <li><a href="#calculator" className="hover:underline">Calculator</a></li>
               <li><a href="#plans" className="hover:underline">Plans</a></li>
-              <li><a href="#referrals" className="hover:underline">Referrals</a></li>
+              <li><a href="#partners" className="hover:underline">Partners</a></li>
             </ul>
           </div>
           <div><div className="font-semibold mb-2">Help</div>
             <ul className="space-y-1 text-sm text-slate-300">
-              <li><a href="#faq" className="hover:underline">FAQ</a></li>
+              <li><a href="#advantages" className="hover:underline">Advantages</a></li>
               <li><a href="#contact" className="hover:underline">Contact</a></li>
             </ul>
           </div>
