@@ -1,395 +1,288 @@
+
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>TrustMe AI</title>
-  <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' ry='16' fill='%2308142B'/><text x='50' y='62' font-size='56' text-anchor='middle' fill='%23B3E5FC' font-family='Arial, Helvetica, sans-serif'>T</text></svg>">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <div class="avatar">T</div>
-      <div class="brand-text">
-        <div class="brand-title">TrustMe AI</div>
-        <div class="brand-sub" id="brandSub">Secure • Automated • Real-Time</div>
+      <div class="logo">T</div>
+      <div>
+        <div class="title">TrustMe AI</div>
+        <div class="subtitle">Secure · Automated · Real‑Time</div>
       </div>
     </div>
-    <button id="getStartedBtn" class="btn btn-primary-outline">Get Started</button>
+    <button id="getStartedBtn" class="btn primary">Get Started</button>
   </header>
 
-  <main id="viewContainer">
+  <main id="main">
     <!-- FRONT PAGE -->
-    <section id="view-home" class="view active">
+    <section id="page-front" class="page active">
       <div class="card">
-        <div class="card-title">Welcome</div>
-        <p>Use the tabs below to manage your <b>Assets</b>, define your <b>Strategy</b>, organize your <b>Team</b>, and view your profile in <b>Mine</b>.</p>
+        <h2>Welcome</h2>
+        <p>Use the tabs below to manage Assets, Trading Strategy (TMI1), Team, and your Profile.</p>
       </div>
 
-      <!-- Quick actions -->
-      <div class="grid-2">
-        <div class="big-tile" id="tileTopUp">
-          <div class="tile-icon">💳</div>
-          <div class="tile-title">Top-Up</div>
-        </div>
-        <div class="big-tile" id="tileWithdraw">
-          <div class="tile-icon">💸</div>
-          <div class="tile-title">Withdraw</div>
-        </div>
-      </div>
-
-      <!-- Calculator -->
       <div class="card">
-        <div class="card-title">Earnings Calculator</div>
-        <div class="calc-grid">
-          <label class="field">
-            <span>Amount (USDT)</span>
-            <input id="calcAmount" type="number" min="0" value="1000" />
+        <h3>Earnings Calculator</h3>
+        <div class="grid2">
+          <label>Amount (USDT)
+            <input id="calcAmount" type="number" min="50" value="1000"/>
           </label>
-          <label class="field">
-            <span>Daily Yield % (TMI1: 1.5–3%)</span>
-            <input id="calcRate" type="range" min="1.5" max="3" step="0.1" value="2.0" />
-            <div class="muted" id="calcRateLabel">2.0%</div>
-          </label>
-          <label class="field">
-            <span>Days</span>
-            <input id="calcDays" type="number" min="1" max="365" value="30" />
-          </label>
-          <label class="switcher">
-            <input id="calcCompound" type="checkbox" checked />
-            <span>Compound daily</span>
+          <label>Daily % (1.5–3)
+            <input id="calcRate" type="number" min="1.5" max="3" step="0.1" value="2.0"/>
           </label>
         </div>
-
-        <div class="result-grid">
-          <div class="result">
-            <div class="result-title">Est. Daily Earnings</div>
-            <div class="result-value" id="calcDaily">$0.00</div>
-          </div>
-          <div class="result">
-            <div class="result-title">Est. Earnings in Period</div>
-            <div class="result-value" id="calcPeriod">$0.00</div>
-          </div>
-          <div class="result">
-            <div class="result-title">Projected Balance</div>
-            <div class="result-value" id="calcBalance">$0.00</div>
-          </div>
+        <div class="grid2">
+          <label>Days
+            <input id="calcDays" type="number" min="1" value="30"/>
+          </label>
+          <label style="display:flex;align-items:center;gap:.5rem;">
+            <input id="calcCompound" type="checkbox"/> Compound daily
+          </label>
         </div>
-        <p class="muted">This tool is for illustration only. Actual results may vary.</p>
-      </div>
-
-      <!-- Partners -->
-      <div class="card">
-        <div class="partners-heading">
-          <div class="spark">✦</div>
-          <div>
-            <div class="partners-title">Partners</div>
-            <div class="muted">Official Partner</div>
-          </div>
-        </div>
-        <div class="partners-grid">
-          <div class="partner">Bitget</div>
-          <div class="partner">eToro</div>
-          <div class="partner">Gate</div>
-          <div class="partner">Binance</div>
-          <div class="partner">OKX</div>
-          <div class="partner">KuCoin</div>
-          <div class="partner">Kraken</div>
-          <div class="partner">Bybit</div>
-          <div class="partner">Gemini</div>
-          <div class="partner">crypto.com</div>
-        </div>
-      </div>
-
-      <!-- Our Advantages -->
-      <div class="card">
-        <div class="advantages-heading">
-          <div class="spark">✦</div>
-          <div>
-            <div class="partners-title">Our Advantages</div>
-            <div class="muted">Built for transparency and speed</div>
-          </div>
-        </div>
-
-        <div class="advantage">
-          <div class="adv-icon">🛡️</div>
-          <div>
-            <div class="adv-title">Transparent Security</div>
-            <div class="muted">Every transaction is traceable. Operations are transparent and public. Funds are secure.</div>
-          </div>
-        </div>
-
-        <div class="advantage">
-          <div class="adv-icon">🤖</div>
-          <div>
-            <div class="adv-title">Automated Trading</div>
-            <div class="muted">24/7 automatic trading execution, no manual intervention required.</div>
-          </div>
-        </div>
-
-        <div class="advantage">
-          <div class="adv-icon">📊</div>
-          <div>
-            <div class="adv-title">Real-Time Data</div>
-            <div class="muted">Access to major global markets with second-level updates.</div>
-          </div>
+        <div class="calc-output">
+          <button id="calcBtn" class="btn">Calculate</button>
+          <div id="calcResult" class="muted"></div>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-title">Roadmap</div>
-        <ol class="bullets">
-          <li>Phase 1 — UX & onboarding</li>
-          <li>Phase 2 — Exchange API integration</li>
-          <li>Phase 3 — Live strategies and settlements</li>
-        </ol>
+        <h3>Partners</h3>
+        <div class="partners">
+          <span>Binance</span><span>OKX</span><span>Kraken</span><span>Bybit</span><span>Gate</span><span>KuCoin</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Our Advantages</h3>
+        <ul class="advantages">
+          <li><b>Transparent Security</b> — Every transaction is traceable; operations are transparent and public.</li>
+          <li><b>Automated Trading</b> — 24/7 execution, no manual intervention required.</li>
+          <li><b>Real‑Time Data</b> — Access to major global markets with second‑level updates.</li>
+        </ul>
       </div>
     </section>
 
-    <!-- ASSETS (gated) -->
-    <section id="view-assets" class="view">
+    <!-- ASSETS -->
+    <section id="page-assets" class="page">
       <div class="card">
-        <div class="card-title">Assets</div>
-        <p class="muted">Available USDT: <b id="balAvail">0</b> • Locked: <b id="balLocked">0</b> • Cumulative Income: <b id="balIncome">0</b></p>
-        <div class="row gap">
-          <button class="btn" id="openTopUp">Top-Up</button>
-          <button class="btn" id="openWithdraw">Withdraw</button>
-          <button class="btn" id="demoAdd100">+100 (demo)</button>
+        <h2>Assets</h2>
+        <div class="balances">
+          <div><div class="label">Available</div><div id="balAvailable" class="value">0</div></div>
+          <div><div class="label">Locked</div><div id="balLocked" class="value">0</div></div>
+          <div><div class="label">Total</div><div id="balTotal" class="value">0</div></div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <!-- Top Up -->
+        <div class="card">
+          <h3>Top‑Up</h3>
+          <div class="grid2">
+            <label>Currency
+              <select id="topCur"><option>USDT</option></select>
+            </label>
+            <label>Network
+              <select id="topNet">
+                <option value="TRC20">TRON (TRC20)</option>
+                <option value="BEP20">BNB Smart Chain (BEP20)</option>
+                <option value="ERC20">Ethereum (ERC20)</option>
+              </select>
+            </label>
+          </div>
+          <div class="qrwrap">
+            <img id="topQr" alt="Deposit QR"/>
+          </div>
+          <label>Deposit Address
+            <div class="copyline">
+              <input id="topAddr" readonly/>
+              <button class="btn sm" id="copyTop">Copy</button>
+            </div>
+          </label>
+
+          <div class="add-fake">
+            <label>Add to balance (demo)
+              <div class="copyline">
+                <input id="topAmount" type="number" min="1" value="50"/>
+                <button id="topAddBtn" class="btn">Add</button>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Withdraw -->
+        <div class="card">
+          <h3>Withdraw</h3>
+          <div class="grid2">
+            <label>Currency
+              <select id="wdCur"><option>USDT</option></select>
+            </label>
+            <label>Network
+              <select id="wdNet">
+                <option value="TRC20">TRON (TRC20)</option>
+                <option value="BEP20">BNB Smart Chain (BEP20)</option>
+                <option value="ERC20">Ethereum (ERC20)</option>
+              </select>
+            </label>
+          </div>
+          <div class="qrwrap">
+            <img id="wdQr" alt="Withdraw QR"/>
+          </div>
+          <label>Withdrawal Address
+            <div class="copyline">
+              <input id="wdAddr" placeholder="Enter your wallet address"/>
+              <button class="btn sm" id="copyWd">Copy</button>
+            </div>
+          </label>
+          <label>Amount (USDT)
+            <input id="wdAmount" type="number" min="10" value="10"/>
+          </label>
+          <button id="wdBtn" class="btn danger">Withdraw</button>
+          <div id="wdNote" class="muted"></div>
         </div>
       </div>
     </section>
 
-    <!-- STRATEGY (gated) -->
-    <section id="view-strategy" class="view">
+    <!-- STRATEGY -->
+    <section id="page-strategy" class="page">
       <div class="card">
-        <div class="card-title">Strategy</div>
-        <p id="stratStatus">Current plan: <b>TMI1</b> — 50 to 500,000 USDT, target yield <b>1.5% – 3%</b>.</p>
-        <div id="stratActions" class="row gap">
-          <button class="btn btn-primary" id="activateBtn">Activate TMI1</button>
+        <h2>Strategy</h2>
+        <p>Current plan: <b>TMI1</b> — 50 to 500,000 USDT, target yield <b>1.5% – 3%</b>.</p>
+      </div>
+
+      <div id="planInactive" class="card">
+        <h3>Activate TMI1</h3>
+        <div class="grid3">
+          <label>Amount (50–500000)
+            <input id="tmiAmount" type="number" min="50" max="500000" value="50"/>
+          </label>
+          <label>Daily % (1.5–3)
+            <input id="tmiRate" type="number" min="1.5" max="3" step="0.1" value="2.0"/>
+          </label>
+          <label class="switchlbl">
+            <input id="tmiCompound" type="checkbox"/> Compound daily
+          </label>
+        </div>
+        <button id="tmiActivate" class="btn primary">Activate TMI1</button>
+        <div id="tmiMsg" class="muted"></div>
+      </div>
+
+      <div id="planActive" class="card" style="display:none;">
+        <div class="split">
+          <h3>TMI1 — Active</h3>
+          <span id="tmiSince" class="muted"></span>
+        </div>
+        <div class="balances">
+          <div><div class="label">Active Amount</div><div id="tmiAmt" class="value">0</div></div>
+          <div><div class="label">Daily %</div><div id="tmiPct" class="value">0</div></div>
+          <div><div class="label">Accrued</div><div id="tmiAccrued" class="value">0</div></div>
+        </div>
+        <div class="btnrow">
+          <button id="tmiSettle" class="btn">Settle</button>
+          <button id="tmiStop" class="btn danger">Stop</button>
         </div>
       </div>
     </section>
 
-    <!-- TEAM (gated) -->
-    <section id="view-team" class="view">
+    <!-- TEAM -->
+    <section id="page-team" class="page">
       <div class="card">
-        <div class="card-title">Team</div>
+        <h2>Team</h2>
         <p>Invite friends and grow your rewards.</p>
       </div>
     </section>
 
     <!-- MINE -->
-    <section id="view-mine" class="view">
-      <div class="profile-banner">
-        <div class="pfp">S</div>
-        <div class="profile-info">
-          <div class="profile-name" id="profileName">TrustMeAI-100222</div>
-          <div class="profile-meta">UID: <span id="profileUid">100222</span> • Invite Code: <span id="inviteCode">MPQQ8K</span></div>
-          <div class="chips">
-            <span class="chip" id="levelChip">Level TMI1</span>
-            <span class="chip chip-muted">Agent 0</span>
+    <section id="page-mine" class="page">
+      <div class="profile card">
+        <div class="row">
+          <div class="avatar">S</div>
+          <div>
+            <div class="uid" id="mineUid">TrustMe‑00001</div>
+            <div class="muted small">UID • <span id="mineUidNum"></span> · Invite Code: <span id="mineInvite"></span></div>
           </div>
+          <div class="spacer"></div>
+          <button id="upgradeBtn" class="btn">Upgrade level</button>
         </div>
-        <button class="btn btn-primary" id="upgradeBtn">Upgrade level</button>
-      </div>
-
-      <div class="quick-grid">
-        <a class="quick" href="#" data-action="invite"><span>🎁</span> Invite Friends</a>
-        <a class="quick" href="#" data-action="agent"><span>⭐</span> Agent Level</a>
-        <a class="quick" href="#" data-action="profits"><span>💵</span> My Profits</a>
-        <a class="quick" href="#" data-action="orders"><span>🧾</span> Order Record</a>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Common Functions</div>
-        <div class="quick-grid">
-          <a class="quick" href="#" data-action="rules"><span>📘</span> Operational Rules</a>
-          <a class="quick" href="#" data-action="safety"><span>🛡️</span> Safety Center</a>
-          <a class="quick" href="#" data-action="feedback"><span>✉️</span> Feedback</a>
-          <a class="quick" href="#" data-action="help"><span>❓</span> Help Center</a>
+        <div class="tagrow">
+          <span class="tag">Level TMI1</span>
+          <span class="tag">Agent 0</span>
         </div>
       </div>
 
+      <div class="grid4">
+        <a class="iconbtn card" href="#" data-link="invite">🎁<span>Invite Friends</span></a>
+        <a class="iconbtn card" href="#" data-link="agent">⭐<span>Agent Level</span></a>
+        <a class="iconbtn card" href="#" data-link="profits">💵<span>My Profits</span></a>
+        <a class="iconbtn card" href="#" data-link="orders">🧾<span>Order Record</span></a>
+      </div>
+
       <div class="card">
-        <div class="card-title">Other Features</div>
-        <div class="quick-grid">
-          <a class="quick" href="#" data-action="personal"><span>👤</span> Personal Info</a>
-          <a class="quick" href="#" data-action="about"><span>ℹ️</span> About</a>
-          <a class="quick" href="#" data-action="lang"><span>🌐</span> Language</a>
-          <a class="quick" href="#" data-action="support"><span>💬</span> Customer Service</a>
+        <h3>Common Functions</h3>
+        <div class="grid4">
+          <a class="iconbtn" href="#" data-link="rules">📘<span>Operational Rules</span></a>
+          <a class="iconbtn" href="#" data-link="safety">🛡️<span>Safety Center</span></a>
+          <a class="iconbtn" href="#" data-link="feedback">✉️<span>Feedback</span></a>
+          <a class="iconbtn" href="#" data-link="help">❓<span>Help Center</span></a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Other Features</h3>
+        <div class="grid4">
+          <a class="iconbtn" href="#" data-link="info">👤<span>Personal Info</span></a>
+          <a class="iconbtn" href="#" data-link="about">ℹ️<span>About</span></a>
+          <a class="iconbtn" href="#" data-link="lang">🌐<span>Language</span></a>
+          <a class="iconbtn" href="#" data-link="cs">💬<span>Customer Service</span></a>
         </div>
       </div>
     </section>
   </main>
 
+  <!-- bottom nav -->
   <nav class="tabbar">
-    <button class="tab active" data-view="home">🏠<span>Front Page</span></button>
-    <button class="tab" data-view="assets">🧳<span>Assets</span></button>
-    <button class="tab" data-view="strategy">📈<span>Strategy</span></button>
-    <button class="tab" data-view="team">👥<span>Team</span></button>
-    <button class="tab" data-view="mine">🧑‍💼<span>Mine</span></button>
+    <button data-tab="front" class="active">🏠<span>Front Page</span></button>
+    <button data-tab="assets">💼<span>Assets</span></button>
+    <button data-tab="strategy">📈<span>Strategy</span></button>
+    <button data-tab="team">👥<span>Team</span></button>
+    <button data-tab="mine">👤<span>Mine</span></button>
   </nav>
 
-  <!-- LOGIN MODAL -->
-  <dialog id="authDialog" class="modal">
-    <form method="dialog" class="modal-card" id="authForm" onsubmit="return false;">
-      <div class="modal-title">Log In</div>
-      <div class="tabs-line">
-        <button type="button" class="pill active" data-auth-tab="phone">Phone Number</button>
-        <button type="button" class="pill" data-auth-tab="mail">Mail</button>
+  <!-- Login modal -->
+  <div id="loginModal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <div class="split">
+        <h3>Log In</h3>
+        <button id="loginClose" class="btn sm plain">✕</button>
       </div>
-
-      <div id="formPhone">
-        <label class="field">
-          <span>Phone number</span>
-          <div class="input-row">
-            <select class="code"><option selected>+45</option><option>+1</option><option>+44</option></select>
-            <input placeholder="Enter your mobile phone number" />
-          </div>
+      <div class="tabs small">
+        <button data-login-tab="phone" class="active">Phone Number</button>
+        <button data-login-tab="mail">Mail</button>
+      </div>
+      <div id="loginPhonePane">
+        <label>Phone
+          <input id="loginPhone" placeholder="+45 5555 5555"/>
         </label>
       </div>
-      <div id="formMail" style="display:none">
-        <label class="field">
-          <span>Email</span>
-          <input placeholder="Enter your email address" type="email" />
+      <div id="loginMailPane" style="display:none;">
+        <label>Email
+          <input id="loginMail" placeholder="you@example.com"/>
         </label>
       </div>
-
-      <label class="field"><span>Password</span><input placeholder="Enter your password" type="password" /></label>
-
-      <div class="row between">
-        <label class="checkbox"><input type="checkbox" /> Remember me</label>
-        <a href="#" class="link">Forget the password</a>
-      </div>
-
-      <div class="row gap">
-        <button class="btn btn-primary" id="loginBtn" type="button">Log In</button>
-        <button class="btn" id="registerBtn" type="button">Register</button>
-      </div>
-    </form>
-  </dialog>
-
-  <!-- TOP-UP MODAL -->
-  <dialog id="topupDialog" class="modal">
-    <form method="dialog" class="modal-card">
-      <div class="modal-title">Top Up</div>
-      <label class="field">
-        <span>Choose a Currency</span>
-        <div class="select-like"><span class="token usdt">●</span> USDT</div>
+      <label>Password
+        <input id="loginPass" type="password" placeholder="Enter your password"/>
       </label>
-
-      <label class="field">
-        <span>Select the Network</span>
-        <select id="topupNetwork">
-          <option value="TRC20" selected>TRON (TRC20)</option>
-          <option value="BEP20">BNB Smart Chain (BEP20)</option>
-          <option value="ERC20">Ethereum (ERC20)</option>
-        </select>
-      </label>
-
-      <div class="qr-wrap">
-        <canvas id="topupQr" width="256" height="256"></canvas>
-        <div class="addr-row">
-          <input id="topupAddress" readonly value="TQ1-PLACEHOLDER-TRC20-ADDRESS" />
-          <button type="button" class="btn" id="copyTopup">Copy</button>
-        </div>
-        <p class="muted">This address only supports USDT deposits on the selected network.</p>
-      </div>
-
-      <label class="field">
-        <span>Mark received (demo)</span>
-        <input id="topupAmountDemo" type="number" min="0" placeholder="Enter amount to credit (demo)" />
-      </label>
-
-      <div class="row gap">
-        <button class="btn btn-primary" id="creditDemo" type="button">Credit</button>
-        <button class="btn" value="cancel">Close</button>
-      </div>
-    </form>
-  </dialog>
-
-  <!-- WITHDRAW MODAL -->
-  <dialog id="withdrawDialog" class="modal">
-    <form method="dialog" class="modal-card">
-      <div class="modal-title">Withdraw</div>
-      <label class="field">
-        <span>Withdrawal Currency</span>
-        <div class="select-like"><span class="token usdt">●</span> USDT</div>
-      </label>
-
-      <label class="field">
-        <span>Select the Network</span>
-        <select id="withdrawNetwork">
-          <option value="TRC20" selected>TRON (TRC20)</option>
-          <option value="BEP20">BNB Smart Chain (BEP20)</option>
-          <option value="ERC20">Ethereum (ERC20)</option>
-        </select>
-      </label>
-
-      <label class="field">
-        <span>Withdrawal Address</span>
-        <input id="withdrawAddress" placeholder="Enter the withdrawal address" />
-      </label>
-
-      <label class="field">
-        <span>Amount (USDT)</span>
-        <input id="withdrawAmount" placeholder="Enter the withdrawal amount" type="number" min="0" />
-      </label>
-
-      <div class="qr-wrap small">
-        <canvas id="withdrawQr" width="192" height="192"></canvas>
-        <p class="muted">QR above mirrors the address you typed (demo).</p>
-      </div>
-
-      <div class="row gap">
-        <button class="btn btn-primary" id="confirmWithdraw" type="button">Confirm</button>
-        <button class="btn" value="cancel">Close</button>
-      </div>
-    </form>
-  </dialog>
-
-  <!-- ACTIVATE TMI1 MODAL -->
-  <dialog id="activateDialog" class="modal">
-    <form method="dialog" class="modal-card">
-      <div class="modal-title">Activate TMI1</div>
-      <p class="muted">Plan range: <b>50 – 500,000 USDT</b>. Target daily yield <b>1.5% – 3%</b>.</p>
-
-      <label class="field">
-        <span>Amount to lock (USDT)</span>
-        <input id="actAmount" type="number" min="50" step="1" value="100" />
-      </label>
-
-      <label class="field">
-        <span>Daily yield %</span>
-        <input id="actRate" type="range" min="1.5" max="3" step="0.1" value="2.0" />
-        <div class="muted" id="actRateLabel">2.0%</div>
-      </label>
-
-      <label class="switcher">
-        <input id="actCompound" type="checkbox" checked />
-        <span>Compound daily</span>
-      </label>
-
-      <div class="result-grid">
-        <div class="result">
-          <div class="result-title">Est. Daily</div>
-          <div class="result-value" id="actDaily">$0.00</div>
-        </div>
-        <div class="result">
-          <div class="result-title">30d Earnings</div>
-          <div class="result-value" id="actMonth">$0.00</div>
-        </div>
-      </div>
-
-      <p class="muted" id="actWarning"></p>
-
-      <div class="row gap">
-        <button class="btn btn-primary" id="actConfirm" type="button">Confirm</button>
-        <button class="btn" value="cancel">Close</button>
-      </div>
-    </form>
-  </dialog>
+      <label class="cb"><input id="rememberMe" type="checkbox"/> Remember me</label>
+      <button id="doLogin" class="btn primary">Log In</button>
+      <div id="loginMsg" class="muted"></div>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>
