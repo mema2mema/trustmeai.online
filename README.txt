@@ -1,20 +1,17 @@
-TrustMe AI — Invite Feature (Team → Invite Friends)
+Drop the folders into your project and add these tags above </body>:
 
-Files:
-- invite.html                        (page)
-- addons/qrcode.min.js               (QR generator, offline)
-- addons/invite-page.js              (page logic)
-- addons/invite-hook.js              (site-wide hook; makes “Invite Friends” open invite.html)
+<script src="./vendor/qrcode.min.js"></script>
+<script>
+  if (!window.QRCode) {
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
+    document.head.appendChild(s);
+  }
+</script>
+<script src="./addons/nav-fixes.js" defer></script>
+<script src="./addons/click-cards.js" defer></script>
+<script src="./addons/canonicalize-ref.js" defer></script>
+<script src="./addons/referral-use.js" defer></script>
+<script src="./addons/deposit-withdraw-qr.js" defer></script>
 
-Install (1 minute):
-1) Upload **invite.html** to your site root (same folder as index.html).
-2) Upload the whole **addons/** folder to your site root.
-3) Open your main **index.html** and insert this SINGLE line just above </body>:
-   <script src="./addons/invite-hook.js" defer></script>
-
-Usage:
-- On your site, clicking any “Invite Friends” tile/button will open /invite.html.
-- The Invite page lets you edit your code, copy/share your link, and download the QR.
-- The code is saved in localStorage under key: tm_invite_code.
-
-If your Team screen still doesn’t respond, give me the exact HTML for that tile and I’ll add a precise selector to invite-hook.js.
+See README in zip for hook IDs/classes you need in your HTML.

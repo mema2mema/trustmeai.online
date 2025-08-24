@@ -1,40 +1,27 @@
-/**
- * addons/nav-fixes.js
- * Makes the bottom nav tabs fully clickable and routes to #home/#assets/#strategy/#team/#mine.
- * It toggles view panels with ids: view-home, view-assets, view-strategy, view-team, view-mine.
- */
 (function () {
   const routes = ['home', 'assets', 'strategy', 'team', 'mine'];
-
   function showRoute(route) {
     routes.forEach(r => {
       const panel = document.getElementById('view-' + r);
-      if (panel) {
-        panel.style.display = (r === route) ? '' : 'none';
-        panel.classList.toggle('active', r === route);
-      }
+      if (panel) panel.style.display = (r === route) ? '' : 'none';
     });
-    document.querySelectorAll('#bottomTabs .tab').forEach(btn => {
-      btn.classList.toggle('active', btn.getAttribute('data-route') === '#' + route);
+    document.querySelectorAll('[data-route]').forEach(el => {
+      el.classList.toggle('active', el.getAttribute('data-route') === '#' + route);
     });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
   function currentRoute() {
-    const h = (window.location.hash || '#home').replace('#', '');
+    const h = (window.location.hash || '#home').slice(1);
     return routes.includes(h) ? h : 'home';
   }
-
   document.addEventListener('click', (e) => {
-    const tab = e.target.closest('#bottomTabs .tab[data-route]');
+    const tab = e.target.closest('[data-route]');
     if (!tab) return;
     e.preventDefault();
     const to = tab.getAttribute('data-route');
-    if (!to) return;
-    if (window.location.hash !== to) window.location.hash = to;
-    else showRoute(to.replace('#',''));
+    if (to) window.location.hash = to;
   });
-
-  function sync() { showRoute(currentRoute()); }
+  const sync = () => showRoute(currentRoute());
   window.addEventListener('hashchange', sync);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync);
   else sync();
