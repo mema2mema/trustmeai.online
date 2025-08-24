@@ -1,24 +1,73 @@
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>TrustMe AI — Invite Friends</title>
-    <link rel="stylesheet" href="./addons/invite.css">
-  </head>
-  <body>
-    <div class="header">
-      <a class="back" href="./index.html" aria-label="Back">⟵</a>
-      <div>
-        <div style="font-weight:700">TrustMe AI</div>
-        <div style="font-size:12px;color:var(--tm-muted)">Invite Friends</div>
-      </div>
-      <div style="margin-left:auto"><a class="tm-btn" href="./index.html">Home</a></div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Invite Friends — TrustMe AI</title>
+  <link rel="stylesheet" href="./addons/invite.css">
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div class="back"><a class="link" href="./">← Back</a></div>
+      <div class="mini">UID: <span id="uidText">#—</span></div>
     </div>
-    <main id="invite-page-root" class="container"></main>
 
-    <script src="./addons/qrcode.min.js"></script>
-    <script src="./addons/invite.js" data-standalone="1"></script>
-  </body>
+    <div class="card">
+      <h1 class="h">Invite Friends</h1>
+      <p class="mini">Share your link or QR. New users who register with your code join your team.</p>
+
+      <div class="qr-wrap"><img id="qrImg" alt="QR"></div>
+
+      <div class="row" style="margin-top:16px">
+        <div>
+          <div class="label">Invitation Link</div>
+          <div class="input">
+            <input id="inviteLink" readonly>
+            <button class="btn" data-copy-for="inviteLink">Copy</button>
+          </div>
+        </div>
+        <div>
+          <div class="label">Invitation Code</div>
+          <div class="input">
+            <input id="inviteCode" readonly style="max-width:220px">
+            <button class="btn" data-copy-for="inviteCode">Copy</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:16px">
+        <div class="stat">
+          <div class="k">Team Number</div>
+          <div id="statTeamCount" class="v">—</div>
+        </div>
+        <div class="stat">
+          <div class="k">Total Reward</div>
+          <div id="statTotalReward" class="v">—</div>
+        </div>
+        <div class="stat">
+          <div class="k">Today's Earnings</div>
+          <div id="statToday" class="v">—</div>
+        </div>
+        <div class="stat">
+          <div class="k">The Monthly Income</div>
+          <div id="statMonthly" class="v">—</div>
+        </div>
+      </div>
+
+      <div class="table">
+        <table>
+          <thead><tr><th>Invite Friends</th><th>Invite Friends For Income</th></tr></thead>
+          <tbody id="inviteTable">
+            <tr><td>1</td><td>0 USDT</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footnote">This page is standalone and safe to link from your Mine or Team tabs. API wiring can replace the placeholders anytime.</div>
+    </div>
+  </div>
+
+  <script src="./addons/invite.js"></script>
+</body>
 </html>

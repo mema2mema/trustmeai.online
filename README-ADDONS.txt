@@ -1,38 +1,35 @@
+# TrustMe AI — Team + Invite (Drop-in v2)
 
-TrustMe AI — Invite Friends Addon
-=================================
+This package gives you a **standalone Invite page** and a **tiny hook script**
+that redirects your **Team** nav and **Invite Friends** button to that page,
+without changing your existing layout.
 
-This package adds an **Invite Friends** feature without touching your existing pages.
+## Files
+- `invite.html` – standalone page with QR, link, code, and placeholders.
+- `addons/invite.css` – isolated styles.
+- `addons/invite.js` – invite logic (UID/code in localStorage).
+- `addons/invite-hook.js` – auto-redirects Team + Invite buttons to `invite.html`.
 
-You get two options:
+> The QR image is generated via `api.qrserver.com` at runtime. If you prefer
+> a local generator later, you can swap that in `addons/invite.js`.
 
-A) Standalone page (quickest)
------------------------------
-1) Upload the whole folder to your site next to your current `index.html`.
-2) Link the "Invite Friends" tile to `invite.html` (e.g., <a href="./invite.html">Invite Friends</a>).
+## Install
+1. Upload everything in this folder to your site root (same level as `index.html`).
+2. Add ONE line to your existing HTML (near the end of `<body>` in your main page):
 
-B) SPA modal (embed into your existing index.html)
---------------------------------------------------
-1) Include the two scripts + styles at the bottom of your current `index.html` (before </body>):
+```html
+<script src="./addons/invite-hook.js" defer></script>
+```
 
-<link rel="stylesheet" href="./addons/invite.css">
-<script src="./addons/qrcode.min.js"></script>
-<script src="./addons/invite.js"></script>
+That’s it. The hook watches your DOM and:
+- redirects the **Team** tab to `invite.html`,
+- redirects your **Invite Friends** tile/button to `invite.html`.
 
-2) On your "Invite Friends" tile/button, call `openInviteModal()` on click:
-   <button onclick="openInviteModal()">Invite Friends</button>
+## Direct linking
+You can also link to the page explicitly:
+```html
+<a href="invite.html">Invite Friends</a>
+```
 
-What it does
-------------
-- Generates and stores a **UID** and **Invite Code** in localStorage.
-- Builds your invite link: `{origin}/reg/?tid=CODE`.
-- Renders a **QR code**, **copy buttons**, and **Team Data** (placeholder totals).
-- Has an **Invitation Record** list area (ready for API later).
-
-Safe by design
---------------
-- No global overrides, no changes to your existing logic.
-- Uses its own CSS variables and class names.
-- All data is local (no network calls).
-
-— Enjoy!
+## Hardcode domain in the invite link (optional)
+Open `addons/invite.js` and replace `buildInviteLink()` with your domain.
