@@ -1,49 +1,82 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Invite Friends — TrustMe AI</title>
-  <link rel="stylesheet" href="./addons/invite.css" />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <style>
+    :root{
+      --bg:#0e1217; --panel:#141a22; --text:#e8eef6; --muted:#9fb0c3;
+      --accent:#00e5a8; --btn:#1f2a37; --btn-h:#243041; --border:#1b2633;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background:var(--bg); color:var(--text);
+    }
+    header{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:16px 20px; border-bottom:1px solid var(--border);
+      position:sticky; top:0; background:var(--bg); z-index:5;
+    }
+    .brand{ display:flex; align-items:center; gap:12px; }
+    .logo{ width:32px; height:32px; border-radius:10px; background:linear-gradient(135deg,#00e5a8,#4de9ff); display:grid; place-items:center; font-weight:700; color:#0a0e13; }
+    .title{ font-weight:700; }
+    .subtitle{ font-size:12px; color:var(--muted); }
+    .back{ padding:8px 12px; background:var(--btn); border:1px solid var(--border); border-radius:10px; color:var(--text); cursor:pointer; }
+    main{ max-width:1100px; margin:24px auto; padding:0 16px; display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    .panel{ background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:18px; }
+    h2{ margin:0 0 12px 0; font-size:20px; }
+    #qrBox{ display:grid; place-items:center; width:100%; height:320px; background:#0b0f14; border:1px dashed var(--border); border-radius:12px; }
+    .muted{ color:var(--muted); font-size:13px; }
+    .row{ display:flex; gap:10px; align-items:center; }
+    .row input{ flex:1; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:#0b0f14; color:var(--text); }
+    .btn{ padding:10px 14px; border-radius:10px; background:var(--btn); border:1px solid var(--border); color:var(--text); cursor:pointer; }
+    .btn.primary{ background:linear-gradient(135deg,#00e5a8,#4de9ff); color:#081018; border:none; }
+    @media (max-width: 860px){ main{ grid-template-columns:1fr; } }
+  </style>
 </head>
 <body>
   <header>
-    <button onclick="history.back()">← Back</button>
-    <div>
-      <h1>Invite Friends</h1>
-      <p class="muted">Share your invite link and earn rewards.</p>
+    <div class="brand">
+      <div class="logo">T</div>
+      <div>
+        <div class="title">TrustMe AI</div>
+        <div class="subtitle">Invite Friends</div>
+      </div>
     </div>
+    <button class="back" id="backBtn">← Back</button>
   </header>
-  <main>
-    <div class="grid">
-      <section class="card">
-        <h2>QR Code</h2>
-        <canvas id="qrCanvas" width="260" height="260" aria-label="Invite QR"></canvas>
-        <div class="row" style="margin-top:12px; justify-content:center; gap:8px">
-          <button class="btn" id="downloadQR">Download QR</button>
-        </div>
-        <div class="hint">Scanning the QR opens your personal registration link.</div>
-      </section>
-      <section class="card">
-        <h2>Invite Link</h2>
-        <div class="row" style="margin-top:8px">
-          <input class="grow" type="text" id="inviteLink" readonly />
-          <button class="btn" id="copyLink">Copy</button>
-          <button class="btn primary" id="shareLink">Share</button>
-        </div>
 
-        <h2 style="margin-top:16px">Invitation Code</h2>
-        <div class="row" style="margin-top:8px">
-          <input class="grow" type="text" id="inviteCode" />
-          <button class="btn" id="copyCode">Copy</button>
-        </div>
-        <p class="muted">Tip: You can change the code—your link and QR will update automatically.</p>
-      </section>
-    </div>
+  <main>
+    <section class="panel">
+      <h2>QR Code</h2>
+      <div id="qrBox"><span class="muted">Generating QR…</span></div>
+      <div class="row" style="margin-top:12px;">
+        <button class="btn" id="downloadQR">Download QR</button>
+        <span class="muted" id="tip">Scanning the QR opens your personal registration link.</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Invite Link</h2>
+      <div class="row">
+        <input id="inviteLink" type="text" readonly>
+        <button class="btn" id="copyLink">Copy</button>
+        <button class="btn primary" id="shareBtn">Share</button>
+      </div>
+
+      <h2 style="margin-top:18px;">Invitation Code</h2>
+      <div class="row">
+        <input id="inviteCode" type="text" maxlength="20" placeholder="Enter your invite code">
+        <button class="btn" id="copyCode">Copy</button>
+      </div>
+      <p class="muted" style="margin-top:10px;">Tip: You can change the code — your link and QR will update automatically.</p>
+    </section>
   </main>
 
-  <!-- QR library from CDN (lightweight). If it fails, the page still works with a fallback notice. -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
-  <script src="./addons/invite.js" defer></script>
+  <script src="./addons/qrcode.min.js"></script>
+  <script src="./addons/invite-page.js" defer></script>
 </body>
 </html>
