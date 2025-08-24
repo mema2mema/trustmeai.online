@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -20,15 +19,16 @@
   </header>
 
   <main id="main">
-    <!-- FRONT PAGE -->
-    <section id="page-front" class="page active"> style="display:none">…</section>
+    <!-- HOME -->
+    <section id="view-home" class="page" style="">
       <div class="card">
         <h2>Welcome</h2>
-        <p>Use the tabs below to manage Assets, Trading Strategy (TMI1), Team, and your Profile.</p>
+        <p>Manage your Assets, Strategy (TMI1), Team and Profile from the tabs below.</p>
+        <p><a class="btn" href="invite.html">🎁 Invite Friends</a></p>
       </div>
 
       <div class="card">
-        <h3>Earnings Calculator</h3>
+        <h3>Calculator</h3>
         <div class="grid2">
           <label>Amount (USDT)
             <input id="calcAmount" type="number" min="50" value="1000"/>
@@ -50,26 +50,10 @@
           <div id="calcResult" class="muted"></div>
         </div>
       </div>
-
-      <div class="card">
-        <h3>Partners</h3>
-        <div class="partners">
-          <span>Binance</span><span>OKX</span><span>Kraken</span><span>Bybit</span><span>Gate</span><span>KuCoin</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Our Advantages</h3>
-        <ul class="advantages">
-          <li><b>Transparent Security</b> — Every transaction is traceable; operations are transparent and public.</li>
-          <li><b>Automated Trading</b> — 24/7 execution, no manual intervention required.</li>
-          <li><b>Real‑Time Data</b> — Access to major global markets with second‑level updates.</li>
-        </ul>
-      </div>
     </section>
 
     <!-- ASSETS -->
-    <section id="page-assets" class="page"> style="display:none">…</section>
+    <section id="view-assets" class="page" style="display:none;">
       <div class="card">
         <h2>Assets</h2>
         <div class="balances">
@@ -78,9 +62,7 @@
           <div><div class="label">Total</div><div id="balTotal" class="value">0</div></div>
         </div>
       </div>
-
       <div class="grid2">
-        <!-- Top Up -->
         <div class="card">
           <h3>Top‑Up</h3>
           <div class="grid2">
@@ -104,18 +86,8 @@
               <button class="btn sm" id="copyTop">Copy</button>
             </div>
           </label>
-
-          <div class="add-fake">
-            <label>Add to balance (demo)
-              <div class="copyline">
-                <input id="topAmount" type="number" min="1" value="50"/>
-                <button id="topAddBtn" class="btn">Add</button>
-              </div>
-            </label>
-          </div>
         </div>
 
-        <!-- Withdraw -->
         <div class="card">
           <h3>Withdraw</h3>
           <div class="grid2">
@@ -149,14 +121,14 @@
     </section>
 
     <!-- STRATEGY -->
-    <section id="page-strategy" class="page"> style="display:none">…</section>
+    <section id="view-strategy" class="page" style="display:none;">
       <div class="card">
-        <h2>Strategy</h2>
-        <p>Current plan: <b>TMI1</b> — 50 to 500,000 USDT, target yield <b>1.5% – 3%</b>.</p>
+        <h2>Strategy — TMI1</h2>
+        <p><b>TMI1</b>: 50 – 500,000 USDT · target 1.5% – 3% per day.</p>
       </div>
 
       <div id="planInactive" class="card">
-        <h3>Activate TMI1</h3>
+        <h3>Activate</h3>
         <div class="grid3">
           <label>Amount (50–500000)
             <input id="tmiAmount" type="number" min="50" max="500000" value="50"/>
@@ -190,70 +162,46 @@
     </section>
 
     <!-- TEAM -->
-    <section id="page-team" class="page"> style="display:none">…</section>
+    <section id="view-team" class="page" style="display:none;">
       <div class="card">
         <h2>Team</h2>
         <p>Invite friends and grow your rewards.</p>
+        <p><a class="btn" href="invite.html">🎁 Invite Friends</a></p>
       </div>
     </section>
 
     <!-- MINE -->
-    <section id="page-mine" class="page"> style="display:none">…</section>
+    <section id="view-mine" class="page" style="display:none;">
       <div class="profile card">
         <div class="row">
-          <div class="avatar">S</div>
+          <div class="avatar">T</div>
           <div>
-            <div class="uid" id="mineUid">TrustMe‑00001</div>
-            <div class="muted small">UID • <span id="mineUidNum"></span> · Invite Code: <span id="mineInvite"></span></div>
+            <div class="uid" id="mineUid">TrustMe-00001</div>
+            <div class="muted small">Invite Code: <span id="mineInvite">TMI8K</span></div>
           </div>
           <div class="spacer"></div>
-          <button id="upgradeBtn" class="btn">Upgrade level</button>
-        </div>
-        <div class="tagrow">
-          <span class="tag">Level TMI1</span>
-          <span class="tag">Agent 0</span>
+          <a class="btn" href="invite.html">🎁 Invite Friends</a>
         </div>
       </div>
-
       <div class="grid4">
-        <a class="iconbtn card" href="#" data-link="invite">🎁<span>Invite Friends</span></a>
-        <a class="iconbtn card" href="#" data-link="agent">⭐<span>Agent Level</span></a>
-        <a class="iconbtn card" href="#" data-link="profits">💵<span>My Profits</span></a>
-        <a class="iconbtn card" href="#" data-link="orders">🧾<span>Order Record</span></a>
-      </div>
-
-      <div class="card">
-        <h3>Common Functions</h3>
-        <div class="grid4">
-          <a class="iconbtn" href="#" data-link="rules">📘<span>Operational Rules</span></a>
-          <a class="iconbtn" href="#" data-link="safety">🛡️<span>Safety Center</span></a>
-          <a class="iconbtn" href="#" data-link="feedback">✉️<span>Feedback</span></a>
-          <a class="iconbtn" href="#" data-link="help">❓<span>Help Center</span></a>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Other Features</h3>
-        <div class="grid4">
-          <a class="iconbtn" href="#" data-link="info">👤<span>Personal Info</span></a>
-          <a class="iconbtn" href="#" data-link="about">ℹ️<span>About</span></a>
-          <a class="iconbtn" href="#" data-link="lang">🌐<span>Language</span></a>
-          <a class="iconbtn" href="#" data-link="cs">💬<span>Customer Service</span></a>
-        </div>
+        <a class="iconbtn card" href="invite.html">🎁<span>Invite Friends</span></a>
+        <a class="iconbtn card" href="#">⭐<span>Agent Level</span></a>
+        <a class="iconbtn card" href="#">💵<span>My Profits</span></a>
+        <a class="iconbtn card" href="#">🧾<span>Order Record</span></a>
       </div>
     </section>
   </main>
 
   <!-- bottom nav -->
-<nav class="tabbar" id="bottomTabs">
-  <button class="tab active"  data-route="#home">    🏠<span>Front Page</span></button>
-  <button class="tab"         data-route="#assets">  💼<span>Assets</span></button>
-  <button class="tab"         data-route="#strategy">📈<span>Strategy</span></button>
-  <button class="tab"         data-route="#team">    👥<span>Team</span></button>
-  <button class="tab"         data-route="#mine">    👤<span>Mine</span></button>
-</nav>
+  <nav class="tabbar" id="bottomTabs">
+    <button class="tab active"  data-route="#home">    🏠<span>Front Page</span></button>
+    <button class="tab"         data-route="#assets">  💼<span>Assets</span></button>
+    <button class="tab"         data-route="#strategy">📈<span>Strategy</span></button>
+    <button class="tab"         data-route="#team">    👥<span>Team</span></button>
+    <button class="tab"         data-route="#mine">    👤<span>Mine</span></button>
+  </nav>
 
-  <!-- Login modal -->
+  <!-- Simple login modal (kept minimal) -->
   <div id="loginModal" class="modal hidden">
     <div class="modal-backdrop"></div>
     <div class="modal-card">
@@ -261,32 +209,18 @@
         <h3>Log In</h3>
         <button id="loginClose" class="btn sm plain">✕</button>
       </div>
-      <div class="tabs small">
-        <button data-login-tab="phone" class="active">Phone Number</button>
-        <button data-login-tab="mail">Mail</button>
-      </div>
-      <div id="loginPhonePane">
-        <label>Phone
-          <input id="loginPhone" placeholder="+45 5555 5555"/>
-        </label>
-      </div>
-      <div id="loginMailPane" style="display:none;">
-        <label>Email
-          <input id="loginMail" placeholder="you@example.com"/>
-        </label>
-      </div>
+      <label>Email
+        <input id="loginMail" placeholder="you@example.com"/>
+      </label>
       <label>Password
         <input id="loginPass" type="password" placeholder="Enter your password"/>
       </label>
-      <label class="cb"><input id="rememberMe" type="checkbox"/> Remember me</label>
       <button id="doLogin" class="btn primary">Log In</button>
-      <div id="loginMsg" class="muted"></div>
+      <div id="loginMsg" class="muted small"></div>
     </div>
   </div>
 
   <script src="app.js"></script>
   <script src="./addons/nav-fixes.js" defer></script>
-  <script src="./addons/invite-hook.js" defer></script>
-  <script src="./addons/qrcode.min.js" defer></script>
 </body>
 </html>
