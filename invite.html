@@ -1,121 +1,104 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Invite Friends — TrustMe AI</title>
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
-    <style>
-      :root{
-        --bg:#0c1220; --panel:#131b2e; --muted:#8aa0b3; --text:#e6eef6; --accent:#2dd4bf;
-        --btn:#2dd4bf; --btn-txt:#062a25; --card:#0f1626;
-      }
-      html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial;}
-      .wrap{max-width:1100px;margin:24px auto;padding:0 16px;}
-      header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-      .back{background:transparent;border:1px solid #2a3550;color:var(--text);padding:8px 12px;border-radius:10px;cursor:pointer}
-      h1{font-size:22px;margin:0}
-      .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-      @media (max-width:900px){.grid{grid-template-columns:1fr}}
-      .card{background:var(--panel);border-radius:14px;padding:16px}
-      .muted{color:var(--muted);font-size:13px}
-      .qrbox{display:flex;align-items:center;justify-content:center;height:300px;background:var(--card);border-radius:12px;margin-top:8px}
-      .row{display:flex;gap:8px;margin:8px 0}
-      input[type="text"]{flex:1;min-width:0;background:#0b1426;border:1px solid #26314b;color:var(--text);padding:10px 12px;border-radius:10px;outline:none}
-      .btn{background:var(--btn);color:var(--btn-txt);border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600}
-      .btn.secondary{background:#1f2a44;color:var(--text)}
-      .tip{font-size:12px;color:var(--muted);margin-top:6px}
-    </style>
-    <!-- QRCode lib (fixes "QRCode is not defined") -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-  </head>
-  <body>
-    <div class="wrap">
-      <header>
-        <button class="back" onclick="history.back()">← Back</button>
-        <h1>Invite Friends</h1>
-      </header>
-
-      <div class="grid">
-        <section class="card">
-          <h2 style="margin:0 0 8px">QR Code</h2>
-          <div id="qrBox" class="qrbox"><span class="muted">Generating…</span></div>
-          <div class="row"><button id="downloadQr" class="btn secondary">Download QR</button></div>
-          <div class="tip">Scanning this QR opens your personal registration link.</div>
-        </section>
-
-        <section class="card">
-          <h2 style="margin:0 0 8px">Invite Link</h2>
-          <div class="row">
-            <input id="inviteLink" type="text" readonly>
-            <button id="copyLink" class="btn">Copy</button>
-            <button id="shareLink" class="btn">Share</button>
-          </div>
-
-          <h3 style="margin:16px 0 8px">Invitation Code</h3>
-          <div class="row">
-            <input id="inviteCode" type="text" value="TMI8K" maxlength="24">
-            <button id="copyCode" class="btn secondary">Copy</button>
-          </div>
-          <div class="tip">Tip: You can change the code — your link and QR will update automatically.</div>
-        </section>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invite Friends — TrustMe AI</title>
+  <link rel="stylesheet" href="./styles/invite.css" />
+</head>
+<body>
+  <header class="invite-header">
+    <a href="./index.html#team" class="back-btn">← Back</a>
+    <div class="title-wrap">
+      <h1>Invite Friends</h1>
+      <p class="subtitle">Share your invite link and earn rewards.</p>
     </div>
+  </header>
 
-    <script>
-      (function(){
-        const codeInput = document.getElementById('inviteCode');
-        const linkInput = document.getElementById('inviteLink');
-        const qrBox    = document.getElementById('qrBox');
-        let qr;
+  <main class="invite-grid">
+    <section class="card qr-card">
+      <h2>QR Code</h2>
+      <div id="qrBox" class="qr-box"></div>
+      <div class="hint">Scanning the QR opens your personal registration link.</div>
+      <button id="btnDownload" class="btn">Download QR</button>
+    </section>
 
-        function inviteUrlFrom(code){
-          return 'https://trustmeai.online/reg?ref=' + encodeURIComponent(code || '');
+    <section class="card link-card">
+      <h2>Invite Link</h2>
+      <div class="row">
+        <input id="inviteLink" type="text" readonly />
+        <button id="btnCopy" class="btn">Copy</button>
+        <button id="btnShare" class="btn primary">Share</button>
+      </div>
+
+      <h2 style="margin-top: 24px;">Invitation Code</h2>
+      <div class="row">
+        <input id="inviteCode" type="text" />
+        <button id="btnCopyCode" class="btn">Copy</button>
+      </div>
+      <p class="tip">
+        Tip: You can change the code — your link and QR will update automatically.
+      </p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script>
+    (function () {
+      const codeInput = document.getElementById('inviteCode');
+      const linkInput = document.getElementById('inviteLink');
+      const qrBox = document.getElementById('qrBox');
+      const btnCopy = document.getElementById('btnCopy');
+      const btnCopyCode = document.getElementById('btnCopyCode');
+      const btnShare = document.getElementById('btnShare');
+      const btnDownload = document.getElementById('btnDownload');
+
+      const BASE = (location.origin || '') + '/reg';
+      const LS_KEY = 'trustmeai_invite_code';
+
+      function getCode() { return (localStorage.getItem(LS_KEY) || 'TMI8K').trim(); }
+      function setCode(v) { localStorage.setItem(LS_KEY, v); }
+      function linkFor(code) { return BASE + '?ref=' + encodeURIComponent(code); }
+
+      function render() {
+        const code = getCode();
+        codeInput.value = code;
+        const url = linkFor(code);
+        linkInput.value = url;
+        qrBox.innerHTML = '';
+        try {
+          new QRCode(qrBox, { text: url, width: 240, height: 240, correctLevel: QRCode.CorrectLevel.M });
+        } catch (err) {
+          qrBox.textContent = 'QR error: ' + (err && err.message ? err.message : err);
         }
+      }
 
-        function ensureQR(){
-          if (qr) return qr;
-          qr = new QRCode(qrBox, { text: '', width: 260, height: 260, correctLevel: QRCode.CorrectLevel.M });
-          return qr;
-        }
+      codeInput.addEventListener('input', () => { setCode(codeInput.value || 'TMI8K'); render(); });
+      btnCopy.addEventListener('click', () => { linkInput.select(); document.execCommand('copy'); btnCopy.textContent='Copied!'; setTimeout(()=>btnCopy.textContent='Copy',1200); });
+      btnCopyCode.addEventListener('click', () => { codeInput.select(); document.execCommand('copy'); btnCopyCode.textContent='Copied!'; setTimeout(()=>btnCopyCode.textContent='Copy',1200); });
 
-        function render(){
-          const url = inviteUrlFrom(codeInput.value.trim());
-          linkInput.value = url;
-          ensureQR().clear();
-          ensureQR().makeCode(url);
-        }
+      btnShare.addEventListener('click', async () => {
+        const url = linkInput.value;
+        try {
+          if (navigator.share) { await navigator.share({ title: 'Join TrustMe AI', url }); }
+          else { linkInput.select(); document.execCommand('copy'); alert('Link copied to clipboard'); }
+        } catch (e) {}
+      });
 
-        render();
+      btnDownload.addEventListener('click', () => {
+        const img = qrBox.querySelector('img');
+        const canvas = qrBox.querySelector('canvas');
+        let dataUrl = '';
+        if (img && img.src) dataUrl = img.src;
+        if (!dataUrl && canvas) dataUrl = canvas.toDataURL('image/png');
+        if (!dataUrl) return alert('QR not ready yet.');
+        const a = document.createElement('a');
+        a.href = dataUrl; a.download = 'trustmeai-invite.png'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      });
 
-        codeInput.addEventListener('input', render);
-
-        document.getElementById('copyLink').addEventListener('click', async () => {
-          try { await navigator.clipboard.writeText(linkInput.value); } catch {}
-        });
-        document.getElementById('copyCode').addEventListener('click', async () => {
-          try { await navigator.clipboard.writeText(codeInput.value); } catch {}
-        });
-        document.getElementById('shareLink').addEventListener('click', async () => {
-          const url = linkInput.value;
-          if (navigator.share) {
-            try { await navigator.share({ title:'Join me on TrustMe AI', url }); } catch {}
-          } else {
-            try { await navigator.clipboard.writeText(url); } catch {}
-            alert('Share not supported here. Link copied to clipboard.');
-          }
-        });
-        document.getElementById('downloadQr').addEventListener('click', () => {
-          const img = qrBox.querySelector('img') || qrBox.querySelector('canvas');
-          let src = (img.tagName.toLowerCase() === 'img') ? img.src : img.toDataURL('image/png');
-          const a = document.createElement('a');
-          a.href = src;
-          a.download = 'trustmeai-invite-' + (codeInput.value || 'code') + '.png';
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-        });
-      })();
-    </script>
-  </body>
+      if (!localStorage.getItem(LS_KEY)) setCode('TMI8K');
+      render();
+    })();
+  </script>
+</body>
 </html>

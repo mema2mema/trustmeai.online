@@ -21,7 +21,7 @@
 
   <main id="main">
     <!-- FRONT PAGE -->
-    <section id="page-front" class="page active">
+    <section id="page-front" class="page active"> style="display:none">…</section>
       <div class="card">
         <h2>Welcome</h2>
         <p>Use the tabs below to manage Assets, Trading Strategy (TMI1), Team, and your Profile.</p>
@@ -69,7 +69,7 @@
     </section>
 
     <!-- ASSETS -->
-    <section id="page-assets" class="page">
+    <section id="page-assets" class="page"> style="display:none">…</section>
       <div class="card">
         <h2>Assets</h2>
         <div class="balances">
@@ -149,7 +149,7 @@
     </section>
 
     <!-- STRATEGY -->
-    <section id="page-strategy" class="page">
+    <section id="page-strategy" class="page"> style="display:none">…</section>
       <div class="card">
         <h2>Strategy</h2>
         <p>Current plan: <b>TMI1</b> — 50 to 500,000 USDT, target yield <b>1.5% – 3%</b>.</p>
@@ -190,7 +190,7 @@
     </section>
 
     <!-- TEAM -->
-    <section id="page-team" class="page">
+    <section id="page-team" class="page"> style="display:none">…</section>
       <div class="card">
         <h2>Team</h2>
         <p>Invite friends and grow your rewards.</p>
@@ -198,7 +198,7 @@
     </section>
 
     <!-- MINE -->
-    <section id="page-mine" class="page">
+    <section id="page-mine" class="page"> style="display:none">…</section>
       <div class="profile card">
         <div class="row">
           <div class="avatar">S</div>
@@ -245,13 +245,13 @@
   </main>
 
   <!-- bottom nav -->
-  <nav class="tabbar">
-    <button data-tab="front" class="active">🏠<span>Front Page</span></button>
-    <button data-tab="assets">💼<span>Assets</span></button>
-    <button data-tab="strategy">📈<span>Strategy</span></button>
-    <button data-tab="team">👥<span>Team</span></button>
-    <button data-tab="mine">👤<span>Mine</span></button>
-  </nav>
+<nav class="tabbar" id="bottomTabs">
+  <button class="tab active"  data-route="#home">    🏠<span>Front Page</span></button>
+  <button class="tab"         data-route="#assets">  💼<span>Assets</span></button>
+  <button class="tab"         data-route="#strategy">📈<span>Strategy</span></button>
+  <button class="tab"         data-route="#team">    👥<span>Team</span></button>
+  <button class="tab"         data-route="#mine">    👤<span>Mine</span></button>
+</nav>
 
   <!-- Login modal -->
   <div id="loginModal" class="modal hidden">
@@ -285,6 +285,8 @@
   </div>
 
   <script src="app.js"></script>
+  <script src="./addons/nav-fixes.js" defer></script>
   <script src="./addons/invite-hook.js" defer></script>
+  <script src="./addons/qrcode.min.js" defer></script>
 </body>
 </html>
